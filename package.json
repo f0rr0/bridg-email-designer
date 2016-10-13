@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "Bridg 2.0 Email Designer (React)",
   "scripts": {
-    "start": "$(npm bin)/babel-node scripts/start.js"
+    "start": "$(npm bin)/webpack-dashboard -- $(npm bin)/webpack-dev-server",
+    "prebuild": "$(npm bin)/rimraf ./build",
+    "build": "$(npm bin)/webpack --env.prod",
+    "predeploy": "npm run build",
+    "deploy": "$(npm bin)/gh-pages -d build"
   },
   "repository": {
     "url": "git+https://github.com/Bridg/bridg-email-designer.git",
@@ -25,23 +29,29 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "babel-register": "^6.16.3",
+    "copy-webpack-plugin": "^3.0.1",
+    "css-loader": "^0.25.0",
     "enzyme": "^2.4.1",
     "eslint": "^3.7.1",
     "eslint-config-airbnb": "^12.0.0",
-    "eslint-loader": "^1.5.0",
     "eslint-plugin-import": "^2.0.1",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.4.1",
+    "gh-pages": "^0.11.0",
     "html-webpack-plugin": "^2.22.0",
     "openurl": "^1.1.1",
+    "rimraf": "^2.5.4",
+    "style-loader": "^0.13.1",
     "webpack": "^2.1.0-beta.25",
+    "webpack-dashboard": "^0.2.0",
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
     "react": "^15.3.2",
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "^2.1.2",
-    "react-dom": "^15.3.2"
+    "react-dom": "^15.3.2",
+    "styled-components": "^1.0.0"
   },
   "main": "index.js"
 }
