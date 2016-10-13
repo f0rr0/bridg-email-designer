@@ -6,8 +6,8 @@
 git clone https://github.com/Bridg/bridg-email-designer
 cd bridg-email-designer
 npm install # yarn install (if using yarn)
-npm start
-npm run build
+npm start # dev mode
+npm run build # production build
 ```
 
 ### Development environment
