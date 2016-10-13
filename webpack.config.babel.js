@@ -16,8 +16,7 @@ const devConfig = {
   output: {
     path: resolve(__dirname, './build'),
     pathinfo: true,
-    filename: 'static/js/bundle.js',
-    publicPath: '/'
+    filename: 'bundle.js',
   },
   module: {
     loaders: [
