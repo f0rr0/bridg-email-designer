@@ -16,7 +16,7 @@ const devConfig = {
   output: {
     path: resolve(__dirname, './build'),
     pathinfo: true,
-    filename: 'bundle.js',
+    filename: 'static/js/bundle.[hash].js',
   },
   module: {
     loaders: [
@@ -28,6 +28,13 @@ const devConfig = {
       {
         test: /\.css$/,
         loaders: ['style', 'css']
+      },
+      {
+        test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
+        loader: 'file',
+        query: {
+          name: 'static/media/[name].[hash:8].[ext]'
+        }
       }
     ]
   },

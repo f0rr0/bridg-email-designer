@@ -1,5 +1,5 @@
 import React from 'react';
 import Designer from './Designer.jsx';
-import './App.css';
+import './reset.css';
 
 export default () => <Designer />;
