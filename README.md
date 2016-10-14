@@ -22,3 +22,4 @@ npm run build # production build
 ```
 npm run deploy
 ```
+The repo is deployed at https://bridg.github.io/bridg-email-designer.
