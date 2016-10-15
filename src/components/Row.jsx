@@ -25,10 +25,10 @@ const Column = styled('div')`
 
 const rowSource = Object.assign({}, source, {
   beginDrag(props, monitor, component) {
-    const { type, cols } = props;
+    const { type, col } = props;
     return {
       type,
-      cols,
+      col,
       component
     };
   }
@@ -36,12 +36,12 @@ const rowSource = Object.assign({}, source, {
 
 class Row extends Component {
   render() {
-    const { cols, disableDrag, isDragging, connectDragSource } = this.props;
+    const { type, col, disableDrag, isDragging, connectDragSource } = this.props;
     return connectDragSource(
-      <div style={{ marginBottom: 10, opacity: isDragging ? 0.6 : 1 }}>
+      <div id={type} style={{ marginBottom: 10, opacity: isDragging ? 0.6 : 1 }}>
         <Container disableDrag={disableDrag}>
           {
-            [...Array(cols).keys()].map(key => <Column key={key} />)
+            [...Array(col).keys()].map(key => <Column key={key} />)
           }
         </Container>
       </div>,
@@ -51,15 +51,14 @@ class Row extends Component {
 }
 
 Row.propTypes = {
-  cols: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
+  col: PropTypes.number.isRequired,
   disableDrag: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
-  connectDragSource: PropTypes.func.isRequired,
+  connectDragSource: PropTypes.func.isRequired
 };
 
 Row.defaultProps = {
-  type: manifest.ROW,
-  cols: 1,
   disableDrag: false
 };
 
