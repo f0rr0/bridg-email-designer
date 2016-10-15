@@ -6,6 +6,7 @@ import SwipeableViews from 'react-swipeable-views';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Dashboard from 'material-ui/svg-icons/action/dashboard';
 import List from 'material-ui/svg-icons/action/list';
+import Layouts from './Layouts';
 
 injectTapEventPlugin();
 
@@ -14,7 +15,6 @@ const Container = styled('section')`
 `;
 
 const Slide = styled('div')`
-  padding: 10px;
   background: #003F60;
   color: #FFFFFF;
 `;
@@ -55,7 +55,7 @@ export default class Toolbox extends Component {
             onChangeIndex={this.handleChange}
           >
             <Slide>
-              Layouts here...
+              <Layouts />
             </Slide>
             <Slide>
               Components here...

@@ -3,5 +3,10 @@
     ["es2015", { "modules": false }],
     "react",
     "stage-0"
-  ]
+  ],
+  "env": {
+    "production": {
+      "plugins": ["transform-react-constant-elements"]
+    }
+  }
 }

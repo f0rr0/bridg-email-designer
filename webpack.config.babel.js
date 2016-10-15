@@ -16,7 +16,10 @@ const devConfig = {
   output: {
     path: resolve(__dirname, './build'),
     pathinfo: true,
-    filename: 'static/js/bundle.[hash].js',
+    filename: 'static/js/bundle.[hash:8].js',
+  },
+  resolve: {
+    extensions: ['*', '.js', '.jsx']
   },
   module: {
     loaders: [
@@ -58,7 +61,7 @@ const devConfig = {
 };
 
 const prodConfig = Object.assign({}, devConfig, {
-  devtool: 'source-map',
+  devtool: 'cheap-module-source-map',
   entry: './index.jsx',
   plugins: [
     new DefinePlugin({
@@ -66,6 +69,7 @@ const prodConfig = Object.assign({}, devConfig, {
         'NODE_ENV': JSON.stringify('production')
       }
     }),
+    new optimize.DedupePlugin(),
     new HtmlWebpackPlugin({
       inject: true,
       template: resolve(__dirname, './public/index.html'),
@@ -93,10 +97,11 @@ const prodConfig = Object.assign({}, devConfig, {
       output: {
         comments: false,
         screw_ie8: true
-      }
+      },
+      sourceMap: true
     }),
     new CopyPlugin([
-      { from: resolve(__dirname, './public/'), force: true }
+      { from: resolve(__dirname, './public/') }
     ], {
       ignore: [
         'index.html'

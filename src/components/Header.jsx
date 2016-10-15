@@ -30,6 +30,7 @@ const Divider = styled('span')`
 
 const Title = styled('div')`
   color: #FFFFFF;
+  font-size: 18px;
 `;
 
 export default () =>
