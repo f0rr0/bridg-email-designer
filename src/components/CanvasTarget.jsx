@@ -7,7 +7,15 @@ class CanvasTarget extends Component {
   render() {
     const { connectDropTarget, children } = this.props;
     return connectDropTarget(
-      <div style={{ minHeight: '100%', paddingBottom: '5.5em' }}>
+      <div
+        style={{
+          width: '100%',
+          padding: '10px 10px 10em',
+          overflowY: 'scroll',
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
         {children}
       </div>
     );

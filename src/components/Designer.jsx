@@ -13,12 +13,15 @@ const Main = styled('main')`
   font-size: 16px;
   background: #0FBD72;
   font-family: 'Lato', sans-serif;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Container = styled('section')`
   padding: 1.802em 1.802em;
   display: flex;
-  height: 85%;
+  flex-grow: 1;
+  display: flex;
 `;
 
 class Designer extends Component {
