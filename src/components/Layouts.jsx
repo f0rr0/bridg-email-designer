@@ -14,4 +14,5 @@ export default () =>
     <Row type={manifest.ROW} col={1} />
     <Row type={manifest.ROW} col={2} />
     <Row type={manifest.ROW} col={3} />
+    <Row type={manifest.ROW} col={4} />
   </Layouts>;

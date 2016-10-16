@@ -5,10 +5,10 @@ import manifest from '../lib/manifest';
 import Row from './Row';
 
 const Container = styled('section')`
-  margin-left: 1.802em;
-  width: 60%;
-  background: #003F60;
+  padding-left: 1.802em;
   display: flex;
+  flex: 0 0 60%;
+  max-width: 60%;
 `;
 
 export default class Canvas extends Component {
@@ -21,7 +21,11 @@ export default class Canvas extends Component {
 
   renderRows() {
     return this.state.rows.map((col, index) =>
-      <Row type={manifest.ROW} key={index} disableDrag col={col} />
+      <Row
+        type={manifest.ROW}
+        key={index} col={col}
+        disableDrag
+      />
     );
   }
 

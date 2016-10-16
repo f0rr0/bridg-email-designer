@@ -1,27 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import styled from 'styled-components';
 import { DragSource } from 'react-dnd';
 import manifest from '../lib/manifest';
 import { source, collect } from '../lib/genericDragSource';
-
-const Container = styled('div')`
-  display: flex;
-  min-height: 5em;
-  background: pink;
-  border-radius: 4px;
-  cursor: ${props => props.disableDrag ? 'default' : 'move'};
-`;
-
-const Column = styled('div')`
-  background: red;
-  flex-grow: 1;
-  margin: 5px 0 5px 5px;
-  border-radius: 3px;
-
-  &:last-child {
-    margin-right: 5px;
-  }
-`;
+import Column from './Column';
 
 const rowSource = Object.assign({}, source, {
   beginDrag(props, monitor, component) {
@@ -38,12 +19,24 @@ class Row extends Component {
   render() {
     const { type, col, disableDrag, isDragging, connectDragSource } = this.props;
     return connectDragSource(
-      <div id={type} style={{ marginBottom: 10, opacity: isDragging ? 0.6 : 1 }}>
-        <Container disableDrag={disableDrag}>
-          {
-            [...Array(col).keys()].map(key => <Column key={key} />)
-          }
-        </Container>
+      <div
+        id={type}
+        style={{
+          marginBottom: 10,
+          opacity: isDragging ? 0.6 : 1,
+          display: 'flex',
+          flex: '0 0 auto',
+          minHeight: '5em',
+          background: '#454F4E',
+          borderRadius: '4px',
+          cursor: disableDrag ? 'default' : 'move'
+        }}
+      >
+        {
+          [...Array(col).keys()].map(key =>
+            <Column col={col} readOnly={!disableDrag} key={key} {...this.props} />
+          )
+        }
       </div>,
       { dropEffect: 'copy' }
     );

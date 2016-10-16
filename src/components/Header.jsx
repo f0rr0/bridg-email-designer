@@ -7,7 +7,7 @@ const Header = styled('header')`
   display: flex;
   padding: 0.5em 0.889em;
   align-items: center;
-  flex-shrink: 0;
+  flex: 0 0 auto;
 `;
 
 const Logo = styled('div')`

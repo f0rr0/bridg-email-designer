@@ -11,6 +11,7 @@ const devConfig = {
   entry: [
     'webpack-dev-server/client?http://localhost:8080',
     'webpack/hot/dev-server',
+    'babel-polyfill',
     './index.jsx'
   ],
   output: {
@@ -62,7 +63,10 @@ const devConfig = {
 
 const prodConfig = Object.assign({}, devConfig, {
   devtool: 'cheap-module-source-map',
-  entry: './index.jsx',
+  entry: [
+    'babel-polyfill',
+    './index.jsx'
+  ],
   plugins: [
     new DefinePlugin({
       'process.env': {

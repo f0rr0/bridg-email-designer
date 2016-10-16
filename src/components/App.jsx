@@ -26,6 +26,10 @@ injectGlobal`
   time {
     display: block;
   }
+
+  h1 {
+    font-size: 2em !important;
+  }
 `;
 /*eslint-enable */
 

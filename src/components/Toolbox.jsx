@@ -7,15 +7,17 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import Dashboard from 'material-ui/svg-icons/action/dashboard';
 import List from 'material-ui/svg-icons/action/list';
 import Layouts from './Layouts';
+import Content from './Content';
 
 injectTapEventPlugin();
 
 const Container = styled('section')`
-  width: 40%;
+  flex: 0 0 40%;
+  max-width: 40%;
 `;
 
 const Slide = styled('div')`
-  background: #003F60;
+  background: #0FBD72;
   color: #FFFFFF;
 `;
 
@@ -48,7 +50,7 @@ export default class Toolbox extends Component {
             }}
           >
             <Tab icon={<Dashboard />} label="Layouts" value={0} />
-            <Tab icon={<List />} label="Components" value={1} />
+            <Tab icon={<List />} label="Content" value={1} />
           </Tabs>
           <SwipeableViews
             index={this.state.slideIndex}
@@ -58,7 +60,7 @@ export default class Toolbox extends Component {
               <Layouts />
             </Slide>
             <Slide>
-              Components here...
+              <Content />
             </Slide>
           </SwipeableViews>
         </Container>

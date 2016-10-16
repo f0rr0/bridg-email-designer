@@ -11,17 +11,16 @@ const Main = styled('main')`
   width: 100%;
   overflow-y: scroll;
   font-size: 16px;
-  background: #0FBD72;
+  background: #003F60;
   font-family: 'Lato', sans-serif;
   display: flex;
   flex-direction: column;
 `;
 
 const Container = styled('section')`
-  padding: 1.802em 1.802em;
+  padding: 1.802em;
   display: flex;
-  flex-grow: 1;
-  display: flex;
+  flex: 1 1 auto;
 `;
 
 class Designer extends Component {
