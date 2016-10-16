@@ -29,12 +29,13 @@ class Row extends Component {
           minHeight: '5em',
           background: '#454F4E',
           borderRadius: '4px',
-          cursor: disableDrag ? 'default' : 'move'
+          cursor: disableDrag ? 'default' : 'move',
+          padding: '5px'
         }}
       >
         {
           [...Array(col).keys()].map(key =>
-            <Column col={col} readOnly={!disableDrag} key={key} {...this.props} />
+            <Column col={col} key={key} />
           )
         }
       </div>,

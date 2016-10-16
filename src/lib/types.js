@@ -1,3 +1,4 @@
 export default [
-  'ROW'
+  'ROW',
+  'TEXT'
 ];

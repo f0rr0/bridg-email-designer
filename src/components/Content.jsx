@@ -1,11 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
+import Text from './Text';
+import manifest from '../lib/manifest';
 
 const Content = styled('section')`
   display: flex;
   flex-direction: column;
-  padding: 10px 10px 0;
+  padding: 10px;
 `;
 
 export default () =>
-  <Content />;
+  <Content>
+    <Text type={manifest.TEXT} readOnly placeholder="Custom text content" />
+  </Content>;

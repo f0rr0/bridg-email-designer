@@ -1,11 +1,20 @@
 import React, { Component, PropTypes } from 'react';
 import { EditorState, RichUtils, DefaultDraftBlockRenderMap } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
-import createToolbarPlugin from 'draft-js-toolbar-plugin';
-import createFocusPlugin from 'draft-js-focus-plugin';
-import 'draft-js-focus-plugin/lib/plugin.css';
+import { DragSource } from 'react-dnd';
+import createToolbarPlugin, { ToolbarDecorator } from 'draft-js-toolbar-plugin';
+// import createFocusPlugin, { FocusDecorator } from 'draft-js-focus-plugin';
+// import createDndPlugin, { DraggableDecorator } from 'draft-js-dnd-plugin';
+// import createAlignmentPlugin, { AlignmentDecorator } from 'draft-js-alignment-plugin';
+// import createResizeablePlugin, { ResizeableDecorator } from 'draft-js-resizeable-plugin';
+// import createImagePlugin, { imageCreator, imageStyles } from 'draft-js-image-plugin';
+// import 'draft-js-alignment-plugin/lib/plugin.css';
+// import 'draft-js-focus-plugin/lib/plugin.css';
+// import 'draft-js-image-plugin/lib/plugin.css';
 import 'draft-js-toolbar-plugin/lib/plugin.css';
-import blockTypes from './Blocks';
+import Blocks from './Blocks';
+import manifest from '../lib/manifest';
+import { source, collect } from '../lib/genericDragSource';
 
 const toolbarPlugin = createToolbarPlugin({
   textActions: [{
@@ -40,62 +49,112 @@ const toolbarPlugin = createToolbarPlugin({
       ))
   }]
 });
-const focusPlugin = createFocusPlugin();
+
+// const dndPlugin = createDndPlugin({
+//   allowDrop: true,
+//   handleUpload(data, success, failed, progress) {
+//     console.log(data);
+//     alert('Thiis does not implement a backend.');
+//   },
+//   handleDefaultData(blockType) {
+//     if (blockType === 'block-image') {
+//       return {
+//         url: '/whoa.jpg'
+//       };
+//     }
+//     return {};
+//   },
+//   handlePlaceholder: (state, selection, data) => {
+//     const { type } = data;
+//     if (type.indexOf('image/') === 0) {
+//       return 'block-image';
+//     }
+//     return undefined;
+//   },
+//   handleBlock: (state, selection, data) => {
+//     const { type } = data;
+//     if (type.indexOf('image/') === 0) {
+//       return 'block-image';
+//     }
+//     return undefined;
+//   },
+//   handleDrop() {
+//     console.log('wtf');
+//   }
+// });
+//
+// const image = ResizeableDecorator({
+//   resizeSteps: 10,
+//   handles: true,
+//   vertical: 'auto'
+// })(
+//   DraggableDecorator(
+//     FocusDecorator(
+//       AlignmentDecorator(
+//         ToolbarDecorator()(
+//           imageCreator({ theme: imageStyles })
+//         )
+//       )
+//     )
+//   )
+// );
 
 const plugins = [
   toolbarPlugin,
-  focusPlugin
+  // dndPlugin,
+  // createFocusPlugin(),
+  // createResizeablePlugin(),
+  // createImagePlugin({ component: image }),
+  // createAlignmentPlugin()
 ];
 
-export default class Text extends Component {
+class Text extends Component {
   constructor(props) {
     super(props);
     this.state = {
       editorState: EditorState.createEmpty(),
     };
-
     const renderMap = {};
-    Object.keys(blockTypes).forEach((type) => {
+    Object.keys(Blocks).forEach((type) => {
       renderMap[type] = {
         element: 'div'
       };
     });
-
     this.blockRenderMap = DefaultDraftBlockRenderMap.merge(renderMap);
-    this.onChange = this.onChange.bind(this);
-    this.focus = this.focus.bind(this);
-    this.blockRendererFn = this.blockRendererFn.bind(this);
   }
 
-  onChange(editorState) {
+  onChange = (editorState) => {
     this.setState({
       editorState
     });
   }
 
-  focus() {
-    if (!this.props.readOnly) {
+  focus = () => {
+    if (this.props.disableDrag) {
       this.editor.focus();
     }
   }
 
-  blockRendererFn(contentBlock) {
+  blockRendererFn = (contentBlock) => {
     const type = contentBlock.getType();
-    return blockTypes && blockTypes[type] ? {
-      component: blockTypes[type]
+    return Blocks && Blocks[type] ? {
+      component: Blocks[type]
     } : undefined;
   }
 
   render() {
-    const { readOnly } = this.props;
-    return (
+    const { type, disableDrag, isDragging, connectDragSource } = this.props;
+    return connectDragSource(
       <div
+        id={type}
         style={{
-          background: '#636363',
-          marginBottom: 10,
+          background: '#FFFFFF',
+          opacity: isDragging ? 0.6 : 1,
           height: '100%',
           padding: '10px',
-          cursor: readOnly ? 'move' : 'text'
+          color: '#000000',
+          lineHeight: 1.125,
+          cursor: disableDrag ? 'text' : 'move'
         }}
         onClick={this.focus}
       >
@@ -106,17 +165,24 @@ export default class Text extends Component {
           blockRenderMap={this.blockRenderMap}
           blockRendererFn={this.blockRendererFn}
           ref={(c) => { this.editor = c; }}
+          readOnly={!disableDrag}
           {...this.props}
         />
-      </div>
+      </div>,
+      { dropEffect: 'copy' }
     );
   }
 }
 
 Text.propTypes = {
-  readOnly: PropTypes.bool
+  type: PropTypes.string.isRequired,
+  disableDrag: PropTypes.bool,
+  isDragging: PropTypes.bool.isRequired,
+  connectDragSource: PropTypes.func.isRequired
 };
 
 Text.defaultProps = {
-  readOnly: false
+  disableDrag: false
 };
+
+export default DragSource(manifest.TEXT, source, collect)(Text);
