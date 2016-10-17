@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import equal from 'deep-equal';
 import styled, { css } from 'styled-components';
 import ColumnTarget from './ColumnTarget';
 import manifest from '../lib/manifest';
@@ -15,12 +16,20 @@ const Container = styled('div')`
   }
 `;
 
-class Column extends Component {
+export default class Column extends Component {
   constructor(props) {
     super(props);
     this.state = {
       content: []
     };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return !equal(this.props, nextProps) || !equal(this.state, nextState);
+  }
+
+  componentDidUpdate() {
+    // console.log('wow');
   }
 
   renderContent() {
@@ -34,11 +43,18 @@ class Column extends Component {
   }
 
   render() {
+    const { col, handleContent, rowIndex, columnIndex } = this.props;
     return (
-      <Container col={this.props.col}>
+      <Container col={col}>
         <ColumnTarget
-          onDrop={({ type }) => {
-            this.setState({ content: this.state.content.concat(type) });
+          onDrop={({ type, component }) => {
+            this.setState({
+              content: this.state.content.concat({
+                type,
+                component
+              })
+            });
+            handleContent(rowIndex, columnIndex, component);
           }}
         >
           {this.renderContent()}
@@ -49,7 +65,8 @@ class Column extends Component {
 }
 
 Column.propTypes = {
-  col: PropTypes.number.isRequired
+  col: PropTypes.number.isRequired,
+  handleContent: PropTypes.func,
+  rowIndex: PropTypes.number.isRequired,
+  columnIndex: PropTypes.number.isRequired
 };
-
-export default Column;

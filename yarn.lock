@@ -2138,7 +2138,7 @@ decorate-component-with-props@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/decorate-component-with-props/-/decorate-component-with-props-1.0.2.tgz#5764d3cf6a58685a522201bad31bff0cb531e5fe"
 
-deep-equal@^1.0.0:
+deep-equal, deep-equal@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.0.1.tgz#f5d260292b660e084eff4cdbc9f08ad3247448b5"
 
@@ -2321,6 +2321,12 @@ draft-js-alignment-plugin@2.0.0-beta5:
     react-dom ">=15.2.1"
     union-class-names "^1.0.0"
 
+draft-js-block-breakout-plugin:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/draft-js-block-breakout-plugin/-/draft-js-block-breakout-plugin-0.0.2.tgz#874763be395358bb49f5c3e7f162b0b83b1a124d"
+  dependencies:
+    immutable "^3.8.1"
+
 draft-js-cleanup-empty-plugin@2.0.0-beta5:
   version "2.0.0-beta5"
   resolved "https://registry.yarnpkg.com/draft-js-cleanup-empty-plugin/-/draft-js-cleanup-empty-plugin-2.0.0-beta5.tgz#304b52b69bc51a79b6a4147ddf9bf69b36b1123a"
@@ -2356,6 +2362,12 @@ draft-js-entity-props-plugin@2.0.0-beta5:
     react ">=15.2.1"
     react-dom ">=15.2.1"
     union-class-names "^1.0.0"
+
+draft-js-export-html:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/draft-js-export-html/-/draft-js-export-html-0.5.0.tgz#85380307baba82ad46cb7a8b1ae7ae1625fd037b"
+  dependencies:
+    draft-js-utils "^0.1.5"
 
 draft-js-focus-plugin:
   version "2.0.0-beta1"
@@ -2416,6 +2428,10 @@ draft-js-toolbar-plugin@2.0.0-beta5:
     react ">=15.2.1"
     react-dom ">=15.2.1"
     union-class-names "^1.0.0"
+
+draft-js-utils@^0.1.5:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/draft-js-utils/-/draft-js-utils-0.1.6.tgz#71f0e90a843426f0eadc83e8154b3220c4bb7f9e"
 
 duplexer2@^0.1.4:
   version "0.1.4"
@@ -3477,7 +3493,7 @@ ignore@^3.1.5:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-3.2.0.tgz#8d88f03c3002a0ac52114db25d2c673b0bf1e435"
 
-immutable@^3.7.6, immutable@>=3.8.1:
+immutable@^3.7.6, immutable@^3.8.1, immutable@>=3.8.1:
   version "3.8.1"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.1.tgz#200807f11ab0f72710ea485542de088075f68cd2"
 

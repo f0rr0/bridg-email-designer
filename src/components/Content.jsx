@@ -11,5 +11,5 @@ const Content = styled('section')`
 
 export default () =>
   <Content>
-    <Text type={manifest.TEXT} readOnly placeholder="Custom text content" />
+    <Text type={manifest.TEXT} readOnly />
   </Content>;

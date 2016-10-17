@@ -4,8 +4,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import SwipeableViews from 'react-swipeable-views';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import Dashboard from 'material-ui/svg-icons/action/dashboard';
-import List from 'material-ui/svg-icons/action/list';
+import DashboardIcon from 'material-ui/svg-icons/action/dashboard';
+import ListIcon from 'material-ui/svg-icons/action/list';
 import Layouts from './Layouts';
 import Content from './Content';
 
@@ -49,8 +49,8 @@ export default class Toolbox extends Component {
               background: '#89D6FF'
             }}
           >
-            <Tab icon={<Dashboard />} label="Layouts" value={0} />
-            <Tab icon={<List />} label="Content" value={1} />
+            <Tab icon={<DashboardIcon />} label="Layouts" value={0} />
+            <Tab icon={<ListIcon />} label="Content" value={1} />
           </Tabs>
           <SwipeableViews
             index={this.state.slideIndex}

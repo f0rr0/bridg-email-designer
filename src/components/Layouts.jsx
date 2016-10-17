@@ -11,8 +11,10 @@ const Layouts = styled('section')`
 
 export default () =>
   <Layouts>
-    <Row type={manifest.ROW} col={1} />
-    <Row type={manifest.ROW} col={2} />
-    <Row type={manifest.ROW} col={3} />
-    <Row type={manifest.ROW} col={4} />
+    {
+      [...Array(4).keys()].map(
+        key =>
+          <Row key={key} rowIndex={key} type={manifest.ROW} col={key + 1} />
+      )
+    }
   </Layouts>;

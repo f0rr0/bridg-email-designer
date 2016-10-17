@@ -1,8 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { EditorState, RichUtils, DefaultDraftBlockRenderMap } from 'draft-js';
-import Editor from 'draft-js-plugins-editor';
 import { DragSource } from 'react-dnd';
+import { RichUtils, DefaultDraftBlockRenderMap } from 'draft-js';
+import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
+import { stateToHTML } from 'draft-js-export-html';
 import createToolbarPlugin, { ToolbarDecorator } from 'draft-js-toolbar-plugin';
+import createBlockBreakoutPlugin from 'draft-js-block-breakout-plugin';
 // import createFocusPlugin, { FocusDecorator } from 'draft-js-focus-plugin';
 // import createDndPlugin, { DraggableDecorator } from 'draft-js-dnd-plugin';
 // import createAlignmentPlugin, { AlignmentDecorator } from 'draft-js-alignment-plugin';
@@ -46,6 +48,16 @@ const toolbarPlugin = createToolbarPlugin({
       setEditorState(RichUtils.toggleBlockType(
         editorState,
         'header-3'
+      ))
+  }, {
+    button: <span>Quote</span>,
+    key: 'BLOCKQUOTE',
+    label: 'Blockquote',
+    active: block => block.get('type') === 'blockquote',
+    toggle: (block, action, editorState, setEditorState) =>
+      setEditorState(RichUtils.toggleBlockType(
+        editorState,
+        'blockquote'
       ))
   }]
 });
@@ -101,6 +113,9 @@ const toolbarPlugin = createToolbarPlugin({
 
 const plugins = [
   toolbarPlugin,
+  createBlockBreakoutPlugin({
+    breakoutBlocks: Object.keys(Blocks)
+  })
   // dndPlugin,
   // createFocusPlugin(),
   // createResizeablePlugin(),
@@ -112,7 +127,7 @@ class Text extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorState: EditorState.createEmpty(),
+      editorState: createEditorStateWithText('Custom text content...'),
     };
     const renderMap = {};
     Object.keys(Blocks).forEach((type) => {
@@ -142,9 +157,11 @@ class Text extends Component {
     } : undefined;
   }
 
+  export = () => stateToHTML(this.state.editorState.getCurrentContent())
+
   render() {
-    const { type, disableDrag, isDragging, connectDragSource } = this.props;
-    return connectDragSource(
+    const { type, disableDrag, isDragging, connectDragSource, connectDragPreview } = this.props;
+    return connectDragPreview(connectDragSource(
       <div
         id={type}
         style={{
@@ -154,7 +171,8 @@ class Text extends Component {
           padding: '10px',
           color: '#000000',
           lineHeight: 1.125,
-          cursor: disableDrag ? 'text' : 'move'
+          cursor: disableDrag ? 'text' : 'move',
+          transition: 'all 0.2s ease-in-out'
         }}
         onClick={this.focus}
       >
@@ -170,7 +188,7 @@ class Text extends Component {
         />
       </div>,
       { dropEffect: 'copy' }
-    );
+    ), { captureDraggingState: true });
   }
 }
 
@@ -178,7 +196,8 @@ Text.propTypes = {
   type: PropTypes.string.isRequired,
   disableDrag: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
-  connectDragSource: PropTypes.func.isRequired
+  connectDragSource: PropTypes.func.isRequired,
+  connectDragPreview: PropTypes.func.isRequired
 };
 
 Text.defaultProps = {

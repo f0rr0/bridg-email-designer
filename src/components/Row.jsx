@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
+import equal from 'deep-equal';
 import manifest from '../lib/manifest';
 import { source, collect } from '../lib/genericDragSource';
 import Column from './Column';
@@ -16,40 +17,64 @@ const rowSource = Object.assign({}, source, {
 });
 
 class Row extends Component {
+  shouldComponentUpdate(nextProps) {
+    return !equal(this.props, nextProps);
+  }
+
   render() {
-    const { type, col, disableDrag, isDragging, connectDragSource } = this.props;
-    return connectDragSource(
+    const {
+      rowIndex,
+      type,
+      col,
+      handleContent,
+      disableDrag,
+      isDragging,
+      connectDragSource,
+      connectDragPreview
+    } = this.props;
+
+    return connectDragPreview(connectDragSource(
       <div
         id={type}
         style={{
-          marginBottom: 10,
-          opacity: isDragging ? 0.6 : 1,
           display: 'flex',
           flex: '0 0 auto',
           minHeight: '5em',
-          background: '#454F4E',
+          marginBottom: 10,
+          padding: '5px',
           borderRadius: '4px',
+          background: '#454F4E',
           cursor: disableDrag ? 'default' : 'move',
-          padding: '5px'
+          opacity: isDragging ? 0.6 : 1,
+          transition: 'all 0.2s ease-in-out'
         }}
       >
         {
           [...Array(col).keys()].map(key =>
-            <Column col={col} key={key} />
+            <Column
+              rowIndex={rowIndex}
+              columnIndex={key}
+              col={col}
+              key={key}
+              handleContent={handleContent}
+            />
           )
         }
       </div>,
       { dropEffect: 'copy' }
-    );
+    ), { captureDraggingState: true });
   }
 }
 
 Row.propTypes = {
   type: PropTypes.string.isRequired,
   col: PropTypes.number.isRequired,
+  rowIndex: PropTypes.number.isRequired,
+  handleContent: PropTypes.func,
   disableDrag: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
-  connectDragSource: PropTypes.func.isRequired
+  connectDragSource: PropTypes.func.isRequired,
+  connectDragPreview: PropTypes.func.isRequired
 };
 
 Row.defaultProps = {
