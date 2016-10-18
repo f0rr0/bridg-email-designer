@@ -1,5 +1,6 @@
 export default [
   'ROW',
   'TEXT',
-  'HTML'
+  'HTML',
+  'IMAGE'
 ];

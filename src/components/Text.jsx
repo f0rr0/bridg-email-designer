@@ -75,7 +75,7 @@ class Text extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorState: createEditorStateWithText('Custom formatted text'),
+      editorState: createEditorStateWithText('Formatted text'),
     };
     const renderMap = {};
     Object.keys(Blocks).forEach((type) => {

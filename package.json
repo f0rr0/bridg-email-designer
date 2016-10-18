@@ -70,6 +70,8 @@
     "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^15.3.2",
     "react-motion": "^0.4.5",
+    "react-progressive-image": "^0.1.2",
+    "react-resizable": "^1.4.5",
     "react-swipeable-views": "^0.7.10",
     "react-tap-event-plugin": "^1.0.0",
     "styled-components": "^1.0.0"

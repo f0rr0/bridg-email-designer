@@ -12,8 +12,8 @@ import Content from './Content';
 injectTapEventPlugin();
 
 const Container = styled('section')`
-  flex: 0 0 40%;
-  max-width: 40%;
+  flex: 0 0 25%;
+  max-width: 25%;
 `;
 
 const Slide = styled('div')`

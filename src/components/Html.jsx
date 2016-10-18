@@ -100,14 +100,10 @@ class Html extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      markup: '<p>Custom HTML markup</p>',
+      markup: '<p>HTML markup</p>',
       editing: false,
       editable: props.inCanvas
     };
-  }
-
-  componentDidMount() {
-    this.escapeEl = document.createElement('textarea'); // eslint-disable-line
   }
 
   componentDidUpdate(prevProps, prevState) {

@@ -8,8 +8,8 @@ import Row from './Row';
 const Container = styled('section')`
   padding-left: 1.802em;
   display: flex;
-  flex: 0 0 60%;
-  max-width: 60%;
+  flex: 0 0 75%;
+  max-width: 75%;
 `;
 
 // Canvas state is a 3D Immutable List which holds refs to content
