@@ -18,7 +18,7 @@ import 'codemirror/addon/hint/html-hint.js';
 import 'codemirror/addon/edit/trailingspace.js';
 
 import manifest from '../lib/manifest';
-import { source, collect } from '../lib/genericDragSource';
+import { source, collect } from '../lib/generic-drag-source';
 
 /* These styles might be overridden by global styles elsewhere.
 ** Use with caution.

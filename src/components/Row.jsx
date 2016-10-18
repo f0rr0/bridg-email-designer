@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
 import equal from 'deep-equal';
 import manifest from '../lib/manifest';
-import { source, collect } from '../lib/genericDragSource';
+import { source, collect } from '../lib/generic-drag-source';
 import Column from './Column';
 
 const rowSource = Object.assign({}, source, {

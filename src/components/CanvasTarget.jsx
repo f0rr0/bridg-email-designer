@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { DropTarget } from 'react-dnd';
-import { target, collect } from '../lib/genericDropTarget';
+import { target, collect } from '../lib/generic-drop-target';
 import manifest from '../lib/manifest';
 
 class CanvasTarget extends Component {

@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { injectGlobal } from 'styled-components';
 import { DragSource } from 'react-dnd';
 import { RichUtils, DefaultDraftBlockRenderMap } from 'draft-js';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
@@ -11,27 +10,11 @@ import createCleanupEmptyPlugin from 'draft-js-cleanup-empty-plugin';
 import 'draft-js-toolbar-plugin/lib/plugin.css';
 import Blocks from './Blocks';
 import manifest from '../lib/manifest';
-import { source, collect } from '../lib/genericDragSource';
+import { source, collect } from '../lib/generic-drag-source';
 
 /* These styles might be overridden by global styles elsewhere.
 ** Use with caution.
 */
-
-/*eslint-disable */
-injectGlobal`
-  .header-1 {
-    font-size: 2em;
-  }
-
-  .blockquote {
-    border-left: 4px solid #696969;
-    background: #cecece;
-    padding: 5px;
-    font-style: italic;
-  }
-`;
-/*eslint-enable */
-
 
 const toolbarPlugin = createToolbarPlugin({
   textActions: [{
@@ -92,7 +75,7 @@ class Text extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorState: createEditorStateWithText('Custom text content...'),
+      editorState: createEditorStateWithText('Custom formatted text'),
     };
     const renderMap = {};
     Object.keys(Blocks).forEach((type) => {
@@ -122,7 +105,8 @@ class Text extends Component {
     } : undefined;
   }
 
-  export = () => stateToHTML(this.state.editorState.getCurrentContent())
+  export = () => stateToHTML(this.state.editorState.getCurrentContent());
+
 
   render() {
     const { type, inCanvas, isDragging, connectDragSource, connectDragPreview } = this.props;

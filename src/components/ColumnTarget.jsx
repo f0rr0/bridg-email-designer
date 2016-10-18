@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import equal from 'deep-equal';
 import { DropTarget } from 'react-dnd';
-import { target } from '../lib/genericDropTarget';
+import { target } from '../lib/generic-drop-target';
 import manifest from '../lib/manifest';
 
 const contentTypes = Object.values(manifest).filter(type => type !== 'ROW');

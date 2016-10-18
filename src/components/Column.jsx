@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import equal from 'deep-equal';
 import styled, { css } from 'styled-components';
 import capitalize from 'lodash.capitalize';
 import ColumnTarget from './ColumnTarget';
@@ -21,10 +20,17 @@ export default class Column extends Component {
     this.state = {
       content: []
     };
+    this.components = [];
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return !equal(this.props, nextProps) || !equal(this.state, nextState);
+    return this.state.content.length !== nextState.content.length;
+  }
+
+  componentDidUpdate() {
+    const { handleContent, rowIndex, columnIndex } = this.props;
+    const newComponent = this.components[this.components.length - 1];
+    handleContent(rowIndex, columnIndex, newComponent);
   }
 
   renderContent() {
@@ -37,25 +43,27 @@ export default class Column extends Component {
           key={index}
           inCanvas
           disableDrag
+          ref={(c) => {
+            if (c) {
+              this.components[index] = c.decoratedComponentInstance;
+            }
+          }}
         />
       );
-    }
-    );
+    });
   }
 
   render() {
-    const { col, handleContent, rowIndex, columnIndex } = this.props;
+    const { col } = this.props;
     return (
       <Container col={col}>
         <ColumnTarget
-          onDrop={({ type, component }) => {
+          onDrop={({ type }) => {
             this.setState({
               content: this.state.content.concat({
-                type,
-                component
+                type
               })
             });
-            handleContent(rowIndex, columnIndex, component);
           }}
         >
           {this.renderContent()}

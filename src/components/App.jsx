@@ -26,6 +26,17 @@ injectGlobal`
   time {
     display: block;
   }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  blockquote {
+    border-left: 4px solid #696969;
+    background: #cecece;
+    padding: 5px;
+    font-style: italic;
+  }
 `;
 /*eslint-enable */
 
