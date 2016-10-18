@@ -4,6 +4,8 @@ import { DropTarget } from 'react-dnd';
 import { target } from '../lib/genericDropTarget';
 import manifest from '../lib/manifest';
 
+const contentTypes = Object.values(manifest).filter(type => type !== 'ROW');
+
 const collect = (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver()
@@ -39,4 +41,4 @@ ColumnTarget.propTypes = {
   isOver: PropTypes.bool.isRequired
 };
 
-export default DropTarget(manifest.TEXT, target, collect)(ColumnTarget);
+export default DropTarget(contentTypes, target, collect)(ColumnTarget);

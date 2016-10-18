@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Text from './Text';
+import capitalize from 'lodash.capitalize';
 import manifest from '../lib/manifest';
 
 const Content = styled('section')`
@@ -9,7 +9,29 @@ const Content = styled('section')`
   padding: 10px;
 `;
 
-export default () =>
-  <Content>
-    <Text type={manifest.TEXT} readOnly />
-  </Content>;
+const Container = styled('div')`
+  margin-bottom: 10px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+export default () => {
+  const contentTypes = Object.values(manifest).filter(type => type !== 'ROW');
+  return (
+    <Content>
+      {
+        contentTypes.map((type, index) => {
+          const path = capitalize(type);
+          const ComponentForType = require('./' + path).default; // eslint-disable-line
+          return (
+            <Container key={index}>
+              <ComponentForType type={type} readOnly />
+            </Container>
+          );
+        })
+      }
+    </Content>
+  );
+};

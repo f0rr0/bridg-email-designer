@@ -1639,6 +1639,10 @@ clap@^1.0.9:
   dependencies:
     chalk "^1.1.3"
 
+classnames@^2.2.3:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
+
 clean-css@3.4.x:
   version "3.4.20"
   resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-3.4.20.tgz#c0d8963b5448e030f0bcd3ddd0dac4dfe3dea501"
@@ -1716,6 +1720,10 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.0.1.tgz#1104cd34f9b5b45d3eba88f1babc1924e1ce35fb"
   dependencies:
     number-is-nan "^1.0.0"
+
+codemirror, codemirror@^5.13.4:
+  version "5.19.0"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.19.0.tgz#71fa8523b9425216a2be4734e8aba625ff66e7ec"
 
 collections@^0.2.0:
   version "0.2.2"
@@ -2301,7 +2309,7 @@ dot-prop@^3.0.0:
   dependencies:
     is-obj "^1.0.0"
 
-draft-js, draft-js@>=0.7.0, draft-js@>=0.8.1:
+draft-js, draft-js@>=0.8.1:
   version "0.9.1"
   resolved "https://registry.yarnpkg.com/draft-js/-/draft-js-0.9.1.tgz#940a51a0ad1fede0411676b6404f4050495f54f9"
   dependencies:
@@ -2309,39 +2317,15 @@ draft-js, draft-js@>=0.7.0, draft-js@>=0.8.1:
     immutable "~3.7.4"
     object-assign "^4.1.0"
 
-draft-js-alignment-plugin@2.0.0-beta5:
-  version "2.0.0-beta5"
-  resolved "https://registry.yarnpkg.com/draft-js-alignment-plugin/-/draft-js-alignment-plugin-2.0.0-beta5.tgz#0ba6eb2c7718d478bf7b8462acaaeb1fc08cd6ea"
-  dependencies:
-    decorate-component-with-props "^1.0.2"
-    draft-js ">=0.8.1"
-    find-with-regex "^1.0.2"
-    immutable ">=3.8.1"
-    react ">=15.2.1"
-    react-dom ">=15.2.1"
-    union-class-names "^1.0.0"
-
 draft-js-block-breakout-plugin:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/draft-js-block-breakout-plugin/-/draft-js-block-breakout-plugin-0.0.2.tgz#874763be395358bb49f5c3e7f162b0b83b1a124d"
   dependencies:
     immutable "^3.8.1"
 
-draft-js-cleanup-empty-plugin@2.0.0-beta5:
+draft-js-cleanup-empty-plugin@v2.0.0-beta5:
   version "2.0.0-beta5"
   resolved "https://registry.yarnpkg.com/draft-js-cleanup-empty-plugin/-/draft-js-cleanup-empty-plugin-2.0.0-beta5.tgz#304b52b69bc51a79b6a4147ddf9bf69b36b1123a"
-  dependencies:
-    decorate-component-with-props "^1.0.2"
-    draft-js ">=0.8.1"
-    find-with-regex "^1.0.2"
-    immutable ">=3.8.1"
-    react ">=15.2.1"
-    react-dom ">=15.2.1"
-    union-class-names "^1.0.0"
-
-draft-js-dnd-plugin@2.0.0-beta5:
-  version "2.0.0-beta5"
-  resolved "https://registry.yarnpkg.com/draft-js-dnd-plugin/-/draft-js-dnd-plugin-2.0.0-beta5.tgz#6d2f0bb6602b9625d4c14a92981d2d7da80a07d4"
   dependencies:
     decorate-component-with-props "^1.0.2"
     draft-js ">=0.8.1"
@@ -2369,45 +2353,9 @@ draft-js-export-html:
   dependencies:
     draft-js-utils "^0.1.5"
 
-draft-js-focus-plugin:
-  version "2.0.0-beta1"
-  resolved "https://registry.yarnpkg.com/draft-js-focus-plugin/-/draft-js-focus-plugin-2.0.0-beta1.tgz#96b3958e714c59163022fa28753a0214d51b56c3"
-  dependencies:
-    decorate-component-with-props "^1.0.2"
-    draft-js ">=0.7.0"
-    find-with-regex "^1.0.2"
-    immutable ">=3.8.1"
-    react ">=15.1.0"
-    react-dom ">=15.1.0"
-    union-class-names "^1.0.0"
-
-draft-js-image-plugin@2.0.0-beta5:
-  version "2.0.0-beta5"
-  resolved "https://registry.yarnpkg.com/draft-js-image-plugin/-/draft-js-image-plugin-2.0.0-beta5.tgz#6977d01f892b53b00dfa9e2125aef1d134628122"
-  dependencies:
-    decorate-component-with-props "^1.0.2"
-    draft-js ">=0.8.1"
-    find-with-regex "^1.0.2"
-    immutable ">=3.8.1"
-    react ">=15.2.1"
-    react-dom ">=15.2.1"
-    union-class-names "^1.0.0"
-
 draft-js-plugins-editor@2.0.0-beta5:
   version "2.0.0-beta5"
   resolved "https://registry.yarnpkg.com/draft-js-plugins-editor/-/draft-js-plugins-editor-2.0.0-beta5.tgz#0e81fddb69e23be1c22f1fbd74e25501b3dca171"
-  dependencies:
-    decorate-component-with-props "^1.0.2"
-    draft-js ">=0.8.1"
-    find-with-regex "^1.0.2"
-    immutable ">=3.8.1"
-    react ">=15.2.1"
-    react-dom ">=15.2.1"
-    union-class-names "^1.0.0"
-
-draft-js-resizeable-plugin@2.0.0-beta5:
-  version "2.0.0-beta5"
-  resolved "https://registry.yarnpkg.com/draft-js-resizeable-plugin/-/draft-js-resizeable-plugin-2.0.0-beta5.tgz#ad4867175f3543d29103b70d40c9189171a12a38"
   dependencies:
     decorate-component-with-props "^1.0.2"
     draft-js ">=0.8.1"
@@ -4043,11 +3991,15 @@ lodash.camelcase@^3.0.1:
   dependencies:
     lodash._createcompounder "^3.0.0"
 
+lodash.capitalize:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/lodash.capitalize/-/lodash.capitalize-4.2.1.tgz#f826c9b4e2a8511d84e3aca29db05e1a4f3b72a9"
+
 lodash.cond@^4.3.0:
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/lodash.cond/-/lodash.cond-4.5.2.tgz#f471a1da486be60f6ab955d17115523dd1d255d5"
 
-lodash.debounce@^4.0.3:
+lodash.debounce@^4.0.3, lodash.debounce@^4.0.4:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
 
@@ -5307,6 +5259,14 @@ react-addons-transition-group@^15.0.0:
   version "15.3.2"
   resolved "https://registry.yarnpkg.com/react-addons-transition-group/-/react-addons-transition-group-15.3.2.tgz#64f758d18bd1e59128726b1c9a4db79127c4f1ed"
 
+react-codemirror:
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/react-codemirror/-/react-codemirror-0.2.6.tgz#e71e35717ce6effae68df1dbf2b5a75b84a44f84"
+  dependencies:
+    classnames "^2.2.3"
+    codemirror "^5.13.4"
+    lodash.debounce "^4.0.4"
+
 react-dnd-html5-backend@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-2.1.2.tgz#bcff5866629c335b310b1062fe6537af35073c66"
@@ -5322,7 +5282,7 @@ react-dnd@^2.1.4:
     invariant "^2.1.0"
     lodash "^4.2.0"
 
-react-dom@^15.3.2, react-dom@>=15.1.0, react-dom@>=15.2.1:
+react-dom@^15.3.2, react-dom@>=15.2.1:
   version "15.3.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.3.2.tgz#c46b0aa5380d7b838e7a59c4a7beff2ed315531f"
 
@@ -5355,7 +5315,7 @@ react-tap-event-plugin:
   dependencies:
     fbjs "^0.2.1"
 
-react@^15.3.2, react@>=15.1.0, react@>=15.2.1:
+react@^15.3.2, react@>=15.2.1:
   version "15.3.2"
   resolved "https://registry.yarnpkg.com/react/-/react-15.3.2.tgz#a7bccd2fee8af126b0317e222c28d1d54528d09e"
   dependencies:
@@ -6187,6 +6147,11 @@ title-case@^2.1.0:
   dependencies:
     no-case "^2.2.0"
     upper-case "^1.0.3"
+
+tj/react-click-outside:
+  name react-click-outside
+  version "1.1.0"
+  resolved "https://codeload.github.com/tj/react-click-outside/tar.gz/82d51114d841a151e6285ac542d6fd98690910e6"
 
 to-array@0.1.4:
   version "0.1.4"

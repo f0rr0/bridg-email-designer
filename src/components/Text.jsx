@@ -1,22 +1,37 @@
 import React, { Component, PropTypes } from 'react';
+import { injectGlobal } from 'styled-components';
 import { DragSource } from 'react-dnd';
 import { RichUtils, DefaultDraftBlockRenderMap } from 'draft-js';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
-import createToolbarPlugin, { ToolbarDecorator } from 'draft-js-toolbar-plugin';
+import createToolbarPlugin from 'draft-js-toolbar-plugin';
 import createBlockBreakoutPlugin from 'draft-js-block-breakout-plugin';
-// import createFocusPlugin, { FocusDecorator } from 'draft-js-focus-plugin';
-// import createDndPlugin, { DraggableDecorator } from 'draft-js-dnd-plugin';
-// import createAlignmentPlugin, { AlignmentDecorator } from 'draft-js-alignment-plugin';
-// import createResizeablePlugin, { ResizeableDecorator } from 'draft-js-resizeable-plugin';
-// import createImagePlugin, { imageCreator, imageStyles } from 'draft-js-image-plugin';
-// import 'draft-js-alignment-plugin/lib/plugin.css';
-// import 'draft-js-focus-plugin/lib/plugin.css';
-// import 'draft-js-image-plugin/lib/plugin.css';
+import createEntityPropsPlugin from 'draft-js-entity-props-plugin';
+import createCleanupEmptyPlugin from 'draft-js-cleanup-empty-plugin';
 import 'draft-js-toolbar-plugin/lib/plugin.css';
 import Blocks from './Blocks';
 import manifest from '../lib/manifest';
 import { source, collect } from '../lib/genericDragSource';
+
+/* These styles might be overridden by global styles elsewhere.
+** Use with caution.
+*/
+
+/*eslint-disable */
+injectGlobal`
+  .header-1 {
+    font-size: 2em;
+  }
+
+  .blockquote {
+    border-left: 4px solid #696969;
+    background: #cecece;
+    padding: 5px;
+    font-style: italic;
+  }
+`;
+/*eslint-enable */
+
 
 const toolbarPlugin = createToolbarPlugin({
   textActions: [{
@@ -62,65 +77,15 @@ const toolbarPlugin = createToolbarPlugin({
   }]
 });
 
-// const dndPlugin = createDndPlugin({
-//   allowDrop: true,
-//   handleUpload(data, success, failed, progress) {
-//     console.log(data);
-//     alert('Thiis does not implement a backend.');
-//   },
-//   handleDefaultData(blockType) {
-//     if (blockType === 'block-image') {
-//       return {
-//         url: '/whoa.jpg'
-//       };
-//     }
-//     return {};
-//   },
-//   handlePlaceholder: (state, selection, data) => {
-//     const { type } = data;
-//     if (type.indexOf('image/') === 0) {
-//       return 'block-image';
-//     }
-//     return undefined;
-//   },
-//   handleBlock: (state, selection, data) => {
-//     const { type } = data;
-//     if (type.indexOf('image/') === 0) {
-//       return 'block-image';
-//     }
-//     return undefined;
-//   },
-//   handleDrop() {
-//     console.log('wtf');
-//   }
-// });
-//
-// const image = ResizeableDecorator({
-//   resizeSteps: 10,
-//   handles: true,
-//   vertical: 'auto'
-// })(
-//   DraggableDecorator(
-//     FocusDecorator(
-//       AlignmentDecorator(
-//         ToolbarDecorator()(
-//           imageCreator({ theme: imageStyles })
-//         )
-//       )
-//     )
-//   )
-// );
-
 const plugins = [
   toolbarPlugin,
   createBlockBreakoutPlugin({
     breakoutBlocks: Object.keys(Blocks)
+  }),
+  createEntityPropsPlugin(),
+  createCleanupEmptyPlugin({
+    types: Object.keys(Blocks)
   })
-  // dndPlugin,
-  // createFocusPlugin(),
-  // createResizeablePlugin(),
-  // createImagePlugin({ component: image }),
-  // createAlignmentPlugin()
 ];
 
 class Text extends Component {
@@ -145,7 +110,7 @@ class Text extends Component {
   }
 
   focus = () => {
-    if (this.props.disableDrag) {
+    if (this.props.inCanvas) {
       this.editor.focus();
     }
   }
@@ -160,7 +125,7 @@ class Text extends Component {
   export = () => stateToHTML(this.state.editorState.getCurrentContent())
 
   render() {
-    const { type, disableDrag, isDragging, connectDragSource, connectDragPreview } = this.props;
+    const { type, inCanvas, isDragging, connectDragSource, connectDragPreview } = this.props;
     return connectDragPreview(connectDragSource(
       <div
         id={type}
@@ -171,7 +136,7 @@ class Text extends Component {
           padding: '10px',
           color: '#000000',
           lineHeight: 1.125,
-          cursor: disableDrag ? 'text' : 'move',
+          cursor: inCanvas ? 'text' : 'move',
           transition: 'all 0.2s ease-in-out'
         }}
         onClick={this.focus}
@@ -183,7 +148,6 @@ class Text extends Component {
           blockRenderMap={this.blockRenderMap}
           blockRendererFn={this.blockRendererFn}
           ref={(c) => { this.editor = c; }}
-          readOnly={!disableDrag}
           {...this.props}
         />
       </div>,
@@ -194,14 +158,14 @@ class Text extends Component {
 
 Text.propTypes = {
   type: PropTypes.string.isRequired,
-  disableDrag: PropTypes.bool,
+  inCanvas: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
   connectDragSource: PropTypes.func.isRequired,
   connectDragPreview: PropTypes.func.isRequired
 };
 
 Text.defaultProps = {
-  disableDrag: false
+  inCanvas: false
 };
 
 export default DragSource(manifest.TEXT, source, collect)(Text);

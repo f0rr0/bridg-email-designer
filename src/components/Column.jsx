@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import equal from 'deep-equal';
 import styled, { css } from 'styled-components';
+import capitalize from 'lodash.capitalize';
 import ColumnTarget from './ColumnTarget';
-import manifest from '../lib/manifest';
-import Text from './Text';
 
 const Container = styled('div')`
   background: #636363;
@@ -28,17 +27,19 @@ export default class Column extends Component {
     return !equal(this.props, nextProps) || !equal(this.state, nextState);
   }
 
-  componentDidUpdate() {
-    // console.log('wow');
-  }
-
   renderContent() {
-    return this.state.content.map((type, index) =>
-      <Text
-        type={manifest.TEXT}
-        key={index}
-        disableDrag
-      />
+    return this.state.content.map((content, index) => {
+      const path = capitalize(content.type);
+      const Content = require('./' + path).default; // eslint-disable-line
+      return (
+        <Content
+          type={content.type}
+          key={index}
+          inCanvas
+          disableDrag
+        />
+      );
+    }
     );
   }
 
