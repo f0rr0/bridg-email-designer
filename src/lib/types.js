@@ -2,5 +2,6 @@ export default [
   'ROW',
   'TEXT',
   'HTML',
-  'IMAGE'
+  'IMAGE',
+  'BANNER'
 ];

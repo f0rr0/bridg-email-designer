@@ -27,15 +27,18 @@ import { source, collect } from '../lib/generic-drag-source';
 /*eslint-disable */
 injectGlobal`
   .CodeMirror {
-    padding: 10px;
     font-size: 14px;
   }
 
-  .CodeMirror, .CodeMirror-scroll, .ReactCodeMirror {
+  .CodeMirror, .ReactCodeMirror {
     box-sizing: border-box !important;
-    min-height: 5em !important;
+    max-height: 10em !important;
     height: 100% !important;
+  }
+
+  .CodeMirror-scroll {
     font-family: 'Menlo', 'Monaco', monospace;
+    max-height: 10em !important;
   }
 
   .CodeMirror-hints {

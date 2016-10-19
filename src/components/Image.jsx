@@ -30,7 +30,7 @@ injectGlobal`
     cursor: se-resize;
   }
 `;
-/*eslint-disable */
+/*eslint-enable */
 
 const ImageContainer = styled('div')`
   background: ${({ bg }) => css`url(${bg})`}
@@ -40,7 +40,7 @@ const ImageContainer = styled('div')`
   background-color: #bbbbbb;
   width: 100%;
   height: 100%;
-  transition: all 0.2s ease-in-out;
+  transition: background 0.2s ease-in-out, margin-top 0s;
 
   &:hover {
     opacity: 0.5;
@@ -58,10 +58,10 @@ class Image extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return !equal(this.props, nextProps) || nextState.src !== this.state.src;
+    return !equal(this.props, nextProps) || !equal(this.state, nextState);
   }
 
-  handleResizeStop = (event, {element, size}) => {
+  handleResize= (event, { size }) => {
     const { width, height } = size;
     this.setState({
       height,
@@ -70,8 +70,8 @@ class Image extends Component {
   }
 
   handleClick = () => {
-    const src = window.prompt('Enter the URI to the image', 'https://unsplash.it/200/?random');
-    if (!!src) {
+    const src = window.prompt('Enter the URI to the image', 'https://unsplash.it/200/?random'); // eslint-disable-line
+    if (src) {
       this.setState({
         src
       });
@@ -85,7 +85,7 @@ class Image extends Component {
 
   render() {
     const { type, inCanvas, isDragging, connectDragSource, connectDragPreview } = this.props;
-    const { src } = this.state;
+    const { src, height } = this.state;
     return connectDragPreview(connectDragSource(
       <div
         id={type}
@@ -93,11 +93,14 @@ class Image extends Component {
           background: '#FFFFFF',
           opacity: isDragging ? 0.6 : 1,
           height: '100%',
+          width: '100%',
           padding: '10px',
           color: '#000000',
           lineHeight: 1.125,
           cursor: inCanvas ? 'pointer' : 'move',
-          transition: 'all 0.2s ease-in-out'
+          transition: 'all 0.2s ease-in-out',
+          display: 'flex',
+          flex: '0 0 auto'
         }}
       >
         {
@@ -114,11 +117,13 @@ class Image extends Component {
                     lockAspectRatio
                     minConstraints={[100, 100]}
                     maxConstraints={[200, 200]}
-                    handleSize={[30,30]}
-                    onResizeStop={this.handleResizeStop}
-                    onClick={this.handleClick}
+                    onResize={this.handleResize}
                   >
-                    <ImageContainer bg={img} />
+                    <ImageContainer
+                      height={height}
+                      bg={img}
+                      onClick={this.handleClick}
+                    />
                   </ResizableBox>
               }
             </ProgressiveImage>
