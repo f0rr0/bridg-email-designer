@@ -5,7 +5,7 @@ import equal from 'deep-equal';
 import manifest from '../lib/manifest';
 import { source, collect } from '../lib/generic-drag-source';
 import Column from './Column';
-import close from '../assets/close.svg';
+import close from '../assets/close.png';
 
 const rowSource = Object.assign({}, source, {
   beginDrag(props, monitor, component) {
@@ -21,14 +21,15 @@ const rowSource = Object.assign({}, source, {
 const CloseButton = styled('div')`
   position: absolute;
   right: 0;
-  width: 16px;
-  height: 16px;
-  margin: -10px -5px 0 0;
+  width: 20px;
+  height: 20px;
+  margin: -12px -7px 0 0;
   background-image: ${`url(${close})`};
   background-repeat: no-repeat;
   background-size: contain;
-  filter: invert(100%) brightness(10%);
   cursor: pointer;
+  opacity: ${({ showClose }) => showClose ? 0.8 : 0}
+  transition: all 0.4s ease-in-out;
 `;
 
 class Row extends Component {
@@ -43,15 +44,18 @@ class Row extends Component {
     return !equal(this.props, nextProps) || !equal(this.state, nextState);
   }
 
-  toggleClose = val => () => {
+  toggleClose = (val, cb) => () => {
     this.setState({
       showClose: val
+    }, () => {
+      if (cb) {
+        cb();
+      }
     });
   }
 
   handleClick = () => {
-    this.toggleClose(false);
-    this.props.onClick();
+    this.toggleClose(false, this.props.onClick)();
   }
 
   render() {
@@ -89,8 +93,8 @@ class Row extends Component {
         onMouseOver={this.toggleClose(true)}
         onMouseLeave={this.toggleClose(false)}
       >
-        { inCanvas && showClose ? <CloseButton onClick={this.handleClick} />
-          : null
+        {
+          inCanvas ? <CloseButton showClose={showClose} onClick={this.handleClick} /> : null
         }
         {
           [...Array(col).keys()].map(key =>
