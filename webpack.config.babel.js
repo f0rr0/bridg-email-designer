@@ -20,7 +20,9 @@ const devConfig = {
     filename: 'static/js/bundle.[hash:8].js',
   },
   resolve: {
-    extensions: ['*', '.js', '.jsx']
+    extensions: ['*', '.js', '.jsx'],
+    alias: { './package' : './package.json' }
+    /* Need alias since juice does require('./package') :/ */
   },
   module: {
     loaders: [

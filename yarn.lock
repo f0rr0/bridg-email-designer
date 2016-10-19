@@ -202,7 +202,7 @@ async@^0.9.0:
   version "0.9.2"
   resolved "https://registry.yarnpkg.com/async/-/async-0.9.2.tgz#aea74d5e61c1f899613bf64bda66d4c78f2fd17d"
 
-async@^1.3.0, async@1.5.2:
+async@^1.3.0, async@^1.5.2, async@1.5.2:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
 
@@ -1617,7 +1617,7 @@ cheerio:
     lodash.reject "^4.4.0"
     lodash.some "^4.4.0"
 
-cheerio@^0.20.0:
+cheerio@^0.20.0, cheerio@0.20.0:
   version "0.20.0"
   resolved "https://registry.yarnpkg.com/cheerio/-/cheerio-0.20.0.tgz#5c710f2bab95653272842ba01c6ea61b3545ec35"
   dependencies:
@@ -2145,6 +2145,13 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
+datauri@~0.2.0:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/datauri/-/datauri-0.2.1.tgz#f4e8addbb3e54e3dc12d1c88543b8b0b1bf692fa"
+  dependencies:
+    mimer "*"
+    templayed "*"
+
 date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
@@ -2175,7 +2182,7 @@ deep-equal, deep-equal@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.0.1.tgz#f5d260292b660e084eff4cdbc9f08ad3247448b5"
 
-deep-extend@~0.4.0:
+deep-extend@^0.4.0, deep-extend@~0.4.0:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.4.1.tgz#efe4113d08085f4e6f9687759810f807469e2253"
 
@@ -3435,7 +3442,7 @@ html-webpack-plugin:
     pretty-error "^2.0.0"
     toposort "^1.0.0"
 
-htmlparser2@^3.9.1:
+htmlparser2@^3.8.3, htmlparser2@^3.9.1:
   version "3.9.2"
   resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-3.9.2.tgz#1bdf87acca0f3f9e53fa4fcceb0f4b4cbb00b338"
   dependencies:
@@ -4020,6 +4027,18 @@ jsx-ast-utils@^1.0.0, jsx-ast-utils@^1.3.1:
   dependencies:
     object-assign "^4.1.0"
 
+juice:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/juice/-/juice-3.0.1.tgz#d6c07eaa2b04e8700b6efbdfb56aa86e5e3097ff"
+  dependencies:
+    cheerio "0.20.0"
+    commander "2.9.0"
+    cross-spawn "^4.0.0"
+    deep-extend "^0.4.0"
+    mensch "^0.3.3"
+    slick "1.12.2"
+    web-resource-inliner "3.0.0"
+
 keycode@^2.1.1, keycode@^2.1.7:
   version "2.1.7"
   resolved "https://registry.yarnpkg.com/keycode/-/keycode-2.1.7.tgz#7b9255919f6cff562b09a064d222dca70b020f5c"
@@ -4137,6 +4156,10 @@ lodash.cond@^4.3.0:
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/lodash.cond/-/lodash.cond-4.5.2.tgz#f471a1da486be60f6ab955d17115523dd1d255d5"
 
+lodash.constant@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/lodash.constant/-/lodash.constant-3.0.0.tgz#bfe05cce7e515b3128925d6362138420bd624910"
+
 lodash.debounce@^4.0.3, lodash.debounce@^4.0.4:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
@@ -4183,10 +4206,6 @@ lodash.merge@^4.4.0, lodash.merge@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.0.tgz#69884ba144ac33fe699737a6086deffadd0f89c5"
 
-lodash.omit@^4.3.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/lodash.omit/-/lodash.omit-4.5.0.tgz#6eb19ae5a1ee1dd9df0b969e66ce0b7fa30b5e60"
-
 lodash.pick@^4.2.1:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.pick/-/lodash.pick-4.4.0.tgz#52f05610fff9ded422611441ed1fc123a03001b3"
@@ -4210,6 +4229,10 @@ lodash.some@^4.4.0, lodash.some@^4.6.0:
 lodash.throttle@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
+
+lodash.unescape@^4.0.0:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/lodash.unescape/-/lodash.unescape-4.0.1.tgz#bf2249886ce514cda112fae9218cdc065211fc9c"
 
 lodash.uniqueid:
   version "4.0.1"
@@ -4334,6 +4357,10 @@ memory-fs@^0.3.0, memory-fs@~0.3.0:
     errno "^0.1.3"
     readable-stream "^2.0.1"
 
+mensch@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/mensch/-/mensch-0.3.3.tgz#e200ff4dd823717f8e0563b32e3f5481fca262b2"
+
 meow@^3.5.0, meow@^3.7.0:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/meow/-/meow-3.7.0.tgz#72cb668b425228290abbfa856892587308a801fb"
@@ -4405,6 +4432,10 @@ mime@^1.2.11, mime@^1.3.4, mime@1.3.4:
 mimeparse@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/mimeparse/-/mimeparse-0.1.4.tgz#dafb02752370fd226093ae3152c271af01ac254a"
+
+mimer@*:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/mimer/-/mimer-0.2.1.tgz#c63c5a17fe86423f5161a85d55c3ed5189baaffc"
 
 minimalistic-assert@^1.0.0:
   version "1.0.0"
@@ -5505,12 +5536,6 @@ react-event-listener@^0.3.0:
   dependencies:
     react-addons-shallow-compare "^0.14.0 || ^15.0.0"
 
-react-flip-move:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/react-flip-move/-/react-flip-move-2.6.0.tgz#26a152c55655391577e94db2ceb371fbaf75fa34"
-  dependencies:
-    lodash.omit "^4.3.0"
-
 react-motion:
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/react-motion/-/react-motion-0.4.5.tgz#ecc42f692fec9b2de4c92f85e26375071f779b76"
@@ -5771,7 +5796,7 @@ replace-ext@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/replace-ext/-/replace-ext-0.0.1.tgz#29bbd92078a739f0bcce2b4ee41e837953522924"
 
-request@^2.55.0, request@^2.65.0, request@2.x:
+request@^2.55.0, request@^2.65.0, request@^2.72.0, request@2.x:
   version "2.75.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.75.0.tgz#d2b8268a286da13eaa5d01adf5d18cc90f657d93"
   dependencies:
@@ -5994,6 +6019,10 @@ slash@^1.0.0:
 slice-ansi@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-0.0.4.tgz#edbf8903f66f7ce2f8eafd6ceed65e264c831b35"
+
+slick@1.12.2:
+  version "1.12.2"
+  resolved "https://registry.yarnpkg.com/slick/-/slick-1.12.2.tgz#bd048ddb74de7d1ca6915faa4a57570b3550c2d7"
 
 slide@^1.1.5:
   version "1.1.6"
@@ -6346,6 +6375,10 @@ tar@~2.2.0, tar@~2.2.1:
     block-stream "*"
     fstream "^1.0.2"
     inherits "2"
+
+templayed@*:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/templayed/-/templayed-0.2.3.tgz#4706df625bc6aecd86b7c9f6b0fb548b95cdf769"
 
 text-table@^0.2.0, text-table@~0.2.0:
   version "0.2.0"
@@ -6745,6 +6778,19 @@ watchpack@^1.0.0:
 weak-map@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/weak-map/-/weak-map-1.0.0.tgz#b66e56a9df0bd25a76bbf1b514db129080614a37"
+
+web-resource-inliner@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/web-resource-inliner/-/web-resource-inliner-3.0.0.tgz#59ba4f232c60188705acaf1d81355e19586c8d15"
+  dependencies:
+    async "^1.5.2"
+    chalk "^1.1.3"
+    datauri "~0.2.0"
+    htmlparser2 "^3.8.3"
+    lodash.constant "^3.0.0"
+    lodash.unescape "^4.0.0"
+    request "^2.72.0"
+    xtend "^4.0.0"
 
 webidl-conversions@^2.0.0:
   version "2.0.1"

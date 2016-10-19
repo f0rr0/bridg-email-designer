@@ -84,7 +84,7 @@ class Image extends Component {
 
   export = () => {
     const { src, width, height } = this.state;
-    return `<img src="${src}" width="${width}" height="${height}" />`;
+    return `<center><img src=${src} width=${width} height=${height} align="center" class="float-center" /></center>`;
   }
 
   render() {
