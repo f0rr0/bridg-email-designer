@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import styled from 'styled-components';
 import { fromJS } from 'immutable';
-import FlipMove from 'react-flip-move';
+import uniqueid from 'lodash.uniqueid';
 import CanvasTarget from './CanvasTarget';
 import manifest from '../lib/manifest';
 import parser from '../lib/parser';
@@ -20,14 +20,22 @@ const TargetContainer = styled('section')`
   display: flex;
 `;
 
-// Canvas state is a 3D Immutable List which holds refs to content
+/* Canvas state is a Immutable Data Structure which holds refs to content.
+** Canvas -> [<Row>] List
+** <Row> -> { id, columns<Column> } Map
+** <Column> -> [<Content>] List
+** <Content> -> [refs] List
+*/
 
 export default class Canvas extends Component {
   constructor(props) {
     super(props);
     const { rows = 0, cols = 0 } = props;
     this.state = {
-      canvas: fromJS(Array(rows).fill().map(() => Array(cols).fill(Array(0))))
+      canvas: fromJS(Array(rows).fill().map(() => ({
+        id: uniqueid(),
+        columns: Array(cols).fill(Array(0))
+      })))
     };
   }
 
@@ -44,48 +52,84 @@ export default class Canvas extends Component {
   }
 
   addRow = (cols) => {
+    const newRow = {
+      id: uniqueid(),
+      columns: Array(cols).fill(Array(0))
+    };
     this.setState({
-      canvas: this.state.canvas.push(fromJS(Array(cols).fill(Array(0))))
+      canvas: this.state.canvas.push(fromJS(newRow))
     });
   }
 
-  removeRow = index => () => {
-    this.setState({
-      canvas: this.state.canvas.set(index, null)
+  findRow = (id) => {
+    let found = -1;
+    this.state.canvas.filter((row, index) => {
+      if (row && row.get('id') === id) {
+        found = index;
+        return true;
+      }
+      return false;
     });
+    return found;
   }
 
-  handleContent = (row, col, content) => {
-    const newContent = this.state.canvas.getIn([row, col]).push(content);
-    this.setState({
-      canvas: this.state.canvas.setIn([row, col], newContent)
-    }, () => {
-      console.log(this.exportHtml());
-    });
+  removeRow = id => () => {
+    const index = this.findRow(id);
+    if (index >= 0) {
+      this.setState({
+        canvas: this.state.canvas.delete(index)
+      });
+    }
+  }
+
+  reorderRows = (from, to, inCanvas = true) => {
+    let { canvas } = this.state;
+    const toIndex = this.findRow(to);
+    if (inCanvas) {
+      const fromIndex = this.findRow(from);
+      const row = canvas.get(fromIndex);
+      canvas = canvas.splice(fromIndex, 1);
+      canvas = canvas.splice(toIndex, 0, row);
+      this.setState({
+        canvas
+      });
+    }
+  }
+
+  handleContent = (id, col, content) => {
+    const { canvas } = this.state;
+    const row = this.findRow(id);
+    if (row >= 0) {
+      const currRow = canvas.get(row);
+      const currColumns = currRow.get('columns');
+      const currContent = currColumns.get(col);
+      const modifiedContent = currContent.push(content);
+      const modifiedColumns = currColumns.set(col, modifiedContent);
+      const modifiedRow = currRow.set('columns', modifiedColumns);
+      this.setState({
+        canvas: this.state.canvas.set(row, modifiedRow)
+      });
+    }
   }
 
   exportHtml = () => parser(this.state.canvas);
 
   renderRows = () =>
-    this.state.canvas.map((row, index) => {
-      if (row) {
-        return (
-          <Row
-            type={manifest.ROW}
-            key={index}
-            col={row.size}
-            rowIndex={index}
-            handleContent={this.handleContent}
-            disableDrag
-            inCanvas
-            onClick={this.removeRow(index)}
-          />
-        );
-      }
-      return null;
-    }).toJS();
+    this.state.canvas.map(row =>
+      <Row
+        type={manifest.ROW}
+        key={row.get('id')}
+        col={row.get('columns').size}
+        id={row.get('id')}
+        findRow={this.findRow}
+        handleContent={this.handleContent}
+        inCanvas
+        reorderRows={this.reorderRows}
+        onClick={this.removeRow(row.get('id'))}
+      />).toJS();
 
   render() {
+    console.log(this.exportHtml());
     return (
       <ParentContainer>
         <TargetContainer>
@@ -94,17 +138,7 @@ export default class Canvas extends Component {
               this.addRow(col);
             }}
           >
-            <FlipMove
-              typeName="div"
-              enterAnimation="accordianVertical"
-              leaveAnimation="accordianVertical"
-              easing="ease-in-out"
-              duration="200"
-              staggerDurationBy="15"
-              staggerDelayBy="20"
-            >
-              {this.renderRows()}
-            </FlipMove>
+            {this.renderRows()}
           </CanvasTarget>
         </TargetContainer>
       </ParentContainer>

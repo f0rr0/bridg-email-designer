@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import uniqueid from 'lodash.uniqueid';
 import Row from './Row.jsx';
 import manifest from '../lib/manifest';
 
@@ -13,8 +14,10 @@ export default () =>
   <Layouts>
     {
       [...Array(4).keys()].map(
-        key =>
-          <Row key={key} rowIndex={key} type={manifest.ROW} col={key + 1} />
+        (key) => {
+          const id = uniqueid();
+          return (<Row key={id} id={id} type={manifest.ROW} col={key + 1} />);
+        }
       )
     }
   </Layouts>;

@@ -28,9 +28,9 @@ export default class Column extends Component {
   }
 
   componentDidUpdate() {
-    const { handleContent, rowIndex, columnIndex } = this.props;
+    const { handleContent, rowId, columnIndex } = this.props;
     const newComponent = this.components[this.components.length - 1];
-    handleContent(rowIndex, columnIndex, newComponent);
+    handleContent(rowId, columnIndex, newComponent);
   }
 
   renderContent() {
@@ -76,6 +76,6 @@ export default class Column extends Component {
 Column.propTypes = {
   col: PropTypes.number.isRequired,
   handleContent: PropTypes.func,
-  rowIndex: PropTypes.number.isRequired,
+  rowId: PropTypes.string.isRequired,
   columnIndex: PropTypes.number.isRequired
 };

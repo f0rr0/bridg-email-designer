@@ -3,6 +3,12 @@ import { DropTarget } from 'react-dnd';
 import { target, collect } from '../lib/generic-drop-target';
 import manifest from '../lib/manifest';
 
+const canvasTarget = Object.assign({}, target, {
+  canDrop(props, monitor) {
+    return !monitor.getItem().component.props.inCanvas;
+  }
+});
+
 class CanvasTarget extends Component {
   render() {
     const { connectDropTarget, children } = this.props;
@@ -24,7 +30,7 @@ class CanvasTarget extends Component {
 
 CanvasTarget.propTypes = {
   connectDropTarget: PropTypes.func.isRequired,
-  children: PropTypes.object
+  children: PropTypes.array
 };
 
-export default DropTarget(manifest.ROW, target, collect)(CanvasTarget);
+export default DropTarget(manifest.ROW, canvasTarget, collect)(CanvasTarget);

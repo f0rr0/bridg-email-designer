@@ -1,35 +1,55 @@
 import React, { Component, PropTypes } from 'react';
 import styled from 'styled-components';
-import { DragSource } from 'react-dnd';
+import { DragSource, DropTarget } from 'react-dnd';
 import equal from 'deep-equal';
 import manifest from '../lib/manifest';
-import { source, collect } from '../lib/generic-drag-source';
+import { source, collect as collectSource } from '../lib/generic-drag-source';
+import { target, collect as collectTarget } from '../lib/generic-drop-target';
 import Column from './Column';
 import close from '../assets/close.png';
 
 const rowSource = Object.assign({}, source, {
   beginDrag(props, monitor, component) {
-    const { type, col } = props;
+    if (props.inCanvas) {
+      component.toggleClose(false)();
+    }
     return {
-      type,
-      col,
+      ...props,
       component
     };
   }
 });
 
+const rowTarget = Object.assign({}, target, {
+  canDrop() {
+    return false;
+  },
+  hover(props, monitor) {
+    const { inCanvas: targetInCanvas, id: overId, reorderRows } = props;
+    if (targetInCanvas) {
+      const { id: draggedId, inCanvas: sourceInCanvas } = monitor.getItem();
+      if (draggedId !== overId) {
+        if (sourceInCanvas) {
+          reorderRows(draggedId, overId);
+        } else {
+          reorderRows(null, overId, false); // TODO: Toolbox to canvas reorder.
+        }
+      }
+    }
+  }
+});
+
 const CloseButton = styled('div')`
   position: absolute;
-  right: 0;
   width: 20px;
   height: 20px;
-  margin: -12px -7px 0 0;
+  margin: -15px auto auto -15px;
   background-image: ${`url(${close})`};
   background-repeat: no-repeat;
   background-size: contain;
   cursor: pointer;
   opacity: ${({ showClose }) => showClose ? 0.8 : 0}
-  transition: all 0.4s ease-in-out;
+  transition: all 0.5s ease-in-out;
 `;
 
 class Row extends Component {
@@ -54,13 +74,11 @@ class Row extends Component {
     });
   }
 
-  handleClick = () => {
-    this.toggleClose(false, this.props.onClick)();
-  }
+  handleClick = this.toggleClose(false, this.props.onClick);
 
   render() {
     const {
-      rowIndex,
+      id,
       type,
       col,
       inCanvas,
@@ -68,12 +86,13 @@ class Row extends Component {
       disableDrag,
       isDragging,
       connectDragSource,
-      connectDragPreview
+      connectDragPreview,
+      connectDropTarget
     } = this.props;
 
     const { showClose } = this.state;
 
-    return connectDragPreview(connectDragSource(
+    return connectDropTarget(connectDragPreview(connectDragSource(
       <div
         id={type}
         style={{
@@ -86,7 +105,7 @@ class Row extends Component {
           background: '#454F4E',
           overflowY: 'auto',
           cursor: disableDrag ? 'default' : 'move',
-          opacity: isDragging ? 0.6 : 1,
+          opacity: isDragging ? inCanvas ? 0 : 0.6 : 1, // eslint-disable-line
           transition: 'opacity 0.2s ease-in-out'
         }}
         onMouseEnter={this.toggleClose(true)}
@@ -99,7 +118,7 @@ class Row extends Component {
         {
           [...Array(col).keys()].map(key =>
             <Column
-              rowIndex={rowIndex}
+              rowId={id}
               columnIndex={key}
               col={col}
               key={key}
@@ -109,21 +128,22 @@ class Row extends Component {
         }
       </div>,
       { dropEffect: 'copy' }
-    ), { captureDraggingState: true });
+    ), { captureDraggingState: true }));
   }
 }
 
 Row.propTypes = {
   type: PropTypes.string.isRequired,
   col: PropTypes.number.isRequired,
-  rowIndex: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   inCanvas: PropTypes.bool,
   onClick: PropTypes.func,
   handleContent: PropTypes.func,
   disableDrag: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
   connectDragSource: PropTypes.func.isRequired,
-  connectDragPreview: PropTypes.func.isRequired
+  connectDragPreview: PropTypes.func.isRequired,
+  connectDropTarget: PropTypes.func.isRequired
 };
 
 Row.defaultProps = {
@@ -131,4 +151,4 @@ Row.defaultProps = {
   disableDrag: false
 };
 
-export default DragSource(manifest.ROW, rowSource, collect)(Row);
+export default DropTarget(manifest.ROW, rowTarget, collectTarget)(DragSource(manifest.ROW, rowSource, collectSource)(Row)); // eslint-disable-line
