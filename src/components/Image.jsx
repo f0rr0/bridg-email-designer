@@ -61,12 +61,16 @@ class Image extends Component {
     return !equal(this.props, nextProps) || !equal(this.state, nextState);
   }
 
-  handleResize= (event, { size }) => {
+  handleResize = (event, { size }) => {
     const { width, height } = size;
     this.setState({
       height,
       width
     });
+  }
+
+  handleStart = (event) => {
+    event.preventDefault();
   }
 
   handleClick = () => {
@@ -118,6 +122,9 @@ class Image extends Component {
                     minConstraints={[100, 100]}
                     maxConstraints={[200, 200]}
                     onResize={this.handleResize}
+                    draggableOpts={{
+                      onMouseDown: this.handleStart
+                    }}
                   >
                     <ImageContainer
                       height={height}
