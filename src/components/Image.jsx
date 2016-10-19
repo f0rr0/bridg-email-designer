@@ -37,7 +37,7 @@ const ImageContainer = styled('div')`
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  background-color: #bbbbbb;
+  background-color: ${({ bg }) => bg.includes(placeholder) ? '#bbbbbb' : 'transparent'}
   width: 100%;
   height: 100%;
   transition: background 0.2s ease-in-out, margin-top 0s;
@@ -100,7 +100,7 @@ class Image extends Component {
           cursor: inCanvas ? 'pointer' : 'move',
           transition: 'all 0.2s ease-in-out',
           display: 'flex',
-          flex: '0 0 auto'
+          flex: '1 0 auto'
         }}
       >
         {

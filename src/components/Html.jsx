@@ -32,13 +32,13 @@ injectGlobal`
 
   .CodeMirror, .ReactCodeMirror {
     box-sizing: border-box !important;
-    max-height: 10em !important;
+    max-height: 20em !important;
     height: 100% !important;
   }
 
   .CodeMirror-scroll {
     font-family: 'Menlo', 'Monaco', monospace;
-    max-height: 10em !important;
+    max-height: 20em !important;
   }
 
   .CodeMirror-hints {
@@ -104,7 +104,7 @@ class Html extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      markup: '<p>HTML markup</p>',
+      markup: '<p>HTML Markup</p>',
       editing: false,
       editable: props.inCanvas
     };
@@ -147,14 +147,17 @@ class Html extends Component {
         style={{
           opacity: isDragging ? 0.6 : 1,
           height: '100%',
+          width: '100%',
           cursor: inCanvas ? 'text' : 'move',
-          transition: 'all 0.2s ease-in-out'
+          transition: 'all 0.2s ease-in-out',
+          display: 'flex',
+          flex: '1 0 auto'
         }}
       >
         {
           (editable && editing) ?
             <ClickOutside
-              style={{ height: '100%' }}
+              style={{ height: '100%', width: '100%' }}
               onClickOutside={this.handleBlur}
             >
               <Codemirror
@@ -170,6 +173,7 @@ class Html extends Component {
                 background: '#FFFFFF',
                 padding: '10px',
                 height: '100%',
+                width: '100%',
                 color: '#000000',
                 lineHeight: 1.125
               }}

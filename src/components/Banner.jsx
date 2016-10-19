@@ -11,7 +11,6 @@ const ImageContainer = styled('img')`
   background-color: #bbbbbb;
   width: 100%;
   min-height: 100%;
-  max-height: 10em;
   height: ${({ src }) => src.includes(placeholder) ? '0em' /* hack */ : 'auto'}
   vertical-align: top;
   transition: all 0.2s ease-in-out;
@@ -34,7 +33,7 @@ class Image extends Component {
   }
 
   handleClick = () => {
-    const src = window.prompt('Enter the URI to the image', 'https://unsplash.it/1000/300/?random'); // eslint-disable-line
+    const src = window.prompt('Enter the URI to the image', 'https://unsplash.it/1000/200/?random'); // eslint-disable-line
     if (src) {
       this.setState({
         src
@@ -62,7 +61,7 @@ class Image extends Component {
           cursor: inCanvas ? 'pointer' : 'move',
           transition: 'all 0.2s ease-in-out',
           display: 'flex',
-          flex: '0 0 auto'
+          flex: '1 0 auto'
         }}
       >
         {

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
-import { RichUtils, DefaultDraftBlockRenderMap } from 'draft-js';
+import { EditorState, RichUtils, DefaultDraftBlockRenderMap } from 'draft-js';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import createToolbarPlugin from 'draft-js-toolbar-plugin';
@@ -21,31 +21,31 @@ const toolbarPlugin = createToolbarPlugin({
     button: <span>H1</span>,
     key: 'H1',
     label: 'Header 1',
-    active: block => block.get('type') === 'header-1',
+    active: block => block.get('type') === 'header-one',
     toggle: (block, action, editorState, setEditorState) =>
       setEditorState(RichUtils.toggleBlockType(
         editorState,
-        'header-1'
+        'header-one'
       ))
   }, {
     button: <span>H2</span>,
     key: 'H2',
     label: 'Header 2',
-    active: block => block.get('type') === 'header-2',
+    active: block => block.get('type') === 'header-two',
     toggle: (block, action, editorState, setEditorState) =>
       setEditorState(RichUtils.toggleBlockType(
         editorState,
-        'header-2'
+        'header-two'
       ))
   }, {
     button: <span>H3</span>,
     key: 'H3',
     label: 'Header 3',
-    active: block => block.get('type') === 'header-3',
+    active: block => block.get('type') === 'header-three',
     toggle: (block, action, editorState, setEditorState) =>
       setEditorState(RichUtils.toggleBlockType(
         editorState,
-        'header-3'
+        'header-three'
       ))
   }, {
     button: <span>Quote</span>,
@@ -92,9 +92,19 @@ class Text extends Component {
     });
   }
 
-  focus = () => {
+  clickHandler = () => {
     if (this.props.inCanvas) {
-      this.editor.focus();
+      const hasFocus = this.state.editorState.getSelection().getHasFocus();
+      if (hasFocus) {
+        this.editor.focus();
+      } else {
+        const editorState = EditorState.moveFocusToEnd(this.state.editorState);
+        this.setState({
+          editorState
+        }, () => {
+          this.editor.blur();
+        });
+      }
     }
   }
 
@@ -106,7 +116,6 @@ class Text extends Component {
   }
 
   export = () => stateToHTML(this.state.editorState.getCurrentContent());
-
 
   render() {
     const { type, inCanvas, isDragging, connectDragSource, connectDragPreview } = this.props;
@@ -121,9 +130,10 @@ class Text extends Component {
           color: '#000000',
           lineHeight: 1.125,
           cursor: inCanvas ? 'text' : 'move',
-          transition: 'all 0.2s ease-in-out'
+          transition: 'all 0.2s ease-in-out',
+          flex: '1 0 auto'
         }}
-        onClick={this.focus}
+        onClick={this.clickHandler}
       >
         <Editor
           editorState={this.state.editorState}
