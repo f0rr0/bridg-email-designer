@@ -105,7 +105,7 @@ class Row extends Component {
           background: '#454F4E',
           overflowY: 'auto',
           cursor: disableDrag ? 'default' : 'move',
-          opacity: isDragging ? inCanvas ? 0 : 0.6 : 1, // eslint-disable-line
+          opacity: isDragging ? inCanvas ? 0.4 : 0.4 : 1, // eslint-disable-line
           transition: 'opacity 0.2s ease-in-out'
         }}
         onMouseEnter={this.toggleClose(true)}
