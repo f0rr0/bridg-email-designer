@@ -17,7 +17,7 @@ const Container = styled('section')`
 `;
 
 const Slide = styled('div')`
-  background: #0FBD72;
+  background: rgba(137, 255, 253, 0.5);
   color: #FFFFFF;
 `;
 

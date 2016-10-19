@@ -5,11 +5,17 @@ import CanvasTarget from './CanvasTarget';
 import manifest from '../lib/manifest';
 import Row from './Row';
 
-const Container = styled('section')`
+const ParentContainer = styled('section')`
   padding-left: 1.802em;
-  display: flex;
   flex: 0 0 75%;
   max-width: 75%;
+`;
+
+const TargetContainer = styled('section')`
+  background: rgba(115, 75, 109, 0.5);
+  width: 100%;
+  height: 100%;
+  display: flex;
 `;
 
 // Canvas state is a 3D Immutable List which holds refs to content
@@ -17,7 +23,7 @@ const Container = styled('section')`
 export default class Canvas extends Component {
   constructor(props) {
     super(props);
-    const { rows = 1, cols = 1 } = props;
+    const { rows = 0, cols = 0 } = props;
     this.state = {
       canvas: fromJS(Array(rows).fill().map(() => Array(cols).fill(Array(0))))
     };
@@ -71,15 +77,17 @@ export default class Canvas extends Component {
 
   render() {
     return (
-      <Container>
-        <CanvasTarget
-          onDrop={({ col }) => {
-            this.addRow(col);
-          }}
-        >
-          {this.renderRows()}
-        </CanvasTarget>
-      </Container>
+      <ParentContainer>
+        <TargetContainer>
+          <CanvasTarget
+            onDrop={({ col }) => {
+              this.addRow(col);
+            }}
+          >
+            {this.renderRows()}
+          </CanvasTarget>
+        </TargetContainer>
+      </ParentContainer>
     );
   }
 }

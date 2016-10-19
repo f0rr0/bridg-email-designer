@@ -12,7 +12,7 @@ import placeholder from '../assets/image.svg';
 injectGlobal`
   .react-resizable {
     position: relative;
-    margin: 0 auto;
+    margin: auto;
   }
 
   .react-resizable-handle {
@@ -123,7 +123,7 @@ class Image extends Component {
               }
             </ProgressiveImage>
           :
-            <div>Image</div>
+            <div>Resizable Image</div>
         }
       </div>,
       { dropEffect: 'copy' }

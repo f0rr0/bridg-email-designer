@@ -44,6 +44,7 @@ class Row extends Component {
           padding: '5px',
           borderRadius: '4px',
           background: '#454F4E',
+          overflowY: 'auto',
           cursor: disableDrag ? 'default' : 'move',
           opacity: isDragging ? 0.6 : 1,
           transition: 'all 0.2s ease-in-out'

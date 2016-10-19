@@ -26,9 +26,15 @@ import { source, collect } from '../lib/generic-drag-source';
 
 /*eslint-disable */
 injectGlobal`
-  .CodeMirror, .CodeMirror-scroll {
-    height: 10em;
-    max-height: 10em;
+  .CodeMirror {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .CodeMirror, .CodeMirror-scroll, .ReactCodeMirror {
+    box-sizing: border-box !important;
+    min-height: 5em !important;
+    height: 100% !important;
     font-family: 'Menlo', 'Monaco', monospace;
   }
 
@@ -43,11 +49,6 @@ injectGlobal`
 
   .CodeMirror-scrollbar-filler {
     background: transparent !important;
-  }
-
-  .CodeMirror {
-    padding: 10px;
-    font-size: 14px;
   }
 
   .cm-trailingspace {
@@ -149,7 +150,10 @@ class Html extends Component {
       >
         {
           (editable && editing) ?
-            <ClickOutside onClickOutside={this.handleBlur}>
+            <ClickOutside
+              style={{ height: '100%' }}
+              onClickOutside={this.handleBlur}
+            >
               <Codemirror
                 value={markup}
                 onChange={this.handleChange}

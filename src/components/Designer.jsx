@@ -11,7 +11,7 @@ const Main = styled('main')`
   width: 100%;
   overflow-y: scroll;
   font-size: 16px;
-  background: #003F60;
+  background: linear-gradient(to top, #141E30 , #243B55);
   font-family: 'Lato', sans-serif;
   display: flex;
   flex-direction: column;

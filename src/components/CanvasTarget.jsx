@@ -10,7 +10,6 @@ class CanvasTarget extends Component {
       <div
         style={{
           width: '100%',
-          background: '#0FBD72',
           padding: '10px 10px 10em',
           overflowY: 'scroll',
           display: 'flex',
