@@ -1,8 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import styled from 'styled-components';
 import { fromJS } from 'immutable';
+import FlipMove from 'react-flip-move';
 import CanvasTarget from './CanvasTarget';
 import manifest from '../lib/manifest';
+import parser from '../lib/parser';
 import Row from './Row';
 
 const ParentContainer = styled('section')`
@@ -29,8 +31,13 @@ export default class Canvas extends Component {
     };
   }
 
+  componentDidMount() {
+    // const inky = require('inky/dist/inky-browser');
+    // console.log(inky);
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextState.canvas.size === this.state.canvas.size) {
+    if (nextState.canvas === this.state.canvas) {
       return false;
     }
     return true;
@@ -42,38 +49,41 @@ export default class Canvas extends Component {
     });
   }
 
+  removeRow = index => () => {
+    this.setState({
+      canvas: this.state.canvas.set(index, null)
+    });
+  }
+
   handleContent = (row, col, content) => {
-    console.log(this.exportHtml());
     const newContent = this.state.canvas.getIn([row, col]).push(content);
     this.setState({
       canvas: this.state.canvas.setIn([row, col], newContent)
+    }, () => {
+      console.log(this.exportHtml());
     });
   }
 
-  exportHtml = () => {
-    let html = '';
-    this.state.canvas.forEach((row) => {
-      row.forEach((column) => {
-        column.forEach((content) => {
-          if (content) {
-            html += content.export();
-          }
-        });
-      });
-    });
-    return html;
-  }
+  exportHtml = () => parser(this.state.canvas);
 
   renderRows = () =>
-    this.state.canvas.map((row, index) =>
-      <Row
-        type={manifest.ROW}
-        key={index}
-        col={row.size}
-        rowIndex={index}
-        handleContent={this.handleContent}
-        disableDrag
-      />).toJS();
+    this.state.canvas.map((row, index) => {
+      if (row) {
+        return (
+          <Row
+            type={manifest.ROW}
+            key={index}
+            col={row.size}
+            rowIndex={index}
+            handleContent={this.handleContent}
+            disableDrag
+            inCanvas
+            onClick={this.removeRow(index)}
+          />
+        );
+      }
+      return null;
+    }).toJS();
 
   render() {
     return (
@@ -84,7 +94,17 @@ export default class Canvas extends Component {
               this.addRow(col);
             }}
           >
-            {this.renderRows()}
+            <FlipMove
+              typeName="div"
+              enterAnimation="accordianVertical"
+              leaveAnimation="accordianVertical"
+              easing="ease-in-out"
+              duration="200"
+              staggerDurationBy="15"
+              staggerDelayBy="20"
+            >
+              {this.renderRows()}
+            </FlipMove>
           </CanvasTarget>
         </TargetContainer>
       </ParentContainer>

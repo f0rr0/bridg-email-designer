@@ -24,7 +24,7 @@ class CanvasTarget extends Component {
 
 CanvasTarget.propTypes = {
   connectDropTarget: PropTypes.func.isRequired,
-  children: PropTypes.array
+  children: PropTypes.object
 };
 
 export default DropTarget(manifest.ROW, target, collect)(CanvasTarget);
