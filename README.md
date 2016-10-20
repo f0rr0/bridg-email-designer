@@ -15,20 +15,20 @@ The organization is very minimal. All React components live in `./src/components
 
 ```
 
-+-- `Designer.jsx`
-    +-- `Header.jsx`
-    +-- `Toolbox.jsx`
-    |   +-- `Layouts.jsx`
-    |   +-- `Content.jsx`
-    |       +-- `Text.jsx`
-    |       +-- `Html.jsx`
-    |       +-- `Image.jsx`
-    |       +-- `Banner.jsx`
-    +-- `Canvas.jsx`
-        +-- `CanvasTarget.jsx`
-            +-- `Row.jsx`
-                +-- `Column.jsx`
-                    +-- `ColumnTarget.jsx`
+Designer.jsx
+  +--Header.jsx
+  +--Toolbox.jsx
+  |   +--Layouts.jsx
+  |   +--Content.jsx
+  |       +--Text.jsx
+  |       +--Html.jsx
+  |       +--Image.jsx
+  |       +--Banner.jsx
+  +--Canvas.jsx
+      +--CanvasTarget.jsx
+          +--Row.jsx
+              +--Column.jsx
+                  +--ColumnTarget.jsx
 ```
 ### Drag and Drop
 All 'draggable' and 'droppable' components are decorated with `DragSource` and `DragTarget` components respectively. Some common methods for these live in `./lib/generic-drag-source.js` and `./generic-drop-target.js`.
@@ -44,6 +44,16 @@ Each content component defines an `export` function that returns the markup as i
 
 ### Styling
 There are no CSS files besides the ZURB framework for emails which is inlined with the exported markup. The designer uses inline styling in JSX and `styled-components` exclusively. Also for the presentational components `material-ui` has been used.
+
+### Credits
+The following open source libraries were used:
+* react-dnd
+* codemirror
+* draftjs
+* react-resizable
+* Immutable.js
+* styled-components
+* juice
 
 ### Deploy to gh-pages
 ```
