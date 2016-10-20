@@ -13,6 +13,8 @@ npm run build # production build
 ### File Structure
 The organization is very minimal. All React components live in `./src/components`. The Designer can be broadly broken into the following component hierarchy:
 
+```
+
 +-- `Designer.jsx`
     +-- `Header.jsx`
     +-- `Toolbox.jsx`
@@ -27,7 +29,7 @@ The organization is very minimal. All React components live in `./src/components
             +-- `Row.jsx`
                 +-- `Column.jsx`
                     +-- `ColumnTarget.jsx`
-
+```
 ### Drag and Drop
 All 'draggable' and 'droppable' components are decorated with `DragSource` and `DragTarget` components respectively. Some common methods for these live in `./lib/generic-drag-source.js` and `./generic-drop-target.js`.
 
