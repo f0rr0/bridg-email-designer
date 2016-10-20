@@ -18,6 +18,8 @@ const parseColumns = (columns, numCols) => {
       classString += ' first columns"';
     } else if (numCols > 1 && index === numCols - 1) {
       classString += ' last columns"';
+    } else if (numCols === 1) {
+      classString += ' first last columns"';
     } else {
       classString += ' columns"';
     }

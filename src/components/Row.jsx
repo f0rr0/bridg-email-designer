@@ -40,16 +40,16 @@ const rowTarget = Object.assign({}, target, {
 });
 
 const CloseButton = styled('div')`
-  position: absolute;
-  width: 20px;
   height: 20px;
-  margin: -15px auto auto -15px;
+  margin: ${({ showClose }) => showClose ? '-1px 3px 0 -1px' : '0px'}
+  flex: ${({ showClose }) => showClose ? '0 0 17px' : '0 0 0'}
   background-image: ${`url(${close})`};
   background-repeat: no-repeat;
   background-size: contain;
   cursor: pointer;
   opacity: ${({ showClose }) => showClose ? 0.8 : 0}
   transition: all 0.5s ease-in-out;
+  transition-delay: 0.2s;
 `;
 
 class Row extends Component {
@@ -92,43 +92,45 @@ class Row extends Component {
 
     const { showClose } = this.state;
 
-    return connectDropTarget(connectDragPreview(connectDragSource(
-      <div
-        id={type}
-        style={{
-          display: 'flex',
-          flex: '0 0 auto',
-          minHeight: '5em',
-          marginBottom: 10,
-          padding: '5px',
-          borderRadius: '4px',
-          background: '#454F4E',
-          overflowY: 'auto',
-          cursor: disableDrag ? 'default' : 'move',
-          opacity: isDragging ? inCanvas ? 0.4 : 0.4 : 1, // eslint-disable-line
-          transition: 'opacity 0.2s ease-in-out'
-        }}
-        onMouseEnter={this.toggleClose(true)}
-        onMouseOver={this.toggleClose(true)}
-        onMouseLeave={this.toggleClose(false)}
-      >
-        {
-          inCanvas ? <CloseButton showClose={showClose} onClick={this.handleClick} /> : null
-        }
-        {
-          [...Array(col).keys()].map(key =>
-            <Column
-              rowId={id}
-              columnIndex={key}
-              col={col}
-              key={key}
-              handleContent={handleContent}
-            />
-          )
-        }
-      </div>,
-      { dropEffect: 'copy' }
-    ), { captureDraggingState: true }));
+    return (
+      connectDropTarget(connectDragPreview(connectDragSource(
+        <div
+          id={type}
+          style={{
+            display: 'flex',
+            flex: '0 0 auto',
+            minHeight: '5em',
+            marginBottom: 10,
+            padding: '5px',
+            borderRadius: '4px',
+            background: '#454F4E',
+            overflowY: 'auto',
+            cursor: disableDrag ? 'default' : 'move',
+            opacity: isDragging ? inCanvas ? 0.4 : 0.4 : 1, // eslint-disable-line
+            transition: 'opacity 0.2s ease-in-out'
+          }}
+          onMouseEnter={this.toggleClose(true)}
+          onMouseOver={this.toggleClose(true)}
+          onMouseLeave={this.toggleClose(false)}
+        >
+          {
+            inCanvas ? <CloseButton showClose={showClose} onClick={this.handleClick} /> : null
+          }
+          {
+            [...Array(col).keys()].map(key =>
+              <Column
+                rowId={id}
+                columnIndex={key}
+                col={col}
+                key={key}
+                handleContent={handleContent}
+              />
+            )
+          }
+        </div>,
+        { dropEffect: 'copy' }
+      ), { captureDraggingState: true }))
+    );
   }
 }
 

@@ -39,11 +39,6 @@ export default class Canvas extends Component {
     };
   }
 
-  componentDidMount() {
-    // const inky = require('inky/dist/inky-browser');
-    // console.log(inky);
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     if (nextState.canvas === this.state.canvas) {
       return false;
@@ -129,7 +124,6 @@ export default class Canvas extends Component {
       />).toJS();
 
   render() {
-    console.log(this.exportHtml());
     return (
       <ParentContainer>
         <TargetContainer>
