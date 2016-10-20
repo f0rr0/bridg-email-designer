@@ -14,7 +14,6 @@ npm run build # production build
 The organization is very minimal. All React components live in `./src/components`. The Designer can be broadly broken into the following component hierarchy:
 
 ```
-
 Designer.jsx
   +--Header.jsx
   +--Toolbox.jsx
@@ -31,7 +30,7 @@ Designer.jsx
                   +--ColumnTarget.jsx
 ```
 ### Drag and Drop
-All 'draggable' and 'droppable' components are decorated with `DragSource` and `DragTarget` components respectively. Some common methods for these live in `./lib/generic-drag-source.js` and `./generic-drop-target.js`.
+All 'draggable' and 'droppable' components are decorated with `DragSource` and `DropTarget` components respectively. Some common methods for these live in `./lib/generic-drag-source.js` and `./generic-drop-target.js`.
 
 ### New Content Types
 The designer uses a webpack context to import all content components automatically. To create a new content component, for instance `Social.jsx`, create the file under `./src/components` and add `SOCIAL` to `./lib/types.js`
