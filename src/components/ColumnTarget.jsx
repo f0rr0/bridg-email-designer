@@ -7,8 +7,11 @@ import manifest from '../lib/manifest';
 const contentTypes = Object.values(manifest).filter(type => type !== 'ROW');
 
 const columnTarget = Object.assign({}, target, {
-  canDrop(props) {
-    return Children.toArray(props.children).length === 0;
+  // canDrop(props) {
+  //   return Children.toArray(props.children).length === 0;
+  // }
+  canDrop() {
+    return true;
   }
 });
 

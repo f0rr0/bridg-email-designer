@@ -118,9 +118,9 @@ class Image extends Component {
                   <ResizableBox
                     height={150}
                     width={150}
-                    lockAspectRatio
+                    // lockAspectRatio
                     minConstraints={[100, 100]}
-                    maxConstraints={[200, 200]}
+                    maxConstraints={[600, 600]}
                     onResize={this.handleResize}
                     draggableOpts={{
                       onMouseDown: this.handleStart

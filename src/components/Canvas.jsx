@@ -8,9 +8,9 @@ import parser from '../lib/parser';
 import Row from './Row';
 
 const ParentContainer = styled('section')`
-  padding-left: 1.802em;
+  order: 1;
   flex: 0 0 75%;
-  max-width: 75%;
+  max-width: 648px;
 `;
 
 const TargetContainer = styled('section')`
@@ -103,6 +103,8 @@ export default class Canvas extends Component {
       const modifiedRow = currRow.set('columns', modifiedColumns);
       this.setState({
         canvas: this.state.canvas.set(row, modifiedRow)
+      }, () => {
+        // console.log(this.state.canvas.toJS());
       });
     }
   }

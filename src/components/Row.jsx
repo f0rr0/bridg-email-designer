@@ -10,9 +10,6 @@ import close from '../assets/close.png';
 
 const rowSource = Object.assign({}, source, {
   beginDrag(props, monitor, component) {
-    if (props.inCanvas) {
-      component.toggleClose(false)();
-    }
     return {
       ...props,
       component
@@ -32,7 +29,7 @@ const rowTarget = Object.assign({}, target, {
         if (sourceInCanvas) {
           reorderRows(draggedId, overId);
         } else {
-          reorderRows(null, overId, false); // TODO: Toolbox to canvas reorder.
+          // reorderRows(null, overId, false); TODO: Toolbox to canvas reorder.
         }
       }
     }

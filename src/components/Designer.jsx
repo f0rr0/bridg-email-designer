@@ -27,6 +27,7 @@ const Container = styled('section')`
   padding: 1.802em;
   display: flex;
   flex: 1 1 auto;
+  justify-content: space-between;
 `;
 
 class Designer extends Component {
