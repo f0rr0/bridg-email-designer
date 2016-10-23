@@ -9,33 +9,33 @@ const parseColumn = (column) => {
   return markup;
 };
 
-const parseColumns = (columns, numCols) => {
-  const colSize = 12 / numCols;
+const parseRow = (row) => {
   let markup = '';
-  columns.forEach((column, index) => {
-    let classString = `"small-12 large-${colSize}`;
-    if (numCols > 1 && index === 0) {
-      classString += ' first columns"';
-    } else if (numCols > 1 && index === numCols - 1) {
-      classString += ' last columns"';
-    } else if (numCols === 1) {
-      classString += ' first last columns"';
-    } else {
-      classString += ' columns"';
-    }
-    markup += `<th class=${classString}>${parseColumn(column)}</columns>`;
-  });
+  if (row) {
+    const columns = row.get('columns');
+    const numCols = columns.size;
+    const colSize = 12 / numCols;
+    columns.forEach((column, index) => {
+      let classString = `"small-12 large-${colSize}`;
+      if (numCols > 1 && index === 0) {
+        classString += ' first columns"';
+      } else if (numCols > 1 && index === numCols - 1) {
+        classString += ' last columns"';
+      } else if (numCols === 1) {
+        classString += ' first last columns"';
+      } else {
+        classString += ' columns"';
+      }
+      markup += `<th class=${classString}>${parseColumn(column)}</columns>`;
+    });
+  }
   return markup;
 };
 
 const parseCanvas = (canvas) => {
   let markup = '';
   canvas.forEach((row) => {
-    if (row) {
-      const columns = row.get('columns');
-      const numCols = columns.size;
-      markup += `<table class="row"><tr>${parseColumns(columns, numCols)}</tr></table>`;
-    }
+    markup += `<table class="row"><tr>${parseRow(row)}</tr></table>`;
   });
   return markup;
 };

@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Dialog from 'material-ui/Dialog';
 import Snackbar from 'material-ui/Snackbar';
 import FlatButton from 'material-ui/FlatButton';
@@ -89,6 +86,14 @@ class Designer extends Component {
 
   exportHtml = () => this.canvas.exportHtml();
 
+  saveState = () => {
+    this.canvas.saveToLocalStorage();
+  }
+
+  loadState = () => {
+    this.canvas.loadFromLocalStorage();
+  }
+
   render() {
     const actions = [
       <FlatButton
@@ -104,34 +109,34 @@ class Designer extends Component {
     const html = this.state.markup;
     return (
       <Main>
-        <Header onClick={this.toggleModal} />
+        <Header
+          handleSave={this.saveState}
+          handleExport={this.toggleModal}
+          handleLoad={this.loadState}
+        />
         <Container>
           <Toolbox />
           <Canvas ref={(c) => { this.canvas = c; }} />
         </Container>
-        <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-          <div>
-            <Dialog
-              title="Preview"
-              actions={actions}
-              modal={false}
-              open={this.state.modal}
-              onRequestClose={this.toggleModal}
-              autoScrollBodyContent
-            >
-              <div dangerouslySetInnerHTML={{ __html: html }} />
-            </Dialog>
-            <Snackbar
-              open={this.state.snack}
-              message={this.state.message}
-              autoHideDuration={3000}
-              onRequestClose={this.toggleSnack}
-              contentStyle={{
-                textAlign: 'center'
-              }}
-            />
-          </div>
-        </MuiThemeProvider>
+        <Dialog
+          title="Preview"
+          actions={actions}
+          modal={false}
+          open={this.state.modal}
+          onRequestClose={this.toggleModal}
+          autoScrollBodyContent
+        >
+          <div dangerouslySetInnerHTML={{ __html: html }} />
+        </Dialog>
+        <Snackbar
+          open={this.state.snack}
+          message={this.state.message}
+          autoHideDuration={3000}
+          onRequestClose={this.toggleSnack}
+          contentStyle={{
+            textAlign: 'center'
+          }}
+        />
       </Main>
     );
   }

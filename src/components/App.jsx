@@ -1,6 +1,13 @@
 import React from 'react';
 import { injectGlobal } from 'styled-components';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { white } from 'material-ui/styles/colors';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import Designer from './Designer';
+
+injectTapEventPlugin();
 
 /*eslint-disable */
 injectGlobal`
@@ -40,4 +47,11 @@ injectGlobal`
 `;
 /*eslint-enable */
 
-export default () => <Designer />;
+export default () =>
+  <MuiThemeProvider
+    muiTheme={getMuiTheme(darkBaseTheme, {
+      fontFamily: 'Lato'
+    })}
+  >
+    <Designer />
+  </MuiThemeProvider>;

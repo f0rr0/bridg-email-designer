@@ -5,6 +5,7 @@ import uniqueid from 'lodash.uniqueid';
 import CanvasTarget from './CanvasTarget';
 import manifest from '../lib/manifest';
 import parser from '../lib/parser';
+import serialize from '../lib/serialize';
 import Row from './Row';
 
 const ParentContainer = styled('section')`
@@ -40,7 +41,7 @@ export default class Canvas extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextState.canvas === this.state.canvas) {
+    if (nextState.canvas === this.state.canvas) { // TODO: Replace with Immutable
       return false;
     }
     return true;
@@ -107,6 +108,17 @@ export default class Canvas extends Component {
         // console.log(this.state.canvas.toJS());
       });
     }
+  }
+
+  saveToLocalStorage = () => {
+    const { canvas } = this.state;
+    const state = JSON.stringify(serialize(canvas));
+    localStorage.setItem('canvas', state); // eslint-disable-line
+  }
+
+  loadFromLocalStorage = () => {
+    const canvas = localStorage.getItem('canvas'); // eslint-disable-line
+    console.log(JSON.parse(canvas));
   }
 
   exportHtml = () => parser(this.state.canvas);

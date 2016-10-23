@@ -100,7 +100,7 @@ class Row extends Component {
             marginBottom: 10,
             padding: '5px',
             borderRadius: '4px',
-            background: '#454F4E',
+            background: '#303030',
             overflowY: 'auto',
             cursor: disableDrag ? 'default' : 'move',
             opacity: isDragging ? inCanvas ? 0.4 : 0.4 : 1, // eslint-disable-line
