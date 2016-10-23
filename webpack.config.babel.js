@@ -21,7 +21,7 @@ const devConfig = {
   },
   resolve: {
     extensions: ['*', '.js', '.jsx'],
-    alias: { './package' : './package.json' }
+    alias: { './package': './package.json' }
     /* Need alias since juice does require('./package') :/ */
   },
   module: {
@@ -76,7 +76,7 @@ const prodConfig = Object.assign({}, devConfig, {
   plugins: [
     new DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('production')
+        NODE_ENV: JSON.stringify('production')
       }
     }),
     new optimize.DedupePlugin(),
@@ -123,7 +123,6 @@ const prodConfig = Object.assign({}, devConfig, {
 export default (env = { dev: true }) => {
   if (env.dev) {
     return devConfig;
-  } else {
-    return prodConfig;
   }
-}
+  return prodConfig;
+};
