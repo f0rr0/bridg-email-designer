@@ -3,7 +3,6 @@ import { injectGlobal } from 'styled-components';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { white } from 'material-ui/styles/colors';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Designer from './Designer';
 
@@ -50,7 +49,12 @@ injectGlobal`
 export default () =>
   <MuiThemeProvider
     muiTheme={getMuiTheme(darkBaseTheme, {
-      fontFamily: 'Lato'
+      fontFamily: 'Lato',
+      tabs: {
+        backgroundColor: darkBaseTheme.palette.canvasColor,
+        textColor: darkBaseTheme.palette.disabledColor,
+        selectedTextColor: darkBaseTheme.palette.textColor
+      }
     })}
   >
     <Designer />
