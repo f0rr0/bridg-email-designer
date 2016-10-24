@@ -16,7 +16,14 @@ export default () =>
       [...Array(4).keys()].map(
         (key) => {
           const id = uniqueid();
-          return (<Row key={id} id={id} type={manifest.ROW} col={key + 1} />);
+          return (
+            <Row
+              key={id}
+              id={id}
+              type={manifest.ROW}
+              numCols={key + 1}
+            />
+          );
         }
       )
     }

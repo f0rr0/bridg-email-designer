@@ -71,17 +71,20 @@ class Row extends Component {
     });
   }
 
-  handleClick = this.toggleClose(false, this.props.onClick);
+  handleClick = this.toggleClose(false, this.props.removeRow);
 
   render() {
     const {
       id,
       type,
-      col,
+      numCols,
       inCanvas,
-      handleContent,
       disableDrag,
       isDragging,
+      getPropsForColumn,
+      addContent,
+      updateRef,
+      removeRow,
       connectDragSource,
       connectDragPreview,
       connectDropTarget
@@ -111,16 +114,25 @@ class Row extends Component {
           onMouseLeave={this.toggleClose(false)}
         >
           {
-            inCanvas ? <CloseButton showClose={showClose} onClick={this.handleClick} /> : null
+            inCanvas ? <CloseButton showClose={showClose} onClick={removeRow(id)} /> : null
           }
           {
-            [...Array(col).keys()].map(key =>
+            inCanvas ?
+              [...Array(numCols).keys()].map(key =>
+                <Column
+                  {...getPropsForColumn(key)}
+                  inCanvas
+                  addContent={addContent}
+                  updateRef={updateRef}
+                  key={key}
+                />
+              )
+            : [...Array(numCols).keys()].map(key =>
               <Column
                 rowId={id}
-                columnIndex={key}
-                col={col}
+                colIndex={key}
+                numCols={numCols}
                 key={key}
-                handleContent={handleContent}
               />
             )
           }
@@ -133,11 +145,11 @@ class Row extends Component {
 
 Row.propTypes = {
   type: PropTypes.string.isRequired,
-  col: PropTypes.number.isRequired,
+  numCols: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
   inCanvas: PropTypes.bool,
-  onClick: PropTypes.func,
-  handleContent: PropTypes.func,
+  getPropsForColumn: PropTypes.func,
+  removeRow: PropTypes.func,
   disableDrag: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
   connectDragSource: PropTypes.func.isRequired,

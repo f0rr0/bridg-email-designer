@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import styled, { css } from 'styled-components';
-import capitalize from 'lodash.capitalize';
 import ColumnTarget from './ColumnTarget';
 
 const Container = styled('div')`
@@ -17,52 +16,59 @@ const Container = styled('div')`
 export default class Column extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      content: []
-    };
     this.components = [];
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.state.content.length !== nextState.content.length;
+  shouldComponentUpdate(nextProps) {
+    if (this.props.inCanvas) {
+      return nextProps.contents.size !== this.props.contents.size;
+    }
+    return true;
   }
 
   componentDidUpdate() {
-    const { handleContent, rowId, columnIndex } = this.props;
-    const newComponent = this.components[this.components.length - 1];
-    handleContent(rowId, columnIndex, newComponent);
+    const { updateRef, rowId, colIndex } = this.props;
+    const components = this.components;
+    if (components.length > 0) {
+      updateRef(rowId, colIndex, components);
+    }
   }
 
   renderContent() {
-    return this.state.content.map((content, index) => {
-      const path = capitalize(content.type);
-      const Content = require('./' + path).default; // eslint-disable-line
-      return (
-        <Content
-          type={content.type}
-          key={index}
-          inCanvas
-          disableDrag
-          ref={(c) => {
-            if (c) {
-              this.components[index] = c.decoratedComponentInstance;
-            }
-          }}
-        />
-      );
-    });
+    const { contents, inCanvas } = this.props;
+    if (inCanvas) {
+      return contents.map((content, index) => {
+        const ComponentForType = content.get('component');
+        const type = content.get('type');
+        return (
+          <ComponentForType
+            type={type}
+            key={index}
+            inCanvas
+            disableDrag
+            ref={(c) => {
+              if (c) {
+                this.components[index] = {
+                  type,
+                  component: c.decoratedComponentInstance
+                };
+              }
+            }}
+          />
+        );
+      }).toJS();
+    }
+    return [<div key="fish" />];
   }
 
   render() {
-    const { col } = this.props;
+    const { numCols, addContent, rowId, colIndex } = this.props;
     return (
-      <Container col={col}>
+      <Container col={numCols}>
         <ColumnTarget
           onDrop={({ type }) => {
-            this.setState({
-              content: this.state.content.concat({
-                type
-              })
+            addContent(rowId, colIndex, {
+              type
             });
           }}
         >
@@ -74,8 +80,11 @@ export default class Column extends Component {
 }
 
 Column.propTypes = {
-  col: PropTypes.number.isRequired,
-  handleContent: PropTypes.func,
+  inCanvas: PropTypes.bool,
+  numCols: PropTypes.number.isRequired,
+  addContent: PropTypes.func,
+  updateRef: PropTypes.func,
+  contents: PropTypes.object,
   rowId: PropTypes.string.isRequired,
-  columnIndex: PropTypes.number.isRequired
+  colIndex: PropTypes.number.isRequired
 };
