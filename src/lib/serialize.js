@@ -2,8 +2,8 @@ const serializeColumn = (column) => {
   const state = [];
   column.forEach((content) => {
     state.push({
-      type: content.props.type,
-      state: content.state
+      type: content.get('type'),
+      state: content.get('component').state
     });
   });
   return state;

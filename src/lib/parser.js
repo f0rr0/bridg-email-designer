@@ -4,7 +4,7 @@ import css from '!raw!../css/foundation-emails.css'; // eslint-disable-line
 const parseColumn = (column) => {
   let markup = '';
   column.forEach((content) => {
-    markup += content.export();
+    markup += content.get('component').export();
   });
   return markup;
 };

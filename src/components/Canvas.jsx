@@ -75,12 +75,13 @@ export default class Canvas extends Component {
   }
 
   updateRef = (rowId, colIndex, components) => {
-    this.refsTree = canvasState.updateRef(this.state.canvas, rowId, colIndex, components);
+    this.refsTree = this.state.canvas.mergeDeep(this.refsTree);
+    this.refsTree = canvasState.updateRef(this.refsTree, rowId, colIndex, components);
   }
 
   saveToLocalStorage = () => {
-    const { canvas } = this.state;
-    const state = JSON.stringify(serialize(canvas));
+    this.refsTree = this.state.canvas.mergeDeep(this.refsTree);
+    const state = JSON.stringify(serialize(this.refsTree));
     localStorage.setItem('canvas', state); // eslint-disable-line
   }
 
@@ -89,7 +90,10 @@ export default class Canvas extends Component {
     console.log(JSON.parse(canvas));
   }
 
-  exportHtml = () => parser(this.state.canvas);
+  exportHtml = () => {
+    this.refsTree = this.state.canvas.mergeDeep(this.refsTree);
+    return parser(this.refsTree);
+  }
 
   renderRows = () =>
     this.state.canvas.map((row) => {
