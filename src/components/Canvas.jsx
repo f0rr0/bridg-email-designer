@@ -51,7 +51,9 @@ export default class Canvas extends Component {
   removeRow = id => () => {
     this.setState(({ canvas }) => ({
       canvas: canvasState.removeRow(canvas, id)
-    }));
+    }), () => {
+      this.refsTree = canvasState.removeRow(this.refsTree, id);
+    });
   }
 
   reorderRows = (from, to, inCanvas = true) => {
