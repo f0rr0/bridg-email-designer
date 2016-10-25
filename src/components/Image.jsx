@@ -50,7 +50,7 @@ const ImageContainer = styled('div')`
 class Image extends Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = props.state || {
       src: placeholder,
       height: 150,
       width: 150
@@ -60,6 +60,8 @@ class Image extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     return !equal(this.props, nextProps) || !equal(this.state, nextState);
   }
+
+  serialize = () => this.state;
 
   handleResize = (event, { size }) => {
     const { width, height } = size;
@@ -145,6 +147,7 @@ class Image extends Component {
 
 Image.propTypes = {
   type: PropTypes.string.isRequired,
+  state: PropTypes.object,
   inCanvas: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
   connectDragSource: PropTypes.func.isRequired,

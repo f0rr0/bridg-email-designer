@@ -23,7 +23,7 @@ const ImageContainer = styled('img')`
 class Image extends Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = props.state || {
       src: placeholder
     };
   }
@@ -31,6 +31,8 @@ class Image extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     return !equal(this.props, nextProps) || !equal(nextState, this.state);
   }
+
+  serialize = () => this.state;
 
   handleClick = () => {
     const src = window.prompt('Enter the URI to the image', 'https://unsplash.it/1000/200/?random'); // eslint-disable-line
@@ -86,6 +88,7 @@ class Image extends Component {
 
 Image.propTypes = {
   type: PropTypes.string.isRequired,
+  state: PropTypes.object,
   inCanvas: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
   connectDragSource: PropTypes.func.isRequired,

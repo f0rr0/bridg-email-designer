@@ -36,10 +36,7 @@ export default class Canvas extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextState.canvas === this.state.canvas) { // TODO: Replace with Immutable
-      return false;
-    }
-    return true;
+    return !nextState.canvas.equals(this.state.canvas);
   }
 
   addRow = (numCols) => {
@@ -62,8 +59,7 @@ export default class Canvas extends Component {
     if (inCanvas) {
       const fromIndex = canvasState.findRow(canvas, from);
       const row = canvas.get(fromIndex);
-      canvas = canvas.splice(fromIndex, 1);
-      canvas = canvas.splice(toIndex, 0, row);
+      canvas = canvas.splice(fromIndex, 1).splice(toIndex, 0, row);
       this.setState({
         canvas
       });
@@ -89,7 +85,9 @@ export default class Canvas extends Component {
 
   loadFromLocalStorage = () => {
     const canvas = localStorage.getItem('canvas'); // eslint-disable-line
-    console.log(JSON.parse(canvas));
+    this.setState({
+      canvas: canvasState.create(JSON.parse(canvas))
+    });
   }
 
   exportHtml = () => {

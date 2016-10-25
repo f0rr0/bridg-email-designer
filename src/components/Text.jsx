@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
-import { EditorState, RichUtils, DefaultDraftBlockRenderMap } from 'draft-js';
+import { EditorState, RichUtils, DefaultDraftBlockRenderMap, convertToRaw, convertFromRaw } from 'draft-js';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import createToolbarPlugin from 'draft-js-toolbar-plugin';
@@ -75,7 +75,7 @@ class Text extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorState: createEditorStateWithText('Formatted Text'),
+      editorState: props.state ? EditorState.createWithContent(convertFromRaw(props.state)) : createEditorStateWithText('Formatted Text')
     };
     const renderMap = {};
     Object.keys(Blocks).forEach((type) => {
@@ -91,6 +91,8 @@ class Text extends Component {
       editorState
     });
   }
+
+  serialize = () => convertToRaw(this.state.editorState.getCurrentContent());
 
   clickHandler = () => {
     if (this.props.inCanvas) {
@@ -152,6 +154,7 @@ class Text extends Component {
 
 Text.propTypes = {
   type: PropTypes.string.isRequired,
+  state: PropTypes.object,
   inCanvas: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
   connectDragSource: PropTypes.func.isRequired,

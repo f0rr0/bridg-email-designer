@@ -3,7 +3,7 @@ const serializeColumn = (column) => {
   column.forEach((content) => {
     state.push({
       type: content.get('type'),
-      state: content.get('component').state
+      state: content.get('component').serialize()
     });
   });
   return state;

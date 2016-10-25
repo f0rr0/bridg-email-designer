@@ -66,7 +66,6 @@ class Designer extends Component {
     textArea.select();
     try {
       if (document.execCommand('copy')) {
-        console.log(document.execCommand('copy'));
         this.setState({
           modal: false,
           snack: true,

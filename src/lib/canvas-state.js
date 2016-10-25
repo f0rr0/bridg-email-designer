@@ -1,10 +1,30 @@
-import { fromJS, List } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 import uniqueid from 'lodash.uniqueid';
 import curry from 'lodash.curry';
 import getComponent from './get-component';
 import manifest from './manifest';
 
-const create = () => {
+const create = (savedState) => {
+  if (savedState) {
+    let state = List();
+    savedState.forEach((row) => {
+      let newRow = Map().set('id', uniqueid());
+      let newColumns = List();
+      row.forEach((column) => {
+        let newColumn = List();
+        column.forEach((component) => {
+          const newComponent = Map().set('type', component.type)
+            .set('component', getComponent(component.type))
+            .set('state', component.state);
+          newColumn = newColumn.push(newComponent);
+        });
+        newColumns = newColumns.push(newColumn);
+      });
+      newRow = newRow.set('columns', newColumns);
+      state = state.push(newRow);
+    });
+    return state;
+  }
   return List();
 };
 

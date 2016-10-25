@@ -21,12 +21,12 @@ export default class Column extends Component {
 
   shouldComponentUpdate(nextProps) {
     if (this.props.inCanvas) {
-      return nextProps.contents.size !== this.props.contents.size;
+      return !nextProps.contents.equals(this.props.contents);
     }
     return true;
   }
 
-  componentDidUpdate() {
+  triggerRefsUpdate() {
     const { updateRef, rowId, colIndex } = this.props;
     const components = this.components;
     if (components.length > 0) {
@@ -40,10 +40,15 @@ export default class Column extends Component {
       return contents.map((content, index) => {
         const ComponentForType = content.get('component');
         const type = content.get('type');
+        let state = null;
+        if (content.has('state')) {
+          state = content.get('state');
+        }
         return (
           <ComponentForType
             type={type}
             key={index}
+            state={state}
             inCanvas
             disableDrag
             ref={(c) => {
@@ -52,13 +57,14 @@ export default class Column extends Component {
                   type,
                   component: c.decoratedComponentInstance
                 };
+                this.triggerRefsUpdate();
               }
             }}
           />
         );
       }).toJS();
     }
-    return [<div key="fish" />];
+    return [null];
   }
 
   render() {

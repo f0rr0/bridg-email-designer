@@ -103,7 +103,7 @@ const options = {
 class Html extends Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = props.state || {
       markup: '<p>HTML Markup</p>',
       editing: false,
       editable: props.inCanvas
@@ -115,6 +115,8 @@ class Html extends Component {
       this.editor.getCodeMirror().focus();
     }
   }
+
+  serialize = () => this.state;
 
   handleChange = (newMarkup) => {
     this.setState({
@@ -189,6 +191,7 @@ class Html extends Component {
 
 Html.propTypes = {
   type: PropTypes.string.isRequired,
+  state: PropTypes.object,
   inCanvas: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
   connectDragSource: PropTypes.func.isRequired,
