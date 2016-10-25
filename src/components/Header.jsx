@@ -1,17 +1,20 @@
 import React, { Component, PropTypes } from 'react';
 import styled from 'styled-components';
-import Popover from 'material-ui/Popover';
-import Menu from 'material-ui/Menu';
+import muiThemeable from 'material-ui/styles/muiThemeable';
 import MenuItem from 'material-ui/MenuItem';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
-import Hamburger from 'material-ui/svg-icons/navigation/menu';
+import Settings from 'material-ui/svg-icons/action/settings';
 import Code from 'material-ui/svg-icons/action/code';
-import Archive from 'material-ui/svg-icons/content/archive';
-import Unarchive from 'material-ui/svg-icons/content/unarchive';
+import Save from 'material-ui/svg-icons/content/save';
+import Undo from 'material-ui/svg-icons/content/undo';
+import Redo from 'material-ui/svg-icons/content/redo';
+import Restore from 'material-ui/svg-icons/action/restore';
 import logo from '../assets/Bridg-TM-White.png';
 
 const Header = styled('header')`
-  background: #303030;
+  background: ${({ muiTheme }) => muiTheme.palette.canvasColor};
   display: flex;
   padding: 0.5em 0.889em;
   align-items: center;
@@ -40,83 +43,88 @@ const Divider = styled('span')`
 `;
 
 const Title = styled('div')`
-  color: #FFFFFF;
+  color: ${({ muiTheme }) => muiTheme.palette.textColor};
   font-size: 18px;
   flex-grow: 1;
   text-align: left;
 `;
 
-export default class HeaderComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      open: false
-    };
-  }
-
-  handleTouchTap = (event) => {
-    event.preventDefault();
-    this.setState({
-      open: !this.state.open,
-      anchorEl: event.currentTarget
-    });
-  }
-
-  handleRequestClose = () => {
-    this.setState({
-      open: false
-    });
-  }
-
+class HeaderComponent extends Component {
   render() {
-    const { handleSave, handleLoad } = this.props;
-    const handleExport = () => {
-      this.handleRequestClose();
-      this.props.handleExport();
-    };
+    const {
+      handleSave,
+      handleRestore,
+      handleExport,
+      handleUndo,
+      handleRedo,
+      muiTheme
+    } = this.props;
 
     return (
-      <Header>
+      <Header muiTheme={muiTheme}>
         <a href="http://bridg.com" target="__blank"><Logo /></a>
         <Divider />
-        <Title>Email Designer</Title>
-        <IconButton
-          onTouchTap={this.handleTouchTap}
+        <Title muiTheme={muiTheme}>Email Designer</Title>
+        <FloatingActionButton
+          style={{
+            marginRight: '10px'
+          }}
+          mini
+          secondary
+          onTouchTap={handleUndo}
         >
-          <Hamburger />
-        </IconButton>
-        <Popover
-          open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          <Undo />
+        </FloatingActionButton>
+        <FloatingActionButton
+          style={{
+            marginRight: '30px'
+          }}
+          mini
+          secondary
+          onTouchTap={handleRedo}
+        >
+          <Redo />
+        </FloatingActionButton>
+        <IconMenu
+          iconButtonElement={
+            <IconButton>
+              <Settings />
+            </IconButton>
+          }
+          iconStyle={{
+            color: muiTheme.palette.accent1Color
+          }}
+          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
           targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-          onRequestClose={this.handleRequestClose}
         >
-          <Menu>
-            <MenuItem
-              primaryText="Save"
-              leftIcon={<Archive />}
-              onClick={handleSave}
-            />
-            <MenuItem
-              primaryText="Load"
-              leftIcon={<Unarchive />}
-              onClick={handleLoad}
-            />
-            <MenuItem
-              primaryText="Export"
-              leftIcon={<Code />}
-              onClick={handleExport}
-            />
-          </Menu>
-        </Popover>
+          <MenuItem
+            primaryText="Save"
+            leftIcon={<Save />}
+            onClick={handleSave}
+          />
+          <MenuItem
+            primaryText="Restore"
+            leftIcon={<Restore />}
+            onClick={handleRestore}
+          />
+          <MenuItem
+            primaryText="Export"
+            leftIcon={<Code />}
+            onClick={handleExport}
+          />
+        </IconMenu>
       </Header>
     );
   }
 }
 
+export default muiThemeable()(HeaderComponent);
+
 HeaderComponent.propTypes = {
   handleSave: PropTypes.func.isRequired,
-  handleLoad: PropTypes.func.isRequired,
-  handleExport: PropTypes.func.isRequired
+  handleRestore: PropTypes.func.isRequired,
+  handleExport: PropTypes.func.isRequired,
+  handleUndo: PropTypes.func.isRequired,
+  handleRedo: PropTypes.func.isRequired,
+  muiTheme: PropTypes.object
 };

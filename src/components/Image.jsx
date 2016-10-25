@@ -58,10 +58,11 @@ class Image extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return !equal(this.props, nextProps) || !equal(this.state, nextState);
+    if (!equal(nextState, this.state) && this.props.inCanvas) {
+      this.props.pushToUndoStack();
+    }
+    return !equal(this.props, nextProps) || !equal(nextState, this.state);
   }
-
-  serialize = () => this.state;
 
   handleResize = (event, { size }) => {
     const { width, height } = size;
@@ -89,9 +90,11 @@ class Image extends Component {
     return `<center><img src=${src} width=${width} height=${height} align="center" class="float-center" /></center>`;
   }
 
+  serialize = () => this.state;
+
   render() {
     const { type, inCanvas, isDragging, connectDragSource, connectDragPreview } = this.props;
-    const { src, height } = this.state;
+    const { src, height, width } = this.state;
     return connectDragPreview(connectDragSource(
       <div
         id={type}
@@ -118,8 +121,8 @@ class Image extends Component {
               {
                 img =>
                   <ResizableBox
-                    height={this.state.height}
-                    width={this.state.width}
+                    height={height}
+                    width={width}
                     // lockAspectRatio
                     minConstraints={[100, 100]}
                     maxConstraints={[600, 600]}

@@ -86,13 +86,18 @@ class Text extends Component {
     this.blockRenderMap = DefaultDraftBlockRenderMap.merge(renderMap);
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.editorState.getUndoStack().size !== this.state.editorState.getUndoStack().size
+     && this.props.inCanvas) {
+      this.props.pushToUndoStack();
+    }
+  }
+
   onChange = (editorState) => {
     this.setState({
       editorState
     });
   }
-
-  serialize = () => convertToRaw(this.state.editorState.getCurrentContent());
 
   clickHandler = () => {
     if (this.props.inCanvas) {
@@ -118,6 +123,8 @@ class Text extends Component {
   }
 
   export = () => stateToHTML(this.state.editorState.getCurrentContent());
+
+  serialize = () => convertToRaw(this.state.editorState.getCurrentContent());
 
   render() {
     const { type, inCanvas, isDragging, connectDragSource, connectDragPreview } = this.props;
@@ -157,6 +164,7 @@ Text.propTypes = {
   state: PropTypes.object,
   inCanvas: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
+  pushToUndoStack: PropTypes.func,
   connectDragSource: PropTypes.func.isRequired,
   connectDragPreview: PropTypes.func.isRequired
 };

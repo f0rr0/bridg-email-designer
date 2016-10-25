@@ -32,7 +32,11 @@ class Image extends Component {
     return !equal(this.props, nextProps) || !equal(nextState, this.state);
   }
 
-  serialize = () => this.state;
+  componentWillUpdate() {
+    if (this.props.inCanvas) {
+      this.props.pushToUndoStack();
+    }
+  }
 
   handleClick = () => {
     const src = window.prompt('Enter the URI to the image', 'https://unsplash.it/1000/200/?random'); // eslint-disable-line
@@ -47,6 +51,8 @@ class Image extends Component {
     const { src } = this.state;
     return `<img src="${src}" style="width: 100%;" />`;
   }
+
+  serialize = () => this.state;
 
   render() {
     const { type, inCanvas, isDragging, connectDragSource, connectDragPreview } = this.props;
@@ -91,6 +97,7 @@ Image.propTypes = {
   state: PropTypes.object,
   inCanvas: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
+  pushToUndoStack: PropTypes.func,
   connectDragSource: PropTypes.func.isRequired,
   connectDragPreview: PropTypes.func.isRequired
 };

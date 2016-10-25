@@ -35,7 +35,7 @@ export default class Column extends Component {
   }
 
   renderContent() {
-    const { contents, inCanvas } = this.props;
+    const { contents, inCanvas, pushToUndoStack } = this.props;
     if (inCanvas) {
       return contents.map((content, index) => {
         const ComponentForType = content.get('component');
@@ -49,6 +49,7 @@ export default class Column extends Component {
             type={type}
             key={index}
             state={state}
+            pushToUndoStack={pushToUndoStack}
             inCanvas
             disableDrag
             ref={(c) => {
@@ -90,6 +91,7 @@ Column.propTypes = {
   numCols: PropTypes.number.isRequired,
   addContent: PropTypes.func,
   updateRef: PropTypes.func,
+  pushToUndoStack: PropTypes.func,
   contents: PropTypes.object,
   rowId: PropTypes.string.isRequired,
   colIndex: PropTypes.number.isRequired

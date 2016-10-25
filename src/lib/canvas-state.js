@@ -1,4 +1,4 @@
-import { fromJS, List, Map } from 'immutable';
+import { fromJS, List, Map, Stack } from 'immutable';
 import uniqueid from 'lodash.uniqueid';
 import curry from 'lodash.curry';
 import getComponent from './get-component';
@@ -27,6 +27,8 @@ const create = (savedState) => {
   }
   return List();
 };
+
+const createStack = () => Stack();
 
 const findRow = (canvas, rowId) => {
   let found = -1;
@@ -114,6 +116,7 @@ const getPropsForRow = (canvas, row) => ({
 
 export {
   create,
+  createStack,
   findRow,
   removeRow,
   addRow,

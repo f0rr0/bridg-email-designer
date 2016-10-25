@@ -52,7 +52,7 @@ export default () =>
       fontFamily: 'Lato',
       tabs: {
         backgroundColor: darkBaseTheme.palette.canvasColor,
-        textColor: darkBaseTheme.palette.disabledColor,
+        textColor: darkBaseTheme.palette.secondaryTextColor,
         selectedTextColor: darkBaseTheme.palette.textColor
       }
     })}

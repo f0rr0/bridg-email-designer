@@ -85,6 +85,7 @@ class Row extends Component {
       addContent,
       updateRef,
       removeRow,
+      pushToUndoStack,
       connectDragSource,
       connectDragPreview,
       connectDropTarget
@@ -124,6 +125,7 @@ class Row extends Component {
                   inCanvas
                   addContent={addContent}
                   updateRef={updateRef}
+                  pushToUndoStack={pushToUndoStack}
                   key={key}
                 />
               )
@@ -150,6 +152,9 @@ Row.propTypes = {
   inCanvas: PropTypes.bool,
   getPropsForColumn: PropTypes.func,
   removeRow: PropTypes.func,
+  addContent: PropTypes.func,
+  updateRef: PropTypes.func,
+  pushToUndoStack: PropTypes.func,
   disableDrag: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
   connectDragSource: PropTypes.func.isRequired,

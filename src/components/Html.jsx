@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { injectGlobal } from 'styled-components';
 import { DragSource } from 'react-dnd';
+import equal from 'deep-equal';
 import Codemirror from 'react-codemirror';
 import ClickOutside from 'react-click-outside';
 import { Pass, innerMode } from 'codemirror';
@@ -105,18 +106,26 @@ class Html extends Component {
     super(props);
     this.state = props.state || {
       markup: '<p>HTML Markup</p>',
-      editing: false,
-      editable: props.inCanvas
+      editing: false
     };
   }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return !equal(this.props, nextProps) || !equal(nextState, this.state);
+  }
+
+  // componentWillUpdate(prevProps, prevState) {
+  //   if (this.props.inCanvas && this.editor) {
+  //     console.log(this.editor.getCodeMirror().doc.getHistory().done.filter(obj => obj.hasOwnProperty('changes')));
+  //     console.log(.editor.getCodeMirror().doc.getHistory().done.filter(obj => obj.hasOwnProperty('changes')));
+  //   }
+  // }
 
   componentDidUpdate(prevProps, prevState) {
     if (!prevState.editing && this.state.editing) {
       this.editor.getCodeMirror().focus();
     }
   }
-
-  serialize = () => this.state;
 
   handleChange = (newMarkup) => {
     this.setState({
@@ -131,18 +140,20 @@ class Html extends Component {
   }
 
   handleClick= () => {
-    if (this.state.editable) {
+    if (this.props.inCanvas) {
       this.setState({
         editing: true
       });
     }
   }
 
-  export = () => this.state.markup
+  export = () => this.state.markup;
+
+  serialize = () => this.state;
 
   render() {
     const { type, inCanvas, isDragging, connectDragSource, connectDragPreview } = this.props;
-    const { markup, editable, editing } = this.state;
+    const { markup, editing } = this.state;
     return connectDragPreview(connectDragSource(
       <div
         type={type}
@@ -157,7 +168,7 @@ class Html extends Component {
         }}
       >
         {
-          (editable && editing) ?
+          (inCanvas && editing) ?
             <ClickOutside
               style={{ height: '100%', width: '100%' }}
               onClickOutside={this.handleBlur}
@@ -194,6 +205,7 @@ Html.propTypes = {
   state: PropTypes.object,
   inCanvas: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
+  pushToUndoStack: PropTypes.func,
   connectDragSource: PropTypes.func.isRequired,
   connectDragPreview: PropTypes.func.isRequired
 };

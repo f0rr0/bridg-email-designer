@@ -33,19 +33,59 @@ export default class Canvas extends Component {
       canvas: canvasState.create()
     };
     this.refsTree = canvasState.create();
+    this.undoStack = canvasState.createStack();
+    this.redoStack = canvasState.createStack();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return !nextState.canvas.equals(this.state.canvas);
   }
 
+  pushToUndoStack = () => {
+    this.refsTree = this.state.canvas.mergeDeep(this.refsTree);
+    const state = serialize(this.refsTree);
+    this.undoStack = this.undoStack.push(state);
+  }
+
+  pushToRedoStack = () => {
+    this.redoStack = this.redoStack.push(this.state.canvas);
+  }
+
+  canUndo = () => !this.undoStack.isEmpty();
+
+  doUndo = () => {
+    if (this.canUndo()) {
+      this.pushToRedoStack();
+      this.setState({
+        canvas: canvasState.create(this.undoStack.first())
+      }, () => {
+        this.undoStack = this.undoStack.pop();
+      });
+    }
+  }
+
+  canRedo = () => !this.redoStack.isEmpty();
+
+  doRedo = () => {
+    if (this.canRedo()) {
+      this.pushToUndoStack();
+      this.setState({
+        canvas: this.redoStack.first()
+      }, () => {
+        this.redoStack = this.redoStack.pop();
+      });
+    }
+  }
+
   addRow = (numCols) => {
+    this.pushToUndoStack();
     this.setState(({ canvas }) => ({
       canvas: canvasState.addRow(canvas, numCols)
     }));
   }
 
   removeRow = id => () => {
+    this.pushToUndoStack();
     this.setState(({ canvas }) => ({
       canvas: canvasState.removeRow(canvas, id)
     }), () => {
@@ -67,6 +107,7 @@ export default class Canvas extends Component {
   }
 
   addContent = (rowId, colIndex, content) => {
+    this.pushToUndoStack();
     this.setState(({ canvas }) => ({
       canvas: canvasState.addContent(canvas, rowId, colIndex, content)
     }));
@@ -105,6 +146,7 @@ export default class Canvas extends Component {
           updateRef={this.updateRef}
           removeRow={this.removeRow}
           reorderRows={this.reorderRows}
+          pushToUndoStack={this.pushToUndoStack}
         />
       );
     }).toJS();

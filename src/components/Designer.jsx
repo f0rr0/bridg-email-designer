@@ -30,7 +30,6 @@ const Container = styled('section')`
 class Designer extends Component {
   constructor(props) {
     super(props);
-    this.canvas = null;
     this.state = {
       modal: false,
       snack: false,
@@ -85,6 +84,10 @@ class Designer extends Component {
 
   exportHtml = () => this.canvas.exportHtml();
 
+  doUndo = () => this.canvas.doUndo();
+
+  doRedo = () => this.canvas.doRedo();
+
   saveState = () => {
     try {
       this.canvas.saveToLocalStorage();
@@ -133,7 +136,9 @@ class Designer extends Component {
         <Header
           handleSave={this.saveState}
           handleExport={this.toggleModal}
-          handleLoad={this.loadState}
+          handleRestore={this.loadState}
+          handleUndo={this.doUndo}
+          handleRedo={this.doRedo}
         />
         <Container>
           <Toolbox />
