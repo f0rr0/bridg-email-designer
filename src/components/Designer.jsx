@@ -72,11 +72,11 @@ class Designer extends Component {
           message: 'Markup copied to clickboard!'
         });
       }
-    } catch (err) {
+    } catch (e) {
       this.setState({
         modal: false,
         snack: true,
-        message: `Oops! ${err}`
+        message: `Oops! ${e}`
       });
     }
     document.body.removeChild(textArea);
@@ -86,11 +86,33 @@ class Designer extends Component {
   exportHtml = () => this.canvas.exportHtml();
 
   saveState = () => {
-    this.canvas.saveToLocalStorage();
+    try {
+      this.canvas.saveToLocalStorage();
+      this.setState({
+        snack: true,
+        message: 'Saved successfully!'
+      });
+    } catch (e) {
+      this.setState({
+        snack: true,
+        message: `Oops! ${e}`
+      });
+    }
   }
 
   loadState = () => {
-    this.canvas.loadFromLocalStorage();
+    try {
+      this.canvas.loadFromLocalStorage();
+      this.setState({
+        snack: true,
+        message: 'Restored from memory successfully!'
+      });
+    } catch (e) {
+      this.setState({
+        snack: true,
+        message: `Oops! ${e}`
+      });
+    }
   }
 
   render() {
