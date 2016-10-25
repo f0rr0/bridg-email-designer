@@ -118,8 +118,8 @@ class Image extends Component {
               {
                 img =>
                   <ResizableBox
-                    height={150}
-                    width={150}
+                    height={this.state.height}
+                    width={this.state.width}
                     // lockAspectRatio
                     minConstraints={[100, 100]}
                     maxConstraints={[600, 600]}
