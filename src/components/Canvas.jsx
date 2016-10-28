@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import CanvasTarget from './CanvasTarget';
-import parser from '../lib/parser';
+import exportToHTML from '../lib/export';
 import serialize from '../lib/serialize';
 import * as canvasState from '../lib/canvas-state';
 import Row from './Row';
@@ -42,22 +42,20 @@ export default class Canvas extends Component {
   }
 
   pushToUndoStack = () => {
-    this.refsTree = this.state.canvas.mergeDeep(this.refsTree);
-    const state = serialize(this.refsTree);
+    const state = serialize(this.refsTree).toJSON();
     this.undoStack = this.undoStack.push(state);
-  }
-
-  pushToRedoStack = () => {
-    this.redoStack = this.redoStack.push(this.state.canvas);
+    this.redoStack = this.redoStack.clear();
   }
 
   canUndo = () => !this.undoStack.isEmpty();
 
   doUndo = () => {
     if (this.canUndo()) {
-      this.pushToRedoStack();
+      const state = serialize(this.refsTree).toJSON();
+      this.redoStack = this.redoStack.push(state);
+      this.refsTree = canvasState.create(this.undoStack.first());
       this.setState({
-        canvas: canvasState.create(this.undoStack.first())
+        canvas: this.refsTree
       }, () => {
         this.undoStack = this.undoStack.pop();
       });
@@ -68,9 +66,11 @@ export default class Canvas extends Component {
 
   doRedo = () => {
     if (this.canRedo()) {
-      this.pushToUndoStack();
+      const state = serialize(this.refsTree).toJSON();
+      this.undoStack = this.undoStack.push(state);
+      this.refsTree = canvasState.create(this.redoStack.first());
       this.setState({
-        canvas: this.redoStack.first()
+        canvas: this.refsTree
       }, () => {
         this.redoStack = this.redoStack.pop();
       });
@@ -81,7 +81,9 @@ export default class Canvas extends Component {
     this.pushToUndoStack();
     this.setState(({ canvas }) => ({
       canvas: canvasState.addRow(canvas, numCols)
-    }));
+    }), () => {
+      this.refsTree = this.state.canvas.mergeDeep(this.refsTree);
+    });
   }
 
   removeRow = id => () => {
@@ -114,42 +116,36 @@ export default class Canvas extends Component {
   }
 
   updateRef = (rowId, colIndex, components) => {
-    this.refsTree = this.state.canvas.mergeDeep(this.refsTree);
     this.refsTree = canvasState.updateRef(this.refsTree, rowId, colIndex, components);
   }
 
   saveToLocalStorage = () => {
-    this.refsTree = this.state.canvas.mergeDeep(this.refsTree);
     const state = JSON.stringify(serialize(this.refsTree));
     localStorage.setItem('canvas', state); // eslint-disable-line
   }
 
   loadFromLocalStorage = () => {
     const canvas = localStorage.getItem('canvas'); // eslint-disable-line
+    this.refsTree = canvasState.create(canvas);
     this.setState({
-      canvas: canvasState.create(JSON.parse(canvas))
+      canvas: this.refsTree
     });
   }
 
-  exportHtml = () => {
-    this.refsTree = this.state.canvas.mergeDeep(this.refsTree);
-    return parser(this.refsTree);
-  }
+  exportHtml = () => exportToHTML(this.refsTree);
 
   renderRows = () =>
-    this.state.canvas.map((row) => {
-      return (
-        <Row
-          {...canvasState.getPropsForRow(this.state.canvas, row)}
-          inCanvas
-          addContent={this.addContent}
-          updateRef={this.updateRef}
-          removeRow={this.removeRow}
-          reorderRows={this.reorderRows}
-          pushToUndoStack={this.pushToUndoStack}
-        />
-      );
-    }).toJS();
+    this.state.canvas.map(row =>
+      <Row
+        {...canvasState.getPropsForRow(this.state.canvas, row)}
+        inCanvas
+        addContent={this.addContent}
+        updateRef={this.updateRef}
+        removeRow={this.removeRow}
+        reorderRows={this.reorderRows}
+        pushToUndoStack={this.pushToUndoStack}
+      />
+    ).toJS();
 
   render() {
     return (

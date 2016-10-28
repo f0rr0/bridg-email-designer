@@ -1,29 +1,29 @@
+import { List, Map } from 'immutable';
+
 const serializeColumn = (column) => {
-  const state = [];
+  let state = List();
   column.forEach((content) => {
-    state.push({
-      type: content.get('type'),
-      state: content.get('component').serialize()
-    });
+    const serializedContent = Map()
+     .set('type', content.get('type'))
+     .set('state', content.get('component').serialize());
+    state = state.push(serializedContent);
   });
   return state;
 };
 
 const serializeRow = (row) => {
-  const state = [];
-  if (row) {
-    const columns = row.get('columns');
-    columns.forEach((column) => {
-      state.push(serializeColumn(column));
-    });
-  }
+  let state = List();
+  const columns = row.get('columns');
+  columns.forEach((column) => {
+    state = state.push(serializeColumn(column));
+  });
   return state;
 };
 
 const serializeCanvas = (canvas) => {
-  const state = [];
+  let state = List();
   canvas.forEach((row) => {
-    state.push(serializeRow(row));
+    state = state.push(serializeRow(row));
   });
   return state;
 };
