@@ -32,15 +32,10 @@ class Image extends Component {
     return !equal(this.props, nextProps) || !equal(nextState, this.state);
   }
 
-  componentWillUpdate() {
-    if (this.props.inCanvas) {
-      this.props.pushToUndoStack();
-    }
-  }
-
   handleClick = () => {
     const src = window.prompt('Enter the URI to the image', 'https://unsplash.it/1000/200/?random'); // eslint-disable-line
-    if (src) {
+    if (src && src !== this.state.src) {
+      this.props.pushToUndoStack();
       this.setState({
         src
       });
