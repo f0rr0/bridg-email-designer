@@ -58,9 +58,6 @@ class Image extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (!equal(nextState, this.state) && this.props.inCanvas) {
-      this.props.pushToUndoStack();
-    }
     return !equal(this.props, nextProps) || !equal(nextState, this.state);
   }
 
@@ -72,13 +69,18 @@ class Image extends Component {
     });
   }
 
-  handleStart = (event) => {
+  handleMouseDown = (event) => {
     event.preventDefault();
+  }
+
+  handleResizeStart = () => {
+    this.props.pushToUndoStack();
   }
 
   handleClick = () => {
     const src = window.prompt('Enter the URI to the image', 'https://unsplash.it/200/?random'); // eslint-disable-line
-    if (src) {
+    if (src !== this.state.src) {
+      this.props.pushToUndoStack();
       this.setState({
         src
       });
@@ -127,8 +129,9 @@ class Image extends Component {
                     minConstraints={[100, 100]}
                     maxConstraints={[600, 600]}
                     onResize={this.handleResize}
+                    onResizeStart={this.handleResizeStart}
                     draggableOpts={{
-                      onMouseDown: this.handleStart
+                      onMouseDown: this.handleMouseDown
                     }}
                   >
                     <ImageContainer
@@ -153,6 +156,7 @@ Image.propTypes = {
   state: PropTypes.object,
   inCanvas: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
+  pushToUndoStack: PropTypes.func,
   connectDragSource: PropTypes.func.isRequired,
   connectDragPreview: PropTypes.func.isRequired
 };
