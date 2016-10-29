@@ -1,63 +1,39 @@
 import React, { Component, PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
-import { EditorState, RichUtils, DefaultDraftBlockRenderMap, convertToRaw, convertFromRaw } from 'draft-js';
+import { EditorState, DefaultDraftBlockRenderMap, convertToRaw, convertFromRaw } from 'draft-js';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
-import createToolbarPlugin from 'draft-js-toolbar-plugin';
+import createInlineToolbar, {
+  BoldButton,
+  ItalicButton,
+  UnderlineButton,
+  BlockquoteButton,
+  Separator
+} from 'react-draft-js-inline-toolbar-plugin';
 import createBlockBreakoutPlugin from 'draft-js-block-breakout-plugin';
 import createEntityPropsPlugin from 'draft-js-entity-props-plugin';
 import createCleanupEmptyPlugin from 'draft-js-cleanup-empty-plugin';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
-import 'draft-js-toolbar-plugin/lib/plugin.css';
+import 'react-draft-js-inline-toolbar-plugin/lib/plugin.css';
 import 'draft-js-mention-plugin/lib/plugin.css';
-import Blocks from './Blocks';
+import Blocks, { AlignLeft, AlignRight } from './Blocks';
 import mentions from '../lib/mentions';
 import manifest from '../lib/manifest';
 import { source, collect } from '../lib/generic-drag-source';
 
-const toolbarPlugin = createToolbarPlugin({
-  textActions: [{
-    button: <span>H1</span>,
-    key: 'H1',
-    label: 'Header 1',
-    active: block => block.get('type') === 'header-one',
-    toggle: (block, action, editorState, setEditorState) =>
-      setEditorState(RichUtils.toggleBlockType(
-        editorState,
-        'header-one'
-      ))
-  }, {
-    button: <span>H2</span>,
-    key: 'H2',
-    label: 'Header 2',
-    active: block => block.get('type') === 'header-two',
-    toggle: (block, action, editorState, setEditorState) =>
-      setEditorState(RichUtils.toggleBlockType(
-        editorState,
-        'header-two'
-      ))
-  }, {
-    button: <span>H3</span>,
-    key: 'H3',
-    label: 'Header 3',
-    active: block => block.get('type') === 'header-three',
-    toggle: (block, action, editorState, setEditorState) =>
-      setEditorState(RichUtils.toggleBlockType(
-        editorState,
-        'header-three'
-      ))
-  }, {
-    button: <span>Quote</span>,
-    key: 'BLOCKQUOTE',
-    label: 'Blockquote',
-    active: block => block.get('type') === 'blockquote',
-    toggle: (block, action, editorState, setEditorState) =>
-      setEditorState(RichUtils.toggleBlockType(
-        editorState,
-        'blockquote'
-      ))
-  }]
+const toolbarPlugin = createInlineToolbar({
+  structure: [
+    BoldButton,
+    ItalicButton,
+    UnderlineButton,
+    Separator,
+    BlockquoteButton,
+    AlignLeft,
+    AlignRight
+  ]
 });
+const { InlineToolbar } = toolbarPlugin;
+
 
 const Entry = ({
   mention,
@@ -153,8 +129,10 @@ class Text extends Component {
     } : undefined;
   }
 
-  export = () => stateToHTML(this.state.editorState.getCurrentContent());
-
+  export = () => {
+    console.log(stateToHTML(this.state.editorState.getCurrentContent()));
+    return stateToHTML(this.state.editorState.getCurrentContent());
+  }
   serialize = () => convertToRaw(this.state.editorState.getCurrentContent());
 
   render() {
@@ -184,11 +162,20 @@ class Text extends Component {
           ref={(c) => { this.editor = c; }}
           {...this.props}
         />
-        <MentionSuggestions
-          onSearchChange={this.onSearchChange}
-          suggestions={this.state.suggestions}
-          entryComponent={Entry}
-        />
+        {
+          inCanvas ?
+            <MentionSuggestions
+              onSearchChange={this.onSearchChange}
+              suggestions={this.state.suggestions}
+              entryComponent={Entry}
+            />
+          : null
+        }
+        {
+          inCanvas ?
+            <InlineToolbar />
+          : null
+        }
       </div>,
       { dropEffect: 'copy' }
     ), { captureDraggingState: true });

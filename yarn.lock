@@ -4753,6 +4753,18 @@ react-dom@^15.3.2, react-dom@>=15.2.1:
   version "15.3.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.3.2.tgz#c46b0aa5380d7b838e7a59c4a7beff2ed315531f"
 
+react-draft-js-inline-toolbar-plugin@latest:
+  version "2.0.0-beta5"
+  resolved "https://registry.yarnpkg.com/react-draft-js-inline-toolbar-plugin/-/react-draft-js-inline-toolbar-plugin-2.0.0-beta5.tgz#98690272fecdc919e7d7c9bb7b06f3d4195c557f"
+  dependencies:
+    decorate-component-with-props "^1.0.2"
+    draft-js ">=0.8.1"
+    find-with-regex "^1.0.2"
+    immutable ">=3.8.1"
+    react ">=15.2.1"
+    react-dom ">=15.2.1"
+    union-class-names "^1.0.0"
+
 react-draggable@^2.1.0:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/react-draggable/-/react-draggable-2.2.2.tgz#80932da5ad81795bdfd141e846d7a9309680e270"
