@@ -2,15 +2,19 @@ import { fromJS } from 'immutable';
 
 export default fromJS([
   {
-    name: '*|FNAME|*',
+    name: '{{first_name}}',
     title: 'First Name'
   },
   {
-    name: '*|LNAME|*',
+    name: '{{last_name}}',
     title: 'Last Name'
   },
   {
-    name: '*|EMAIL|*',
+    name: '{{name}}',
+    title: 'Name'
+  },
+  {
+    name: '{{email}}',
     title: 'Email'
   }
 ]);
