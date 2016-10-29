@@ -16,7 +16,7 @@ import createCleanupEmptyPlugin from 'draft-js-cleanup-empty-plugin';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import 'react-draft-js-inline-toolbar-plugin/lib/plugin.css';
 import 'draft-js-mention-plugin/lib/plugin.css';
-import Blocks, { AlignLeft, AlignRight } from './Blocks';
+import Blocks, { AlignLeft, AlignCenter, AlignRight } from './Blocks';
 import mentions from '../lib/mentions';
 import manifest from '../lib/manifest';
 import { source, collect } from '../lib/generic-drag-source';
@@ -29,6 +29,7 @@ const toolbarPlugin = createInlineToolbar({
     Separator,
     BlockquoteButton,
     AlignLeft,
+    AlignCenter,
     AlignRight
   ]
 });
@@ -130,9 +131,34 @@ class Text extends Component {
   }
 
   export = () => {
-    console.log(stateToHTML(this.state.editorState.getCurrentContent()));
-    return stateToHTML(this.state.editorState.getCurrentContent());
+    const options = {
+      blockStyleFn: (block) => {
+        switch (block.getType()) {
+          case 'align-left':
+            return {
+              attributes: {
+                class: 'text-left'
+              }
+            };
+          case 'align-right':
+            return {
+              attributes: {
+                class: 'text-right'
+              }
+            };
+          case 'align-center':
+            return {
+              attributes: {
+                class: 'text-center'
+              }
+            };
+          default: return {};
+        }
+      }
+    };
+    return stateToHTML(this.state.editorState.getCurrentContent(), options);
   }
+
   serialize = () => convertToRaw(this.state.editorState.getCurrentContent());
 
   render() {
