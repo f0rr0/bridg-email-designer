@@ -41,10 +41,8 @@ export default class Canvas extends Component {
     return !nextState.canvas.equals(this.state.canvas);
   }
 
-  pushToUndoStack = () => {
-    const state = serialize(this.refsTree).toJSON();
-    this.undoStack = this.undoStack.push(state);
-    this.redoStack = this.redoStack.clear();
+  onDrop = ({ numCols }) => {
+    this.addRow(numCols);
   }
 
   canUndo = () => !this.undoStack.isEmpty();
@@ -84,6 +82,12 @@ export default class Canvas extends Component {
     }), () => {
       this.refsTree = this.state.canvas.mergeDeep(this.refsTree);
     });
+  }
+
+  pushToUndoStack = () => {
+    const state = serialize(this.refsTree).toJSON();
+    this.undoStack = this.undoStack.push(state);
+    this.redoStack = this.redoStack.clear();
   }
 
   removeRow = id => () => {
@@ -153,11 +157,7 @@ export default class Canvas extends Component {
     return (
       <ParentContainer>
         <TargetContainer>
-          <CanvasTarget
-            onDrop={({ numCols }) => {
-              this.addRow(numCols);
-            }}
-          >
+          <CanvasTarget onDrop={this.onDrop}>
             {this.renderRows()}
           </CanvasTarget>
         </TargetContainer>
