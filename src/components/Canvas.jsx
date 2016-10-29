@@ -127,6 +127,8 @@ export default class Canvas extends Component {
   loadFromLocalStorage = () => {
     const canvas = localStorage.getItem('canvas'); // eslint-disable-line
     this.refsTree = canvasState.create(canvas);
+    this.redoStack = this.redoStack.clear();
+    this.undoStack = this.undoStack.clear();
     this.setState({
       canvas: this.refsTree
     });
