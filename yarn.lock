@@ -2104,6 +2104,19 @@ draft-js-export-html:
   dependencies:
     draft-js-utils "^0.1.5"
 
+draft-js-mention-plugin@2.0.0-beta5:
+  version "2.0.0-beta5"
+  resolved "https://registry.yarnpkg.com/draft-js-mention-plugin/-/draft-js-mention-plugin-2.0.0-beta5.tgz#10c2ab85b191d042760d9b559ae853655028de66"
+  dependencies:
+    decorate-component-with-props "^1.0.2"
+    draft-js ">=0.8.1"
+    find-with-regex "^1.0.2"
+    immutable ">=3.8.1"
+    lodash.escaperegexp "^4.1.2"
+    react ">=15.2.1"
+    react-dom ">=15.2.1"
+    union-class-names "^1.0.0"
+
 draft-js-plugins-editor@2.0.0-beta5:
   version "2.0.0-beta5"
   resolved "https://registry.yarnpkg.com/draft-js-plugins-editor/-/draft-js-plugins-editor-2.0.0-beta5.tgz#0e81fddb69e23be1c22f1fbd74e25501b3dca171"
@@ -3615,6 +3628,10 @@ lodash.deburr@^3.0.0:
 lodash.defaults@^4.0.1:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/lodash.defaults/-/lodash.defaults-4.2.0.tgz#d09178716ffea4dde9e5fb7b37f6f0802274580c"
+
+lodash.escaperegexp@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/lodash.escaperegexp/-/lodash.escaperegexp-4.1.2.tgz#64762c48618082518ac3df4ccf5d5886dae20347"
 
 lodash.filter@^4.4.0:
   version "4.6.0"

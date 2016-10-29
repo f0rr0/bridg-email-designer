@@ -19,7 +19,7 @@ const TargetContainer = styled('section')`
   display: flex;
 `;
 
-/* Canvas state is a Immutable Data Structure which holds refs to content.
+/* Canvas state is an Immutable Data Structure which holds refs to content.
 ** Canvas -> [<Row>] List
 ** <Row> -> { id, columns<Column> } Map
 ** <Column> -> [<Content>] List

@@ -56,6 +56,7 @@
     "draft-js-cleanup-empty-plugin": "v2.0.0-beta5",
     "draft-js-entity-props-plugin": "2.0.0-beta5",
     "draft-js-export-html": "^0.5.0",
+    "draft-js-mention-plugin": "2.0.0-beta5",
     "draft-js-plugins-editor": "2.0.0-beta5",
     "draft-js-toolbar-plugin": "2.0.0-beta5",
     "immutable": "^3.8.1",

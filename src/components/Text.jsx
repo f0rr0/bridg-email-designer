@@ -7,14 +7,13 @@ import createToolbarPlugin from 'draft-js-toolbar-plugin';
 import createBlockBreakoutPlugin from 'draft-js-block-breakout-plugin';
 import createEntityPropsPlugin from 'draft-js-entity-props-plugin';
 import createCleanupEmptyPlugin from 'draft-js-cleanup-empty-plugin';
+import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import 'draft-js-toolbar-plugin/lib/plugin.css';
+import 'draft-js-mention-plugin/lib/plugin.css';
 import Blocks from './Blocks';
+import mentions from '../lib/mentions';
 import manifest from '../lib/manifest';
 import { source, collect } from '../lib/generic-drag-source';
-
-/* These styles might be overridden by global styles elsewhere.
-** Use with caution.
-*/
 
 const toolbarPlugin = createToolbarPlugin({
   textActions: [{
@@ -60,8 +59,33 @@ const toolbarPlugin = createToolbarPlugin({
   }]
 });
 
+const Entry = ({
+  mention,
+  theme,
+  searchValue, // eslint-disable-line
+  ...parentProps
+}) =>
+  <div {...parentProps}>
+    <div className={theme.mentionSuggestionsEntryContainer}>
+      <div className={theme.mentionSuggestionsEntryContainerLeft}>
+        <div className={theme.mentionSuggestionsEntryText}>
+          {mention.get('title')}
+        </div>
+      </div>
+    </div>
+  </div>;
+
+Entry.propTypes = {
+  mention: PropTypes.object,
+  theme: PropTypes.object
+};
+
+const mentionPlugin = createMentionPlugin();
+const { MentionSuggestions } = mentionPlugin;
+
 const plugins = [
   toolbarPlugin,
+  mentionPlugin,
   createBlockBreakoutPlugin({
     breakoutBlocks: Object.keys(Blocks)
   }),
@@ -75,7 +99,8 @@ class Text extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorState: props.state ? EditorState.createWithContent(convertFromRaw(props.state)) : createEditorStateWithText('Formatted Text')
+      editorState: props.state ? EditorState.createWithContent(convertFromRaw(props.state)) : createEditorStateWithText('Formatted Text'),
+      suggestions: mentions
     };
     const renderMap = {};
     Object.keys(Blocks).forEach((type) => {
@@ -98,6 +123,12 @@ class Text extends Component {
       editorState
     });
   }
+
+  onSearchChange = ({ value }) => {
+    this.setState({
+      suggestions: defaultSuggestionsFilter(value, mentions),
+    });
+  };
 
   clickHandler = () => {
     if (this.props.inCanvas) {
@@ -152,6 +183,11 @@ class Text extends Component {
           blockRendererFn={this.blockRendererFn}
           ref={(c) => { this.editor = c; }}
           {...this.props}
+        />
+        <MentionSuggestions
+          onSearchChange={this.onSearchChange}
+          suggestions={this.state.suggestions}
+          entryComponent={Entry}
         />
       </div>,
       { dropEffect: 'copy' }
