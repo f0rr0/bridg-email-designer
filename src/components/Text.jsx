@@ -3,6 +3,7 @@ import { DragSource } from 'react-dnd';
 import { EditorState, DefaultDraftBlockRenderMap, convertToRaw, convertFromRaw } from 'draft-js';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
+import ClickOutside from 'react-click-outside';
 import createInlineToolbar, {
   BoldButton,
   ItalicButton,
@@ -75,8 +76,10 @@ const plugins = [
 class Text extends Component {
   constructor(props) {
     super(props);
+    this.placeholder = props.placeholder || 'Formatted Text';
     this.state = {
-      editorState: props.state ? EditorState.createWithContent(convertFromRaw(props.state)) : createEditorStateWithText('Formatted Text'),
+      editorState: props.state ? EditorState.createWithContent(convertFromRaw(props.state))
+       : createEditorStateWithText(this.placeholder),
       suggestions: mentions
     };
     const renderMap = {};
@@ -107,20 +110,19 @@ class Text extends Component {
     });
   };
 
-  clickHandler = () => {
+  handleClick = () => {
     if (this.props.inCanvas) {
-      const hasFocus = this.state.editorState.getSelection().getHasFocus();
-      if (hasFocus) {
-        this.editor.focus();
-      } else {
-        const editorState = EditorState.moveFocusToEnd(this.state.editorState);
-        this.setState({
-          editorState
-        }, () => {
-          this.editor.blur();
-        });
-      }
+      this.editor.focus();
     }
+  }
+
+  handleClickOutside = () => {
+    const editorState = EditorState.moveFocusToEnd(this.state.editorState);
+    this.setState({
+      editorState
+    }, () => {
+      this.editor.blur();
+    });
   }
 
   blockRendererFn = (contentBlock) => {
@@ -177,30 +179,42 @@ class Text extends Component {
           transition: 'all 0.2s ease-in-out',
           flex: '1 0 auto'
         }}
-        onClick={this.clickHandler}
+        onClick={this.handleClick}
       >
-        <Editor
-          editorState={this.state.editorState}
-          onChange={this.onChange}
-          plugins={plugins}
-          blockRenderMap={this.blockRenderMap}
-          blockRendererFn={this.blockRendererFn}
-          ref={(c) => { this.editor = c; }}
-          {...this.props}
-        />
         {
           inCanvas ?
-            <MentionSuggestions
-              onSearchChange={this.onSearchChange}
-              suggestions={this.state.suggestions}
-              entryComponent={Entry}
-            />
-          : null
-        }
-        {
-          inCanvas ?
-            <InlineToolbar />
-          : null
+            <ClickOutside
+              style={{ height: '100%', width: '100%' }}
+              onClickOutside={this.handleClickOutside}
+            >
+              <Editor
+                editorState={this.state.editorState}
+                onChange={this.onChange}
+                plugins={plugins}
+                blockRenderMap={this.blockRenderMap}
+                blockRendererFn={this.blockRendererFn}
+                ref={(c) => { this.editor = c; }}
+                {...this.props}
+              />
+              <MentionSuggestions
+                onSearchChange={this.onSearchChange}
+                suggestions={this.state.suggestions}
+                entryComponent={Entry}
+              />
+              <InlineToolbar />
+            </ClickOutside>
+          :
+            <div
+              style={{
+                background: '#FFFFFF',
+                height: '100%',
+                width: '100%',
+                color: '#000000',
+                lineHeight: 1.125
+              }}
+            >
+              {this.placeholder}
+            </div>
         }
       </div>,
       { dropEffect: 'copy' }
@@ -213,6 +227,7 @@ Text.propTypes = {
   state: PropTypes.object,
   inCanvas: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
+  placeholder: PropTypes.string,
   pushToUndoStack: PropTypes.func,
   connectDragSource: PropTypes.func.isRequired,
   connectDragPreview: PropTypes.func.isRequired
