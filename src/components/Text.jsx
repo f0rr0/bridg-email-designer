@@ -187,19 +187,19 @@ class Text extends Component {
     const options = {
       blockStyleFn: (block) => {
         switch (block.getType()) {
-          case 'text-left':
+          case 'left-align':
             return {
               attributes: {
                 class: 'text-left'
               }
             };
-          case 'text-right':
+          case 'right-align':
             return {
               attributes: {
                 class: 'text-right'
               }
             };
-          case 'text-center':
+          case 'center-align':
             return {
               attributes: {
                 class: 'text-center'
