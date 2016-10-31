@@ -43,6 +43,18 @@ injectGlobal`
     padding: 5px;
     font-style: italic;
   }
+
+  .text-left {
+    text-align: left;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .text-right {
+    text-align: right;
+  }
 `;
 /*eslint-enable */
 

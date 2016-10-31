@@ -56,6 +56,36 @@ const toolbarPlugin = createToolbarPlugin({
         editorState,
         'blockquote'
       ))
+  }, {
+    button: <span>Left</span>,
+    key: 'LEFT',
+    label: 'Left Align',
+    active: block => block.get('type') === 'left-align',
+    toggle: (block, action, editorState, setEditorState) =>
+      setEditorState(RichUtils.toggleBlockType(
+        editorState,
+        'left-align'
+      ))
+  }, {
+    button: <span>Center</span>,
+    key: 'CENTER',
+    label: 'Center Align',
+    active: block => block.get('type') === 'center-align',
+    toggle: (block, action, editorState, setEditorState) =>
+      setEditorState(RichUtils.toggleBlockType(
+        editorState,
+        'center-align'
+      ))
+  }, {
+    button: <span>Right</span>,
+    key: 'RIGHT',
+    label: 'Right Align',
+    active: block => block.get('type') === 'right-align',
+    toggle: (block, action, editorState, setEditorState) =>
+      setEditorState(RichUtils.toggleBlockType(
+        editorState,
+        'right-align'
+      ))
   }]
 });
 
