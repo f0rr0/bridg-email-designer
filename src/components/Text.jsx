@@ -183,7 +183,34 @@ class Text extends Component {
     } : undefined;
   }
 
-  export = () => stateToHTML(this.state.editorState.getCurrentContent());
+  export = () => {
+    const options = {
+      blockStyleFn: (block) => {
+        switch (block.getType()) {
+          case 'text-left':
+            return {
+              attributes: {
+                class: 'text-left'
+              }
+            };
+          case 'text-right':
+            return {
+              attributes: {
+                class: 'text-right'
+              }
+            };
+          case 'text-center':
+            return {
+              attributes: {
+                class: 'text-center'
+              }
+            };
+          default: return {};
+        }
+      }
+    };
+    return stateToHTML(this.state.editorState.getCurrentContent(), options);
+  }
 
   serialize = () => convertToRaw(this.state.editorState.getCurrentContent());
 
