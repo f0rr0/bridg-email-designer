@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
-import { EditorState, RichUtils, DefaultDraftBlockRenderMap, convertToRaw, convertFromRaw } from 'draft-js';
+import ClickOutside from 'react-click-outside';
+import { EditorState, DefaultDraftBlockRenderMap, convertToRaw, convertFromRaw } from 'draft-js';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 import { stateToHTML } from 'draft-js-export-html';
 import createToolbarPlugin from 'draft-js-toolbar-plugin';
@@ -10,84 +11,10 @@ import createCleanupEmptyPlugin from 'draft-js-cleanup-empty-plugin';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import 'draft-js-toolbar-plugin/lib/plugin.css';
 import 'draft-js-mention-plugin/lib/plugin.css';
-import Blocks from './Blocks';
+import Blocks, { textActions } from './Blocks';
 import mentions from '../lib/mentions';
 import manifest from '../lib/manifest';
 import { source, collect } from '../lib/generic-drag-source';
-
-const toolbarPlugin = createToolbarPlugin({
-  textActions: [{
-    button: <span>H1</span>,
-    key: 'H1',
-    label: 'Header 1',
-    active: block => block.get('type') === 'header-one',
-    toggle: (block, action, editorState, setEditorState) =>
-      setEditorState(RichUtils.toggleBlockType(
-        editorState,
-        'header-one'
-      ))
-  }, {
-    button: <span>H2</span>,
-    key: 'H2',
-    label: 'Header 2',
-    active: block => block.get('type') === 'header-two',
-    toggle: (block, action, editorState, setEditorState) =>
-      setEditorState(RichUtils.toggleBlockType(
-        editorState,
-        'header-two'
-      ))
-  }, {
-    button: <span>H3</span>,
-    key: 'H3',
-    label: 'Header 3',
-    active: block => block.get('type') === 'header-three',
-    toggle: (block, action, editorState, setEditorState) =>
-      setEditorState(RichUtils.toggleBlockType(
-        editorState,
-        'header-three'
-      ))
-  }, {
-    button: <span>Quote</span>,
-    key: 'BLOCKQUOTE',
-    label: 'Blockquote',
-    active: block => block.get('type') === 'blockquote',
-    toggle: (block, action, editorState, setEditorState) =>
-      setEditorState(RichUtils.toggleBlockType(
-        editorState,
-        'blockquote'
-      ))
-  }, {
-    button: <span>Left</span>,
-    key: 'LEFT',
-    label: 'Left Align',
-    active: block => block.get('type') === 'left-align',
-    toggle: (block, action, editorState, setEditorState) =>
-      setEditorState(RichUtils.toggleBlockType(
-        editorState,
-        'left-align'
-      ))
-  }, {
-    button: <span>Center</span>,
-    key: 'CENTER',
-    label: 'Center Align',
-    active: block => block.get('type') === 'center-align',
-    toggle: (block, action, editorState, setEditorState) =>
-      setEditorState(RichUtils.toggleBlockType(
-        editorState,
-        'center-align'
-      ))
-  }, {
-    button: <span>Right</span>,
-    key: 'RIGHT',
-    label: 'Right Align',
-    active: block => block.get('type') === 'right-align',
-    toggle: (block, action, editorState, setEditorState) =>
-      setEditorState(RichUtils.toggleBlockType(
-        editorState,
-        'right-align'
-      ))
-  }]
-});
 
 const Entry = ({
   mention,
@@ -114,7 +41,9 @@ const mentionPlugin = createMentionPlugin();
 const { MentionSuggestions } = mentionPlugin;
 
 const plugins = [
-  toolbarPlugin,
+  createToolbarPlugin({
+    textActions
+  }),
   mentionPlugin,
   createBlockBreakoutPlugin({
     breakoutBlocks: Object.keys(Blocks)
@@ -160,20 +89,19 @@ class Text extends Component {
     });
   };
 
-  clickHandler = () => {
+  handleClick = () => {
     if (this.props.inCanvas) {
-      const hasFocus = this.state.editorState.getSelection().getHasFocus();
-      if (hasFocus) {
-        this.editor.focus();
-      } else {
-        const editorState = EditorState.moveFocusToEnd(this.state.editorState);
-        this.setState({
-          editorState
-        }, () => {
-          this.editor.blur();
-        });
-      }
+      this.editor.focus();
     }
+  }
+
+  handleClickOutside = () => {
+    const editorState = EditorState.moveFocusToEnd(this.state.editorState);
+    this.setState({
+      editorState
+    }, () => {
+      this.editor.blur();
+    });
   }
 
   blockRendererFn = (contentBlock) => {
@@ -230,22 +158,42 @@ class Text extends Component {
           transition: 'all 0.2s ease-in-out',
           flex: '1 0 auto'
         }}
-        onClick={this.clickHandler}
+        onClick={this.handleClick}
       >
-        <Editor
-          editorState={this.state.editorState}
-          onChange={this.onChange}
-          plugins={plugins}
-          blockRenderMap={this.blockRenderMap}
-          blockRendererFn={this.blockRendererFn}
-          ref={(c) => { this.editor = c; }}
-          {...this.props}
-        />
-        <MentionSuggestions
-          onSearchChange={this.onSearchChange}
-          suggestions={this.state.suggestions}
-          entryComponent={Entry}
-        />
+        {
+          inCanvas ?
+            <ClickOutside
+              style={{ height: '100%', width: '100%' }}
+              onClickOutside={this.handleClickOutside}
+            >
+              <Editor
+                editorState={this.state.editorState}
+                onChange={this.onChange}
+                plugins={plugins}
+                blockRenderMap={this.blockRenderMap}
+                blockRendererFn={this.blockRendererFn}
+                ref={(c) => { this.editor = c; }}
+                {...this.props}
+              />
+              <MentionSuggestions
+                onSearchChange={this.onSearchChange}
+                suggestions={this.state.suggestions}
+                entryComponent={Entry}
+              />
+            </ClickOutside>
+          :
+            <div
+              style={{
+                background: '#FFFFFF',
+                height: '100%',
+                width: '100%',
+                color: '#000000',
+                lineHeight: 1.125
+              }}
+            >
+              Formatted Text
+            </div>
+        }
       </div>,
       { dropEffect: 'copy' }
     ), { captureDraggingState: true });
