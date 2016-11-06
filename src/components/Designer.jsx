@@ -34,8 +34,15 @@ class Designer extends Component {
       modal: false,
       snack: false,
       message: '',
-      markup: null
+      markup: null,
+      custom: null
     };
+  }
+
+  setCustom = (component) => {
+    this.setState({
+      custom: component
+    });
   }
 
   toggleModal = () => this.setState({
@@ -141,8 +148,11 @@ class Designer extends Component {
           handleRedo={this.doRedo}
         />
         <Container>
-          <Toolbox />
-          <Canvas ref={(c) => { this.canvas = c; }} />
+          <Toolbox custom={this.state.custom} />
+          <Canvas
+            ref={(c) => { this.canvas = c; }}
+            setCustom={this.setCustom}
+          />
         </Container>
         <Dialog
           title="Preview"

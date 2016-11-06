@@ -86,6 +86,7 @@ class Row extends Component {
       updateRef,
       removeRow,
       pushToUndoStack,
+      setCustom,
       connectDragSource,
       connectDragPreview,
       connectDropTarget
@@ -126,6 +127,7 @@ class Row extends Component {
                   addContent={addContent}
                   updateRef={updateRef}
                   pushToUndoStack={pushToUndoStack}
+                  setCustom={setCustom}
                   key={key}
                 />
               )
@@ -155,6 +157,7 @@ Row.propTypes = {
   addContent: PropTypes.func,
   updateRef: PropTypes.func,
   pushToUndoStack: PropTypes.func,
+  setCustom: PropTypes.func,
   disableDrag: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
   connectDragSource: PropTypes.func.isRequired,

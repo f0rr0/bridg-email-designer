@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import capitalize from 'lodash.capitalize';
-import manifest from '../lib/manifest';
+import getComponent, { contentTypes } from '../lib/get-component';
 
 const Content = styled('section')`
   display: flex;
@@ -17,21 +16,16 @@ const Container = styled('div')`
   }
 `;
 
-export default () => {
-  const contentTypes = Object.values(manifest).filter(type => type !== 'ROW');
-  return (
-    <Content>
-      {
-        contentTypes.map((type, index) => {
-          const path = capitalize(type);
-          const ComponentForType = require('./' + path).default; // eslint-disable-line
-          return (
-            <Container key={index}>
-              <ComponentForType type={type} readOnly />
-            </Container>
-          );
-        })
-      }
-    </Content>
-  );
-};
+export default () =>
+  <Content>
+    {
+      contentTypes.map((type, index) => {
+        const ComponentForType = getComponent(type);
+        return (
+          <Container key={index}>
+            <ComponentForType type={type} readOnly />
+          </Container>
+        );
+      })
+    }
+  </Content>;

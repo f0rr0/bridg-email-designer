@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import styled from 'styled-components';
 import CanvasTarget from './CanvasTarget';
 import exportToHTML from '../lib/export';
@@ -150,6 +150,7 @@ export default class Canvas extends Component {
         removeRow={this.removeRow}
         reorderRows={this.reorderRows}
         pushToUndoStack={this.pushToUndoStack}
+        setCustom={this.props.setCustom}
       />
     ).toJS();
 
@@ -165,3 +166,7 @@ export default class Canvas extends Component {
     );
   }
 }
+
+Canvas.propTypes = {
+  setCustom: PropTypes.func.isRequired
+};

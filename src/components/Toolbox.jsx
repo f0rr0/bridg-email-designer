@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import styled from 'styled-components';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import SwipeableViews from 'react-swipeable-views';
 import DashboardIcon from 'material-ui/svg-icons/action/dashboard';
 import ListIcon from 'material-ui/svg-icons/action/list';
+import TuneIcon from 'material-ui/svg-icons/image/tune';
 import Layouts from './Layouts';
 import Content from './Content';
 
@@ -40,6 +41,7 @@ export default class Toolbox extends Component {
         >
           <Tab icon={<DashboardIcon />} label="Layouts" value={0} />
           <Tab icon={<ListIcon />} label="Content" value={1} />
+          <Tab icon={<TuneIcon />} label="Customization" value={2} />
         </Tabs>
         <SwipeableViews
           index={this.state.slideIndex}
@@ -51,8 +53,15 @@ export default class Toolbox extends Component {
           <Slide>
             <Content />
           </Slide>
+          <Slide>
+            {this.props.custom}
+          </Slide>
         </SwipeableViews>
       </Container>
     );
   }
 }
+
+Toolbox.propTypes = {
+  custom: PropTypes.object
+};

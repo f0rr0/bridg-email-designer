@@ -3,16 +3,23 @@ import styled from 'styled-components';
 import { DragSource } from 'react-dnd';
 import ProgressiveImage from 'react-progressive-image';
 import equal from 'deep-equal';
+import uniqueid from 'lodash.uniqueid';
+import ImageIcon from 'material-ui/svg-icons/image/image';
+import LinkIcon from 'material-ui/svg-icons/content/link';
+import PlusMinus from './PlusMinus';
+import ColorPicker from './ColorPicker';
+import DialogInput from './DialogInput';
 import manifest from '../lib/manifest';
 import { source, collect } from '../lib/generic-drag-source';
 import placeholder from '../assets/image.svg';
 
 const ImageContainer = styled('img')`
-  background-color: #bbbbbb;
   width: 100%;
   min-height: 100%;
   height: ${({ src }) => src.includes(placeholder) ? '0em' /* hack */ : 'auto'}
   vertical-align: top;
+  padding: ${({ padding }) => `${padding}px`}
+  background-color: ${({ background }) => background}
   transition: all 0.2s ease-in-out;
 
   &:hover {
@@ -20,38 +27,130 @@ const ImageContainer = styled('img')`
   }
 `;
 
+const Control = styled('div')`
+  margin-bottom: 10px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
 class Image extends Component {
   constructor(props) {
     super(props);
     this.state = props.state || {
-      src: placeholder
+      src: placeholder,
+      href: '',
+      padding: 0,
+      background: 'rgba(255, 255, 255, 1)'
     };
+    this.uniqueid = uniqueid();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return !equal(this.props, nextProps) || !equal(nextState, this.state);
   }
 
-  handleClick = () => {
-    const src = window.prompt('Enter the URI to the image', 'https://unsplash.it/1000/200/?random'); // eslint-disable-line
-    if (src && src !== this.state.src) {
-      this.props.pushToUndoStack();
-      this.setState({
-        src
-      });
+  componentWillUnmount() {
+    this.props.setCustom(null); // TODO: Revert to default custom opts
+  }
+
+  getCustom = () => {
+    this.props.setCustom(
+      <div style={{ padding: 10 }} key={this.uniqueid}>
+        <Control>
+          <DialogInput
+            icon={<ImageIcon />}
+            label="Image Source"
+            floatingLabelText="Enter link to image"
+            initialValue={this.state.src === placeholder ? 'https://unsplash.it/1000/200/?random' : this.state.src}
+            onChange={this.customDispatch('src')}
+          />
+        </Control>
+        <Control>
+          <DialogInput
+            icon={<LinkIcon />}
+            label="Hyperlink"
+            floatingLabelText="Enter hyperlink address"
+            initialValue={this.state.href}
+            onChange={this.customDispatch('href')}
+          />
+        </Control>
+        <Control>
+          <ColorPicker
+            label="Background Color"
+            initialValue={this.state.background}
+            onChange={this.customDispatch('background')}
+          />
+        </Control>
+        <Control>
+          <PlusMinus
+            label="Padding"
+            initialValue={this.state.padding}
+            onChange={this.customDispatch('padding')}
+          />
+        </Control>
+      </div>
+    );
+  }
+
+  customDispatch = type => (val) => {
+    switch (type) {
+      case 'padding':
+        this.props.pushToUndoStack();
+        this.setState({
+          padding: val
+        });
+        break;
+      case 'src':
+        this.props.pushToUndoStack();
+        this.setState({
+          src: val
+        });
+        break;
+      case 'href':
+        this.props.pushToUndoStack();
+        this.setState({
+          href: val
+        });
+        break;
+      case 'background':
+        this.props.pushToUndoStack();
+        this.setState({
+          background: val
+        });
+        break;
+      default:
     }
   }
 
   export = () => {
-    const { src } = this.state;
-    return `<img src="${src}" style="width: 100%;" />`;
+    const {
+      src,
+      href,
+      padding,
+      background
+    } = this.state;
+    if (href === '') {
+      return `<img src="${src}" style="width: 100%; padding: ${padding}px; background-color: ${background}" />`;
+    }
+    return `<a href=${href} target='__blank' rel='noopener noreferrer'><img src="${src}" style="width: 100%; padding: ${padding}px; background-color: ${background}" /></a>`;
   }
 
   serialize = () => this.state;
 
   render() {
-    const { type, inCanvas, isDragging, connectDragSource, connectDragPreview } = this.props;
-    const { src } = this.state;
+    const {
+      type,
+      inCanvas,
+      isDragging,
+      connectDragSource,
+      connectDragPreview
+    } = this.props;
+    const {
+      src,
+      padding,
+      background
+    } = this.state;
     return connectDragPreview(connectDragSource(
       <div
         id={type}
@@ -75,11 +174,18 @@ class Image extends Component {
             >
               {
                 img =>
-                  <ImageContainer src={img} onClick={this.handleClick} />
+                  <ImageContainer
+                    src={img}
+                    padding={padding}
+                    background={background}
+                    onClick={this.getCustom}
+                  />
               }
             </ProgressiveImage>
           :
-            <div style={{ padding: '10px', lineHeight: 1.125 }}>Banner Image</div>
+            <div style={{ padding: '10px', lineHeight: 1.125 }}>
+              Banner Image
+            </div>
         }
       </div>,
       { dropEffect: 'copy' }
@@ -92,6 +198,7 @@ Image.propTypes = {
   state: PropTypes.object,
   inCanvas: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
+  setCustom: PropTypes.func,
   pushToUndoStack: PropTypes.func,
   connectDragSource: PropTypes.func.isRequired,
   connectDragPreview: PropTypes.func.isRequired
