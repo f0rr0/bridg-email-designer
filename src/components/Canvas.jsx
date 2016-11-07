@@ -68,11 +68,12 @@ export default class Canvas extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return !nextState.canvas.equals(this.state.canvas) || !equal(this.state, nextState);
+    return !equal(this.state, nextState);
   }
 
-  componentWillUnmount() {
-    this.props.setCustom(null);
+  componentDidUpdate() {
+    this.uniqueid = uniqueid();
+    this.props.setCustom(this.getCustom());
   }
 
   onDrop = ({ numCols }) => {

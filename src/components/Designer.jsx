@@ -41,7 +41,6 @@ class Designer extends Component {
 
   setCustom = (component) => {
     if (component) {
-      console.log('wtf2');
       this.setState({
         custom: component
       });
