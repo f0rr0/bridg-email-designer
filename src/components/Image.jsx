@@ -82,7 +82,8 @@ class Image extends Component {
     this.props.setCustom(null);
   }
 
-  getCustom = () => {
+  getCustom = (e) => {
+    e.stopPropagation();
     this.props.setCustom(
       <div style={{ padding: 10 }} key={this.uniqueid}>
         <Control>
@@ -90,7 +91,7 @@ class Image extends Component {
             icon={<ImageIcon />}
             label="Image Source"
             floatingLabelText="Enter link to image"
-            initialValue={this.state.src === placeholder ? 'https://unsplash.it/640/200/?random' : this.state.src}
+            initialValue={this.state.src === placeholder ? 'https://unsplash.it/200/200/?random' : this.state.src}
             onChange={this.customDispatch('src')}
           />
         </Control>

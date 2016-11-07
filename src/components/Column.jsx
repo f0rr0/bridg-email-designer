@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 import ColumnTarget from './ColumnTarget';
 
 const Container = styled('div')`
-  background: #636363;
   max-width: ${({ col }) => css`${100 / col}%`}
   flex: ${({ col }) => css`0 1 ${100 / col}%`}
   border-right: 5px solid #303030;

@@ -14,7 +14,7 @@ const Main = styled('main')`
   width: 100%;
   overflow-y: scroll;
   font-size: 16px;
-  background: linear-gradient(to top, #141E30 , #243B55);
+  background: linear-gradient(to top, #12FFF7, #B3FFAB);
   font-family: 'Lato', sans-serif;
   display: flex;
   flex-direction: column;
@@ -40,9 +40,14 @@ class Designer extends Component {
   }
 
   setCustom = (component) => {
-    this.setState({
-      custom: component
-    });
+    if (component) {
+      console.log('wtf2');
+      this.setState({
+        custom: component
+      });
+    } else if (this.canvas) {
+      this.setCustom(this.canvas.getCustom());
+    }
   }
 
   toggleModal = () => this.setState({
@@ -150,7 +155,9 @@ class Designer extends Component {
         <Container>
           <Toolbox custom={this.state.custom} />
           <Canvas
-            ref={(c) => { this.canvas = c; }}
+            ref={(c) => {
+              this.canvas = c;
+            }}
             setCustom={this.setCustom}
           />
         </Container>

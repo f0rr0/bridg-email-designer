@@ -36,7 +36,7 @@ class ColumnTarget extends Component {
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          background: isOver && canDrop ? 'rgba(187, 187, 187, 0.5)' : 'transparent',
+          background: isOver && canDrop ? 'rgb(187, 187, 187)' : 'transparent',
           transition: 'all 0.3s ease-in-out'
         }}
       >

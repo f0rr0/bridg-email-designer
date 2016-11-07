@@ -54,7 +54,8 @@ class Image extends Component {
     this.props.setCustom(null);
   }
 
-  getCustom = () => {
+  getCustom = (e) => {
+    e.stopPropagation();
     this.props.setCustom(
       <div style={{ padding: 10 }} key={this.uniqueid}>
         <Control>

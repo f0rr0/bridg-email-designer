@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import styled from 'styled-components';
+import Paper from 'material-ui/Paper';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import SwipeableViews from 'react-swipeable-views';
 import DashboardIcon from 'material-ui/svg-icons/action/dashboard';
@@ -14,10 +15,6 @@ const Container = styled('section')`
   flex: 1 0 25%;
   display: flex;
   flex-direction: column;
-`;
-
-const Slide = styled('div')`
-  background: rgba(137, 255, 253, 0.5);
 `;
 
 export default class Toolbox extends Component {
@@ -37,31 +34,39 @@ export default class Toolbox extends Component {
   render() {
     return (
       <Container>
-        <Tabs
-          onChange={this.handleChange}
-          value={this.state.slideIndex}
-        >
-          <Tab icon={<DashboardIcon />} label="Layouts" value={0} />
-          <Tab icon={<ListIcon />} label="Content" value={1} />
-          <Tab icon={<TuneIcon />} label="Customization" value={2} />
-        </Tabs>
-        <SwipeableViews
-          index={this.state.slideIndex}
-          onChangeIndex={this.handleChange}
+        <Paper
           style={{
-            height: '100%'
+            height: 'auto',
+            width: '100%',
+            background: 'rgba(0, 0, 0, 0.35)'
           }}
         >
-          <Slide>
-            <Layouts />
-          </Slide>
-          <Slide>
-            <Content />
-          </Slide>
-          <Slide>
-            {this.props.custom}
-          </Slide>
-        </SwipeableViews>
+          <Tabs
+            onChange={this.handleChange}
+            value={this.state.slideIndex}
+          >
+            <Tab icon={<DashboardIcon />} label="Layouts" value={0} />
+            <Tab icon={<ListIcon />} label="Content" value={1} />
+            <Tab icon={<TuneIcon />} label="Customization" value={2} />
+          </Tabs>
+          <SwipeableViews
+            index={this.state.slideIndex}
+            onChangeIndex={this.handleChange}
+            style={{
+              height: '100%'
+            }}
+          >
+            <div>
+              <Layouts />
+            </div>
+            <div>
+              <Content />
+            </div>
+            <div>
+              {this.props.custom}
+            </div>
+          </SwipeableViews>
+        </Paper>
       </Container>
     );
   }

@@ -73,7 +73,7 @@ class Text extends Component {
     super(props);
     this.state = {
       editorState: props.state ? EditorState.createWithContent(convertFromRaw(props.state.editorState)) : createEditorStateWithText('Formatted Text'),
-      background: props.state ? props.state.background : 'rgba(255, 255, 255, 1)',
+      background: props.state ? props.state.background : 'rgba(255, 255, 255, 0)',
       textColor: props.state ? props.state.textColor : 'rgba(0, 0, 0, 1)',
       padding: props.state ? props.state.padding : 0,
       borderSize: props.state ? props.state.borderSize : 0,
@@ -226,7 +226,8 @@ class Text extends Component {
     }
   }
 
-  handleClick = () => {
+  handleClick = (e) => {
+    e.stopPropagation();
     if (this.props.inCanvas) {
       this.setState({
         editing: true
@@ -365,6 +366,7 @@ class Text extends Component {
           style={{
             height: '100%',
             width: '100%',
+            color: '#000000',
             background: '#FFFFFF',
             padding: 10
           }}
