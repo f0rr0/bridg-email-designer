@@ -17,8 +17,10 @@ import Row from './Row';
 
 const ParentContainer = styled(Paper)`
   order: 1;
-  flex: 0 0 75%;
-  max-width: 648px;
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 500px;
+  max-width: 840px;
 `;
 
 const TargetContainer = styled('section')`

@@ -2,10 +2,27 @@ import React, { Component, PropTypes } from 'react';
 import styled, { css } from 'styled-components';
 import ColumnTarget from './ColumnTarget';
 
-const Container = styled('div')`
-  max-width: ${({ col }) => css`${100 / col}%`}
-  flex: ${({ col }) => css`0 1 ${100 / col}%`}
+const ContainerInToolbox = styled('div')`
+  display: inline-block;
+  width: ${({ col }) => css`${100 / col}%`}
+  height: 100%;
   border-right: 5px solid #303030;
+
+  &:last-child {
+    border-right: none;
+  }
+`;
+
+const Container = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  align-content: stretch;
+  width: ${({ col }) => css`${100 / col}%`}
+  min-height: 5em;
+  height: 100%;
+  border-right: 2px dashed #303030;
+  background: yellow;
 
   &:last-child {
     border-right: none;
@@ -69,19 +86,24 @@ export default class Column extends Component {
   }
 
   render() {
-    const { numCols, addContent, rowId, colIndex } = this.props;
+    const { numCols, addContent, rowId, colIndex, inCanvas } = this.props;
+    if (inCanvas) {
+      return (
+        <Container col={numCols}>
+          <ColumnTarget
+            onDrop={({ type }) => {
+              addContent(rowId, colIndex, {
+                type
+              });
+            }}
+          >
+            {this.renderContent()}
+          </ColumnTarget>
+        </Container>
+      );
+    }
     return (
-      <Container col={numCols}>
-        <ColumnTarget
-          onDrop={({ type }) => {
-            addContent(rowId, colIndex, {
-              type
-            });
-          }}
-        >
-          {this.renderContent()}
-        </ColumnTarget>
-      </Container>
+      <ContainerInToolbox col={numCols} />
     );
   }
 }

@@ -15,11 +15,11 @@ class CanvasTarget extends Component {
     return connectDropTarget(
       <div
         style={{
+          display: 'block',
+          flexGrow: '1',
+          height: '100%',
           width: '100%',
-          padding: '10px 10px 10em',
           overflowY: 'scroll',
-          display: 'flex',
-          flexDirection: 'column'
         }}
       >
         {children}

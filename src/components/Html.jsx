@@ -101,11 +101,22 @@ const options = {
   theme: 'material'
 };
 
+const defaultMarkup =
+`<p
+  style="
+    padding: 10px;
+    background: #FFF;
+    color: #000;
+  "
+>
+  HTML Markup
+</p>`;
+
 class Html extends Component {
   constructor(props) {
     super(props);
     this.state = props.state || {
-      markup: '<p>HTML Markup</p>',
+      markup: defaultMarkup,
       editing: false
     };
   }
@@ -135,6 +146,7 @@ class Html extends Component {
 
   handleBlur = () => {
     this.setState({
+      markup: this.state.markup === '' ? defaultMarkup : this.state.markup,
       editing: false
     });
   }
@@ -164,7 +176,6 @@ class Html extends Component {
           cursor: inCanvas ? 'text' : 'move',
           transition: 'all 0.2s ease-in-out',
           display: 'flex',
-          flex: '1 0 auto'
         }}
       >
         {
@@ -183,11 +194,9 @@ class Html extends Component {
           :
             <div
               style={{
-                background: '#FFFFFF',
-                padding: '10px',
+                background: 'rgba(0, 0, 0, 0)',
                 height: '100%',
                 width: '100%',
-                color: '#000000',
                 lineHeight: 1.125
               }}
               onClick={this.handleClick}

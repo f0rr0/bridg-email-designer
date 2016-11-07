@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import { DragSource, DropTarget } from 'react-dnd';
 import equal from 'deep-equal';
 import manifest from '../lib/manifest';
 import { source, collect as collectSource } from '../lib/generic-drag-source';
 import { target, collect as collectTarget } from '../lib/generic-drop-target';
 import Column from './Column';
-import close from '../assets/close.png';
+// import close from '../assets/close.png';
 
 const rowSource = Object.assign({}, source, {
   beginDrag(props, monitor, component) {
@@ -36,18 +36,18 @@ const rowTarget = Object.assign({}, target, {
   }
 });
 
-const CloseButton = styled('div')`
-  height: 20px;
-  margin: ${({ showClose }) => showClose ? '-1px 3px 0 -1px' : '0px'}
-  flex: ${({ showClose }) => showClose ? '0 0 17px' : '0 0 0'}
-  background-image: ${`url(${close})`};
-  background-repeat: no-repeat;
-  background-size: contain;
-  cursor: pointer;
-  opacity: ${({ showClose }) => showClose ? 0.8 : 0}
-  transition: all 0.5s ease-in-out;
-  transition-delay: 0.2s;
-`;
+// const CloseButton = styled('div')`
+//   height: 20px;
+//   margin: ${({ showClose }) => showClose ? '-1px 3px 0 -1px' : '0px'}
+//   flex: ${({ showClose }) => showClose ? '0 0 17px' : '0 0 0'}
+//   background-image: ${`url(${close})`};
+//   background-repeat: no-repeat;
+//   background-size: contain;
+//   cursor: pointer;
+//   opacity: ${({ showClose }) => showClose ? 0.8 : 0}
+//   transition: all 0.5s ease-in-out;
+//   transition-delay: 0.2s;
+// `;
 
 class Row extends Component {
   constructor(props) {
@@ -84,7 +84,7 @@ class Row extends Component {
       getPropsForColumn,
       addContent,
       updateRef,
-      removeRow,
+      // removeRow,
       pushToUndoStack,
       setCustom,
       connectDragSource,
@@ -92,52 +92,73 @@ class Row extends Component {
       connectDropTarget
     } = this.props;
 
-    const { showClose } = this.state;
+    // const { showClose } = this.state;
 
     return (
       connectDropTarget(connectDragPreview(connectDragSource(
         <div
           id={type}
           style={{
-            display: 'flex',
-            flex: '0 0 auto',
-            minHeight: '5em',
-            marginBottom: 10,
-            borderRadius: '4px',
-            border: '5px solid #303030',
-            overflowY: 'auto',
+            // overflowY: 'auto',
             cursor: disableDrag ? 'default' : 'move',
             opacity: isDragging ? inCanvas ? 0.4 : 0.4 : 1, // eslint-disable-line
             transition: 'opacity 0.2s ease-in-out'
           }}
-          onMouseEnter={this.toggleClose(true)}
-          onMouseOver={this.toggleClose(true)}
-          onMouseLeave={this.toggleClose(false)}
+          // onMouseEnter={this.toggleClose(true)}
+          // onMouseOver={this.toggleClose(true)}
+          // onMouseLeave={this.toggleClose(false)}
         >
-          {
+          {/* {
             inCanvas ? <CloseButton showClose={showClose} onClick={removeRow(id)} /> : null
-          }
+          } */}
           {
             inCanvas ?
-              [...Array(numCols).keys()].map(key =>
-                <Column
-                  {...getPropsForColumn(key)}
-                  inCanvas
-                  addContent={addContent}
-                  updateRef={updateRef}
-                  pushToUndoStack={pushToUndoStack}
-                  setCustom={setCustom}
-                  key={key}
-                />
-              )
-            : [...Array(numCols).keys()].map(key =>
-              <Column
-                rowId={id}
-                colIndex={key}
-                numCols={numCols}
-                key={key}
-              />
-            )
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'stretch',
+                  alignContent: 'stretch',
+                  margin: '0 auto',
+                  width: '500px',
+                  marginBottom: '2px',
+                  border: '2px dashed #303030',
+                }}
+              >
+                {
+                  [...Array(numCols).keys()].map(key =>
+                    <Column
+                      {...getPropsForColumn(key)}
+                      inCanvas
+                      addContent={addContent}
+                      updateRef={updateRef}
+                      pushToUndoStack={pushToUndoStack}
+                      setCustom={setCustom}
+                      key={key}
+                    />
+                  )
+                }
+              </div>
+            :
+              <div
+                style={{
+                  display: 'block',
+                  marginBottom: '10px',
+                  height: '5em',
+                  borderRadius: '4px',
+                  border: '5px solid #303030',
+                }}
+              >
+                {
+                  [...Array(numCols).keys()].map(key =>
+                    <Column
+                      rowId={id}
+                      colIndex={key}
+                      numCols={numCols}
+                      key={key}
+                    />
+                  )
+                }
+              </div>
           }
         </div>,
         { dropEffect: 'copy' }

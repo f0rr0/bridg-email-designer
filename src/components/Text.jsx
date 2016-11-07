@@ -325,7 +325,6 @@ class Text extends Component {
           return (
             <ClickOutside
               style={{
-                height: '100%',
                 width: '100%',
                 background,
                 padding,
@@ -354,7 +353,6 @@ class Text extends Component {
         return (
           <div
             style={{
-              height: '100%',
               width: '100%'
             }}
             dangerouslySetInnerHTML={{ __html: this.export() }} // eslint-disable-line
@@ -384,8 +382,7 @@ class Text extends Component {
           height: '100%',
           lineHeight: 1.125,
           cursor: inCanvas ? 'text' : 'move',
-          transition: 'all 0.2s ease-in-out',
-          flex: '1 0 auto'
+          transition: 'all 0.2s ease-in-out'
         }}
         onClick={this.handleClick}
       >

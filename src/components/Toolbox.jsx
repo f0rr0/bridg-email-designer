@@ -10,9 +10,11 @@ import Layouts from './Layouts';
 import Content from './Content';
 
 const Container = styled('section')`
-  padding-left: 1.802em;
+  padding-left: 15px;
+  width: 394px;
+  max-width: 394px;
+  min-width: 394px;
   order: 2;
-  flex: 1 0 25%;
   display: flex;
   flex-direction: column;
 `;

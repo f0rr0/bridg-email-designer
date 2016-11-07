@@ -15,8 +15,7 @@ import placeholder from '../assets/image.svg';
 
 const ImageContainer = styled('img')`
   width: 100%;
-  min-height: 100%;
-  height: ${({ src }) => src.includes(placeholder) ? '0em' /* hack */ : 'auto'}
+  height: ${({ height }) => `${height}px`};
   vertical-align: top;
   padding: ${({ padding }) => `${padding}px`}
   background-color: ${({ background }) => background}
@@ -41,6 +40,7 @@ class Image extends Component {
       src: placeholder,
       href: '',
       padding: 0,
+      height: 80,
       background: 'rgba(255, 255, 255, 1)'
     };
     this.uniqueid = uniqueid();
@@ -63,7 +63,7 @@ class Image extends Component {
             icon={<ImageIcon />}
             label="Image Source"
             floatingLabelText="Enter link to image"
-            initialValue={this.state.src === placeholder ? 'https://unsplash.it/640/200/?random' : this.state.src}
+            initialValue={this.state.src === placeholder ? 'https://unsplash.it/500/80/?random' : this.state.src}
             onChange={this.customDispatch('src')}
           />
         </Control>
@@ -90,6 +90,14 @@ class Image extends Component {
             onChange={this.customDispatch('padding')}
           />
         </Control>
+        <Control>
+          <PlusMinus
+            label="Height"
+            initialValue={this.state.height}
+            maxValue={1000}
+            onChange={this.customDispatch('height')}
+          />
+        </Control>
       </div>
     );
   }
@@ -100,6 +108,12 @@ class Image extends Component {
         this.props.pushToUndoStack();
         this.setState({
           padding: val
+        });
+        break;
+      case 'height':
+        this.props.pushToUndoStack();
+        this.setState({
+          height: val
         });
         break;
       case 'src':
@@ -129,12 +143,13 @@ class Image extends Component {
       src,
       href,
       padding,
+      height,
       background
     } = this.state;
     if (href === '') {
-      return `<img src="${src}" style="width: 100%; padding: ${padding}px; background-color: ${background}" />`;
+      return `<img src="${src}" style="width: 100%; height:${height}px; padding: ${padding}px; background-color: ${background}" />`;
     }
-    return `<a href=${href} target='__blank' rel='noopener noreferrer'><img src="${src}" style="width: 100%; padding: ${padding}px; background-color: ${background}" /></a>`;
+    return `<a href=${href} target='__blank' rel='noopener noreferrer'><img src="${src}" style="width: 100%; height:${height}px; padding: ${padding}px; background-color: ${background}" /></a>`;
   }
 
   serialize = () => this.state;
@@ -150,6 +165,7 @@ class Image extends Component {
     const {
       src,
       padding,
+      height,
       background
     } = this.state;
     return connectDragPreview(connectDragSource(
@@ -178,6 +194,7 @@ class Image extends Component {
                   <ImageContainer
                     src={img}
                     padding={padding}
+                    height={height}
                     background={background}
                     onClick={this.getCustom}
                   />

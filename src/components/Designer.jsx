@@ -21,7 +21,7 @@ const Main = styled('main')`
 `;
 
 const Container = styled('section')`
-  padding: 1.802em;
+  padding: 15px;
   display: flex;
   flex: 1 1 auto;
   justify-content: space-between;

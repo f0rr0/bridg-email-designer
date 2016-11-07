@@ -1,4 +1,4 @@
-import React, { Component, PropTypes, Children } from 'react';
+import React, { Component, PropTypes } from 'react';
 import equal from 'deep-equal';
 import { DropTarget } from 'react-dnd';
 import { target } from '../lib/generic-drop-target';
@@ -7,9 +7,6 @@ import manifest from '../lib/manifest';
 const contentTypes = Object.values(manifest).filter(type => type !== 'ROW');
 
 const columnTarget = Object.assign({}, target, {
-  // canDrop(props) {
-  //   return Children.toArray(props.children).length === 0;
-  // }
   canDrop() {
     return true;
   }
@@ -35,6 +32,7 @@ class ColumnTarget extends Component {
           width: '100%',
           height: '100%',
           display: 'flex',
+          flexGrow: 1,
           flexDirection: 'column',
           background: isOver && canDrop ? 'rgb(187, 187, 187)' : 'transparent',
           transition: 'all 0.3s ease-in-out'
