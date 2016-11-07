@@ -51,7 +51,7 @@ class Image extends Component {
   }
 
   componentWillUnmount() {
-    this.props.setCustom(null); // TODO: Revert to default custom opts
+    this.props.setCustom(null);
   }
 
   getCustom = () => {
@@ -62,7 +62,7 @@ class Image extends Component {
             icon={<ImageIcon />}
             label="Image Source"
             floatingLabelText="Enter link to image"
-            initialValue={this.state.src === placeholder ? 'https://unsplash.it/1000/200/?random' : this.state.src}
+            initialValue={this.state.src === placeholder ? 'https://unsplash.it/640/200/?random' : this.state.src}
             onChange={this.customDispatch('src')}
           />
         </Control>
@@ -155,7 +155,7 @@ class Image extends Component {
       <div
         id={type}
         style={{
-          background: '#FFFFFF',
+          background: inCanvas ? 'rgba(0, 0, 0, 0)' : '#FFFFFF',
           opacity: isDragging ? 0.6 : 1,
           height: '100%',
           width: '100%',

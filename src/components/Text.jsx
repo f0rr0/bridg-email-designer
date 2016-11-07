@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import styled from 'styled-components';
 import { DragSource } from 'react-dnd';
 import ClickOutside from 'react-click-outside';
 import { EditorState, DefaultDraftBlockRenderMap, convertToRaw, convertFromRaw } from 'draft-js';
@@ -11,6 +12,12 @@ import createCleanupEmptyPlugin from 'draft-js-cleanup-empty-plugin';
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 import 'draft-js-toolbar-plugin/lib/plugin.css';
 import 'draft-js-mention-plugin/lib/plugin.css';
+import TextColorIcon from 'material-ui/svg-icons/editor/format-color-text';
+import BorderColorIcon from 'material-ui/svg-icons/editor/border-color';
+import uniqueid from 'lodash.uniqueid';
+import DropDown from './DropDown';
+import PlusMinus from './PlusMinus';
+import ColorPicker from './ColorPicker';
 import Blocks, { textActions } from './Blocks';
 import mentions from '../lib/mentions';
 import manifest from '../lib/manifest';
@@ -54,12 +61,26 @@ const plugins = [
   })
 ];
 
+const Control = styled('div')`
+  margin-bottom: 10px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
 class Text extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorState: props.state ? EditorState.createWithContent(convertFromRaw(props.state)) : createEditorStateWithText('Formatted Text'),
-      suggestions: mentions
+      editorState: props.state ? EditorState.createWithContent(convertFromRaw(props.state.editorState)) : createEditorStateWithText('Formatted Text'),
+      background: props.state ? props.state.background : 'rgba(255, 255, 255, 1)',
+      textColor: props.state ? props.state.textColor : 'rgba(0, 0, 0, 1)',
+      padding: props.state ? props.state.padding : 0,
+      borderSize: props.state ? props.state.borderSize : 0,
+      borderStyle: props.state ? props.state.borderStyle : 'solid',
+      borderColor: props.state ? props.state.borderColor : 'rgba(0, 0, 0, 1)',
+      suggestions: mentions,
+      editing: false
     };
     const renderMap = {};
     Object.keys(Blocks).forEach((type) => {
@@ -68,6 +89,7 @@ class Text extends Component {
       };
     });
     this.blockRenderMap = DefaultDraftBlockRenderMap.merge(renderMap);
+    this.uniqueid = uniqueid();
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -75,6 +97,10 @@ class Text extends Component {
      && this.props.inCanvas) {
       this.props.pushToUndoStack();
     }
+  }
+
+  componentWillUnmount() {
+    this.props.setCustom(null);
   }
 
   onChange = (editorState) => {
@@ -89,18 +115,133 @@ class Text extends Component {
     });
   };
 
+  getCustom = () => {
+    this.props.setCustom(
+      <div style={{ padding: 10 }} key={this.uniqueid}>
+        <Control>
+          <ColorPicker
+            label="Background Color"
+            initialValue={this.state.background}
+            onChange={this.customDispatch('background')}
+          />
+        </Control>
+        <Control>
+          <ColorPicker
+            label="Text Color"
+            icon={TextColorIcon}
+            initialValue={this.state.textColor}
+            onChange={this.customDispatch('textColor')}
+          />
+        </Control>
+        <Control>
+          <PlusMinus
+            label="Padding"
+            initialValue={this.state.padding}
+            onChange={this.customDispatch('padding')}
+          />
+        </Control>
+        <Control>
+          <ColorPicker
+            label="Border Color"
+            icon={BorderColorIcon}
+            initialValue={this.state.borderColor}
+            onChange={this.customDispatch('borderColor')}
+          />
+        </Control>
+        <Control>
+          <PlusMinus
+            label="Border"
+            initialValue={this.state.borderSize}
+            onChange={this.customDispatch('borderSize')}
+          />
+        </Control>
+        <Control>
+          <DropDown
+            initialValue={this.state.borderStyle}
+            label="Border Style"
+            onChange={this.customDispatch('borderStyle')}
+            items={[
+              {
+                value: 'solid',
+                primaryText: 'Solid'
+              },
+              {
+                value: 'dotted',
+                primaryText: 'Dotted'
+              },
+              {
+                value: 'dashed',
+                primaryText: 'Dashed'
+              },
+              {
+                value: 'double',
+                primaryText: 'Double'
+              }
+            ]}
+          />
+        </Control>
+      </div>
+    );
+  }
+
+  customDispatch = type => (val) => {
+    switch (type) {
+      case 'padding':
+        this.props.pushToUndoStack();
+        this.setState({
+          padding: val
+        });
+        break;
+      case 'background':
+        this.props.pushToUndoStack();
+        this.setState({
+          background: val
+        });
+        break;
+      case 'textColor':
+        this.props.pushToUndoStack();
+        this.setState({
+          textColor: val
+        });
+        break;
+      case 'borderColor':
+        this.props.pushToUndoStack();
+        this.setState({
+          borderColor: val
+        });
+        break;
+      case 'borderSize':
+        this.props.pushToUndoStack();
+        this.setState({
+          borderSize: val
+        });
+        break;
+      case 'borderStyle':
+        this.props.pushToUndoStack();
+        this.setState({
+          borderStyle: val
+        });
+        break;
+      default:
+    }
+  }
+
   handleClick = () => {
     if (this.props.inCanvas) {
-      this.editor.focus();
+      this.setState({
+        editing: true
+      }, () => {
+        this.editor.focus();
+        this.getCustom();
+      });
     }
   }
 
   handleClickOutside = () => {
     const editorState = EditorState.moveFocusToEnd(this.state.editorState);
     this.setState({
-      editorState
-    }, () => {
-      this.editor.blur();
+      editorState,
+      editing: false
     });
   }
 
@@ -112,6 +253,14 @@ class Text extends Component {
   }
 
   export = () => {
+    const {
+      background,
+      borderSize,
+      borderColor,
+      borderStyle,
+      textColor,
+      padding
+    } = this.state;
     const options = {
       blockStyleFn: (block) => {
         switch (block.getType()) {
@@ -137,33 +286,51 @@ class Text extends Component {
         }
       }
     };
-    return stateToHTML(this.state.editorState.getCurrentContent(), options);
+    return `<div style="color: ${textColor}; background-color: ${background}; padding: ${padding}px; border: ${borderSize}px ${borderStyle} ${borderColor}; width: 100%; height: 100%;">${stateToHTML(this.state.editorState.getCurrentContent(), options)}</div>`;
   }
 
-  serialize = () => convertToRaw(this.state.editorState.getCurrentContent());
+  serialize = () => ({
+    background: this.state.background,
+    textColor: this.state.textColor,
+    padding: this.state.padding,
+    borderColor: this.state.borderColor,
+    borderSize: this.state.borderSize,
+    borderStyle: this.state.borderStyle,
+    editorState: convertToRaw(this.state.editorState.getCurrentContent())
+  });
 
   render() {
-    const { type, inCanvas, isDragging, connectDragSource, connectDragPreview } = this.props;
-    return connectDragPreview(connectDragSource(
-      <div
-        id={type}
-        style={{
-          background: '#FFFFFF',
-          opacity: isDragging ? 0.6 : 1,
-          height: '100%',
-          padding: '10px',
-          color: '#000000',
-          lineHeight: 1.125,
-          cursor: inCanvas ? 'text' : 'move',
-          transition: 'all 0.2s ease-in-out',
-          flex: '1 0 auto'
-        }}
-        onClick={this.handleClick}
-      >
-        {
-          inCanvas ?
+    const {
+      type,
+      inCanvas,
+      isDragging,
+      connectDragSource,
+      connectDragPreview
+    } = this.props;
+
+    const {
+      editing,
+      padding,
+      background,
+      textColor,
+      borderSize,
+      borderStyle,
+      borderColor
+    } = this.state;
+
+    const content = (() => {
+      if (inCanvas) {
+        if (editing) {
+          return (
             <ClickOutside
-              style={{ height: '100%', width: '100%' }}
+              style={{
+                height: '100%',
+                width: '100%',
+                background,
+                padding,
+                color: textColor,
+                border: `${borderSize}px ${borderStyle} ${borderColor}`
+              }}
               onClickOutside={this.handleClickOutside}
             >
               <Editor
@@ -181,19 +348,46 @@ class Text extends Component {
                 entryComponent={Entry}
               />
             </ClickOutside>
-          :
-            <div
-              style={{
-                background: '#FFFFFF',
-                height: '100%',
-                width: '100%',
-                color: '#000000',
-                lineHeight: 1.125
-              }}
-            >
-              Formatted Text
-            </div>
+          );
         }
+        return (
+          <div
+            style={{
+              height: '100%',
+              width: '100%'
+            }}
+            dangerouslySetInnerHTML={{ __html: this.export() }} // eslint-disable-line
+          />
+        );
+      }
+      return (
+        <div
+          style={{
+            height: '100%',
+            width: '100%',
+            background: '#FFFFFF',
+            padding: 10
+          }}
+        >
+          Formatted Text
+        </div>
+      );
+    })();
+
+    return connectDragPreview(connectDragSource(
+      <div
+        id={type}
+        style={{
+          opacity: isDragging ? 0.6 : 1,
+          height: '100%',
+          lineHeight: 1.125,
+          cursor: inCanvas ? 'text' : 'move',
+          transition: 'all 0.2s ease-in-out',
+          flex: '1 0 auto'
+        }}
+        onClick={this.handleClick}
+      >
+        {content}
       </div>,
       { dropEffect: 'copy' }
     ), { captureDraggingState: true });
@@ -205,6 +399,7 @@ Text.propTypes = {
   state: PropTypes.object,
   inCanvas: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
+  setCustom: PropTypes.func,
   pushToUndoStack: PropTypes.func,
   connectDragSource: PropTypes.func.isRequired,
   connectDragPreview: PropTypes.func.isRequired

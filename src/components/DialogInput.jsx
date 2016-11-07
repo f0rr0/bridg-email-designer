@@ -83,7 +83,6 @@ class DialogInput extends Component {
             onRequestClose={this.dispatch('hide')}
           >
             <TextField
-              id="text-field-controlled"
               onChange={this.dispatch('upadateVal')}
               floatingLabelText={this.props.floatingLabelText}
               value={this.state.value}

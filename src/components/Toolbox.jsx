@@ -12,6 +12,8 @@ const Container = styled('section')`
   padding-left: 1.802em;
   order: 2;
   flex: 1 0 25%;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Slide = styled('div')`
@@ -46,6 +48,9 @@ export default class Toolbox extends Component {
         <SwipeableViews
           index={this.state.slideIndex}
           onChangeIndex={this.handleChange}
+          style={{
+            height: '100%'
+          }}
         >
           <Slide>
             <Layouts />

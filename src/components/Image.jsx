@@ -4,6 +4,12 @@ import { DragSource } from 'react-dnd';
 import ProgressiveImage from 'react-progressive-image';
 import { ResizableBox } from 'react-resizable';
 import equal from 'deep-equal';
+import uniqueid from 'lodash.uniqueid';
+import ImageIcon from 'material-ui/svg-icons/image/image';
+import LinkIcon from 'material-ui/svg-icons/content/link';
+import PlusMinus from './PlusMinus';
+import ColorPicker from './ColorPicker';
+import DialogInput from './DialogInput';
 import manifest from '../lib/manifest';
 import { source, collect } from '../lib/generic-drag-source';
 import placeholder from '../assets/image.svg';
@@ -37,13 +43,20 @@ const ImageContainer = styled('div')`
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  background-color: ${({ bg }) => bg.includes(placeholder) ? '#bbbbbb' : 'transparent'}
   width: 100%;
   height: 100%;
   transition: background 0.2s ease-in-out, margin-top 0s;
+  cursor: pointer;
 
   &:hover {
     opacity: 0.5;
+  }
+`;
+
+const Control = styled('div')`
+  margin-bottom: 10px;
+  &:last-child {
+    margin-bottom: 0;
   }
 `;
 
@@ -52,13 +65,90 @@ class Image extends Component {
     super(props);
     this.state = props.state || {
       src: placeholder,
+      href: '',
+      padding: 0,
+      background: 'rgba(255, 255, 255, 1)',
       height: 150,
       width: 150
     };
+    this.uniqueid = uniqueid();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return !equal(this.props, nextProps) || !equal(nextState, this.state);
+  }
+
+  componentWillUnmount() {
+    this.props.setCustom(null);
+  }
+
+  getCustom = () => {
+    this.props.setCustom(
+      <div style={{ padding: 10 }} key={this.uniqueid}>
+        <Control>
+          <DialogInput
+            icon={<ImageIcon />}
+            label="Image Source"
+            floatingLabelText="Enter link to image"
+            initialValue={this.state.src === placeholder ? 'https://unsplash.it/640/200/?random' : this.state.src}
+            onChange={this.customDispatch('src')}
+          />
+        </Control>
+        <Control>
+          <DialogInput
+            icon={<LinkIcon />}
+            label="Hyperlink"
+            floatingLabelText="Enter hyperlink address"
+            initialValue={this.state.href}
+            onChange={this.customDispatch('href')}
+          />
+        </Control>
+        <Control>
+          <ColorPicker
+            label="Background Color"
+            initialValue={this.state.background}
+            onChange={this.customDispatch('background')}
+          />
+        </Control>
+        <Control>
+          <PlusMinus
+            label="Padding"
+            initialValue={this.state.padding}
+            onChange={this.customDispatch('padding')}
+          />
+        </Control>
+      </div>
+    );
+  }
+
+  customDispatch = type => (val) => {
+    switch (type) {
+      case 'padding':
+        this.props.pushToUndoStack();
+        this.setState({
+          padding: val
+        });
+        break;
+      case 'src':
+        this.props.pushToUndoStack();
+        this.setState({
+          src: val
+        });
+        break;
+      case 'href':
+        this.props.pushToUndoStack();
+        this.setState({
+          href: val
+        });
+        break;
+      case 'background':
+        this.props.pushToUndoStack();
+        this.setState({
+          background: val
+        });
+        break;
+      default:
+    }
   }
 
   handleResize = (event, { size }) => {
@@ -77,38 +167,50 @@ class Image extends Component {
     this.props.pushToUndoStack();
   }
 
-  handleClick = () => {
-    const src = window.prompt('Enter the URI to the image', 'https://unsplash.it/200/?random'); // eslint-disable-line
-    if (src !== this.state.src) {
-      this.props.pushToUndoStack();
-      this.setState({
-        src
-      });
-    }
-  }
-
   export = () => {
-    const { src, width, height } = this.state;
-    return `<center><img src=${src} width=${width} height=${height} align="center" class="float-center" /></center>`;
+    const {
+      src,
+      background,
+      padding,
+      href,
+      width,
+      height
+    } = this.state;
+    if (href === '') {
+      return `<center style="padding: ${padding}px; background-color: ${background}"><img src=${src} width=${width} height=${height} align="center" class="float-center" /></center>`;
+    }
+    return `<center style="padding: ${padding}px; background-color: ${background}"><a class="float-center" align="center" href=${href} target="__blank" rel="noopener noreferrer" style="width: ${width}px; height: ${height}px;"><img src=${src} width=${width} height=${height} style="display: inline-block !important;"/></a></center>`;
   }
 
   serialize = () => this.state;
 
   render() {
-    const { type, inCanvas, isDragging, connectDragSource, connectDragPreview } = this.props;
-    const { src, height, width } = this.state;
+    const {
+      type,
+      inCanvas,
+      isDragging,
+      connectDragSource,
+      connectDragPreview
+    } = this.props;
+    const {
+      src,
+      padding,
+      background,
+      height,
+      width
+    } = this.state;
     return connectDragPreview(connectDragSource(
       <div
         id={type}
         style={{
-          background: '#FFFFFF',
+          background: inCanvas ? background : '#FFFFFF',
           opacity: isDragging ? 0.6 : 1,
           height: '100%',
           width: '100%',
-          padding: '10px',
+          padding: inCanvas ? padding : '10px',
           color: '#000000',
           lineHeight: 1.125,
-          cursor: inCanvas ? 'pointer' : 'move',
+          cursor: 'move',
           transition: 'all 0.2s ease-in-out',
           display: 'flex',
           flex: '1 0 auto'
@@ -119,6 +221,9 @@ class Image extends Component {
             <ProgressiveImage
               src={src}
               placeholder={placeholder}
+              style={{
+                cursor: 'pointer'
+              }}
             >
               {
                 img =>
@@ -137,7 +242,7 @@ class Image extends Component {
                     <ImageContainer
                       height={height}
                       bg={img}
-                      onClick={this.handleClick}
+                      onClick={this.getCustom}
                     />
                   </ResizableBox>
               }
@@ -156,6 +261,7 @@ Image.propTypes = {
   state: PropTypes.object,
   inCanvas: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
+  setCustom: PropTypes.func,
   pushToUndoStack: PropTypes.func,
   connectDragSource: PropTypes.func.isRequired,
   connectDragPreview: PropTypes.func.isRequired
