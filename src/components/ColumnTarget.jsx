@@ -34,8 +34,8 @@ class ColumnTarget extends Component {
           display: 'flex',
           flexGrow: 1,
           flexDirection: 'column',
-          background: isOver && canDrop ? 'rgb(187, 187, 187)' : 'transparent',
-          transition: 'all 0.3s ease-in-out'
+          outline: isOver && canDrop ? '4px solid red' : 'none',
+          transition: 'all 0.1s ease-out'
         }}
       >
         {children}

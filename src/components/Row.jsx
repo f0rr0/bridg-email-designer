@@ -119,9 +119,8 @@ class Row extends Component {
                   alignItems: 'stretch',
                   alignContent: 'stretch',
                   margin: '0 auto',
-                  width: '500px',
-                  marginBottom: '2px',
-                  border: '2px dashed #303030',
+                  width: '548px',
+                  border: '1px dotted #303030',
                 }}
               >
                 {

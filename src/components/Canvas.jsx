@@ -19,7 +19,7 @@ const ParentContainer = styled(Paper)`
   order: 1;
   flex-grow: 1;
   flex-shrink: 1;
-  min-width: 500px;
+  min-width: 548px;
   max-width: 840px;
 `;
 
@@ -32,6 +32,9 @@ const TargetContainer = styled('section')`
   width: 100%;
   height: 100%;
   display: flex;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  line-height: 1.3;
 `;
 
 const Control = styled('div')`

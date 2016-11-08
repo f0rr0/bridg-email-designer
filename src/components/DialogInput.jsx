@@ -81,6 +81,7 @@ class DialogInput extends Component {
             modal
             open={this.state.show}
             onRequestClose={this.dispatch('hide')}
+            className="customization"
           >
             <TextField
               onChange={this.dispatch('upadateVal')}

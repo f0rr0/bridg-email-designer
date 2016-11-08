@@ -64,7 +64,7 @@ export default class Toolbox extends Component {
             <div>
               <Content />
             </div>
-            <div>
+            <div className="customization">
               {this.props.custom}
             </div>
           </SwipeableViews>

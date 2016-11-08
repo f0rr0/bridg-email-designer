@@ -116,9 +116,10 @@ class Html extends Component {
   constructor(props) {
     super(props);
     this.state = props.state || {
-      markup: defaultMarkup,
-      editing: false
+      markup: defaultMarkup
     };
+    this.state.editing = false;
+    this.state.highlight = false;
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -147,16 +148,24 @@ class Html extends Component {
   handleBlur = () => {
     this.setState({
       markup: this.state.markup === '' ? defaultMarkup : this.state.markup,
-      editing: false
+      editing: false,
+      highlight: false
     });
   }
 
-  handleClick= () => {
+  handleClick = () => {
     if (this.props.inCanvas) {
       this.setState({
-        editing: true
+        editing: true,
+        highlight: false
       });
     }
+  }
+
+  toggleHighlight = () => {
+    this.setState({
+      highlight: !this.state.highlight
+    });
   }
 
   export = () => this.state.markup;
@@ -165,7 +174,7 @@ class Html extends Component {
 
   render() {
     const { type, inCanvas, isDragging, connectDragSource, connectDragPreview } = this.props;
-    const { markup, editing } = this.state;
+    const { markup, editing, highlight } = this.state;
     return connectDragPreview(connectDragSource(
       <div
         type={type}
@@ -197,9 +206,12 @@ class Html extends Component {
                 background: 'rgba(0, 0, 0, 0)',
                 height: '100%',
                 width: '100%',
-                lineHeight: 1.125
+                lineHeight: 1.3,
+                outline: inCanvas && highlight ? '2px solid blue' : 'none'
               }}
               onClick={this.handleClick}
+              onMouseEnter={this.toggleHighlight}
+              onMouseLeave={this.toggleHighlight}
               dangerouslySetInnerHTML={{ __html: markup }} // eslint-disable-line
             />
         }

@@ -21,8 +21,7 @@ const Container = styled('div')`
   width: ${({ col }) => css`${100 / col}%`}
   min-height: 5em;
   height: 100%;
-  border-right: 2px dashed #303030;
-  background: yellow;
+  border-right: 1px dotted #303030;
 
   &:last-child {
     border-right: none;

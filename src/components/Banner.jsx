@@ -63,7 +63,7 @@ class Image extends Component {
             icon={<ImageIcon />}
             label="Image Source"
             floatingLabelText="Enter link to image"
-            initialValue={this.state.src === placeholder ? 'https://unsplash.it/500/80/?random' : this.state.src}
+            initialValue={this.state.src === placeholder ? 'https://unsplash.it/548/80/?random' : this.state.src}
             onChange={this.customDispatch('src')}
           />
         </Control>
@@ -201,7 +201,7 @@ class Image extends Component {
               }
             </ProgressiveImage>
           :
-            <div style={{ padding: '10px', lineHeight: 1.125 }}>
+            <div style={{ padding: '10px', lineHeight: 1.3 }}>
               Banner Image
             </div>
         }

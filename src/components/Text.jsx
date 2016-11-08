@@ -29,7 +29,7 @@ const Entry = ({
   searchValue, // eslint-disable-line
   ...parentProps
 }) =>
-  <div {...parentProps}>
+  <div {...parentProps} style={{ color: '#000' }}>
     <div className={theme.mentionSuggestionsEntryContainer}>
       <div className={theme.mentionSuggestionsEntryContainerLeft}>
         <div className={theme.mentionSuggestionsEntryText}>
@@ -80,7 +80,8 @@ class Text extends Component {
       borderStyle: props.state ? props.state.borderStyle : 'solid',
       borderColor: props.state ? props.state.borderColor : 'rgba(0, 0, 0, 1)',
       suggestions: mentions,
-      editing: false
+      editing: false,
+      highlight: false
     };
     const renderMap = {};
     Object.keys(Blocks).forEach((type) => {
@@ -238,11 +239,21 @@ class Text extends Component {
     }
   }
 
-  handleClickOutside = () => {
-    const editorState = EditorState.moveFocusToEnd(this.state.editorState);
+  handleClickOutside = (e) => {
+    if (![...document.querySelectorAll('.customization')].some(node => node.contains(e.target))) {
+      this.props.setCustom(null);
+      const editorState = EditorState.moveFocusToEnd(this.state.editorState);
+      this.setState({
+        editorState,
+        editing: false,
+        highlight: false
+      });
+    }
+  }
+
+  toggleHighlight = () => {
     this.setState({
-      editorState,
-      editing: false
+      highlight: !this.state.highlight
     });
   }
 
@@ -316,7 +327,8 @@ class Text extends Component {
       textColor,
       borderSize,
       borderStyle,
-      borderColor
+      borderColor,
+      highlight
     } = this.state;
 
     const content = (() => {
@@ -329,7 +341,8 @@ class Text extends Component {
                 background,
                 padding,
                 color: textColor,
-                border: `${borderSize}px ${borderStyle} ${borderColor}`
+                outline: highlight ? '2px solid blue' : 'none',
+                border: `${borderSize}px ${borderStyle} ${borderColor}`,
               }}
               onClickOutside={this.handleClickOutside}
             >
@@ -353,8 +366,11 @@ class Text extends Component {
         return (
           <div
             style={{
-              width: '100%'
+              width: '100%',
+              outline: highlight ? '2px solid blue' : 'none'
             }}
+            onMouseEnter={this.toggleHighlight}
+            onMouseLeave={this.toggleHighlight}
             dangerouslySetInnerHTML={{ __html: this.export() }} // eslint-disable-line
           />
         );
@@ -380,7 +396,7 @@ class Text extends Component {
         style={{
           opacity: isDragging ? 0.6 : 1,
           height: '100%',
-          lineHeight: 1.125,
+          lineHeight: 1.3,
           cursor: inCanvas ? 'text' : 'move',
           transition: 'all 0.2s ease-in-out'
         }}

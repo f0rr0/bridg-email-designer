@@ -22,7 +22,7 @@ class DropDown extends Component {
   render() {
     const { palette } = this.props.muiTheme;
     const items = this.props.items.map(({ value, primaryText }, index) =>
-      <MenuItem key={index} value={value} primaryText={primaryText} />
+      <MenuItem className="customization" key={index} value={value} primaryText={primaryText} />
     );
     return (
       <div

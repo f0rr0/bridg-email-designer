@@ -3,6 +3,7 @@ import styled, { css, injectGlobal } from 'styled-components';
 import { DragSource } from 'react-dnd';
 import ProgressiveImage from 'react-progressive-image';
 import { ResizableBox } from 'react-resizable';
+import ClickOutside from 'react-click-outside';
 import equal from 'deep-equal';
 import uniqueid from 'lodash.uniqueid';
 import ImageIcon from 'material-ui/svg-icons/image/image';
@@ -43,9 +44,10 @@ const ImageContainer = styled('div')`
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  width: 100%;
-  height: 100%;
-  transition: background 0.2s ease-in-out, margin-top 0s;
+  width: ${({ width }) => `${width}px`}
+  height: ${({ height }) => `${height}px`}
+  margin: 0 auto;
+  transition: background 0.2s ease-in-out;
   cursor: pointer;
 
   &:hover {
@@ -68,9 +70,11 @@ class Image extends Component {
       href: '',
       padding: 0,
       background: 'rgba(255, 255, 255, 1)',
-      height: 150,
-      width: 150
+      height: 80,
+      width: (80 / 3) * 4
     };
+    this.state.highlight = false;
+    this.state.editing = false;
     this.uniqueid = uniqueid();
   }
 
@@ -168,19 +172,40 @@ class Image extends Component {
     this.props.pushToUndoStack();
   }
 
+  handleClick = (e) => {
+    this.setState({
+      editing: true
+    });
+    this.getCustom(e);
+  }
+
+  handleClickOutside = (e) => {
+    if (![...document.querySelectorAll('.customization')].some(node => node.contains(e.target))) {
+      this.props.setCustom(null);
+      this.setState({
+        editing: false,
+        highlight: false
+      });
+    }
+  }
+  toggleHighlight = () => {
+    this.setState({
+      highlight: !this.state.highlight
+    });
+  }
+
   export = () => {
     const {
       src,
       background,
       padding,
       href,
-      width,
       height
     } = this.state;
     if (href === '') {
-      return `<center style="padding: ${padding}px; background-color: ${background}"><img src=${src} width=${width} height=${height} align="center" class="float-center" /></center>`;
+      return `<center style="padding: ${padding}px; background-color: ${background}"><img src=${src} align="center" class="float-center" style="width: auto; height: ${height}px" /></center>`;
     }
-    return `<center style="padding: ${padding}px; background-color: ${background}"><a class="float-center" align="center" href=${href} target="__blank" rel="noopener noreferrer" style="width: ${width}px; height: ${height}px;"><img src=${src} width=${width} height=${height} style="display: inline-block !important;"/></a></center>`;
+    return `<center style="padding: ${padding}px; background-color: ${background}"><a class="float-center" align="center" href=${href} target="__blank" rel="noopener noreferrer"><img src=${src} style="display: inline-block !important; width: auto; height: ${height}px"/></a></center>`;
   }
 
   serialize = () => this.state;
@@ -194,12 +219,86 @@ class Image extends Component {
       connectDragPreview
     } = this.props;
     const {
+      editing,
+      highlight,
       src,
       padding,
       background,
       height,
       width
     } = this.state;
+
+    const content = (() => {
+      if (inCanvas) {
+        if (editing) {
+          return (
+            <ClickOutside
+              onClickOutside={this.handleClickOutside}
+              style={{
+                margin: '0 auto'
+              }}
+            >
+              <ProgressiveImage
+                src={src}
+                placeholder={placeholder}
+                style={{
+                  cursor: 'pointer'
+                }}
+              >
+                {
+                  img =>
+                    <ResizableBox
+                      height={height}
+                      width={width}
+                      minConstraints={[100, 100]}
+                      maxConstraints={[548 - (2 * padding), 1000]}
+                      onResize={this.handleResize}
+                      onResizeStart={this.handleResizeStart}
+                      draggableOpts={{
+                        onMouseDown: this.handleMouseDown
+                      }}
+                    >
+                      <ImageContainer
+                        height={height}
+                        width={width}
+                        bg={img}
+                      />
+                    </ResizableBox>
+                }
+              </ProgressiveImage>
+            </ClickOutside>
+          );
+        }
+        return (
+          <ProgressiveImage
+            src={src}
+            placeholder={placeholder}
+          >
+            {
+              img =>
+                <ImageContainer
+                  bg={img}
+                  onMouseEnter={this.toggleHighlight}
+                  onMouseLeave={this.toggleHighlight}
+                  onClick={this.handleClick}
+                  height={height}
+                  width={width}
+                />
+            }
+          </ProgressiveImage>
+        );
+      }
+      return (
+        <div
+          style={{
+            color: '#000000',
+          }}
+        >
+          Resizable Image
+        </div>
+      );
+    })();
+
     return connectDragPreview(connectDragSource(
       <div
         id={type}
@@ -209,48 +308,14 @@ class Image extends Component {
           height: '100%',
           width: '100%',
           padding: inCanvas ? padding : '10px',
-          color: '#000000',
-          lineHeight: 1.125,
+          outline: highlight ? '2px solid blue' : 'none',
+          lineHeight: 1.3,
           cursor: 'move',
-          transition: 'all 0.2s ease-in-out',
           display: 'flex',
           flex: '1 0 auto'
         }}
       >
-        {
-          inCanvas ?
-            <ProgressiveImage
-              src={src}
-              placeholder={placeholder}
-              style={{
-                cursor: 'pointer'
-              }}
-            >
-              {
-                img =>
-                  <ResizableBox
-                    height={height}
-                    width={width}
-                    // lockAspectRatio
-                    minConstraints={[100, 100]}
-                    maxConstraints={[600, 600]}
-                    onResize={this.handleResize}
-                    onResizeStart={this.handleResizeStart}
-                    draggableOpts={{
-                      onMouseDown: this.handleMouseDown
-                    }}
-                  >
-                    <ImageContainer
-                      height={height}
-                      bg={img}
-                      onClick={this.getCustom}
-                    />
-                  </ResizableBox>
-              }
-            </ProgressiveImage>
-          :
-            <div>Resizable Image</div>
-        }
+        {content}
       </div>,
       { dropEffect: 'copy' }
     ), { captureDraggingState: true });
