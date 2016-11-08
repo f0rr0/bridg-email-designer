@@ -120,7 +120,6 @@ class Row extends Component {
                   alignContent: 'stretch',
                   margin: '0 auto',
                   width: '548px',
-                  border: '1px dotted #303030',
                 }}
               >
                 {
