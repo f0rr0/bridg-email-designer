@@ -77,7 +77,6 @@ export default class Canvas extends Component {
   }
 
   componentDidUpdate() {
-    this.uniqueid = uniqueid();
     this.props.setCustom(this.getCustom());
   }
 
@@ -196,6 +195,7 @@ export default class Canvas extends Component {
         canvas: this.refsTree
       }, () => {
         this.undoStack = this.undoStack.pop();
+        this.uniqueid = uniqueid();
       });
     }
   }
@@ -215,6 +215,7 @@ export default class Canvas extends Component {
         canvas: this.refsTree
       }, () => {
         this.redoStack = this.redoStack.pop();
+        this.uniqueid = uniqueid();
       });
     }
   }
@@ -283,6 +284,7 @@ export default class Canvas extends Component {
     this.refsTree = canvasState.create(state.canvas);
     this.redoStack = this.redoStack.clear();
     this.undoStack = this.undoStack.clear();
+    this.uniqueid = uniqueid();
     this.setState({
       ...state,
       canvas: this.refsTree
