@@ -91,6 +91,7 @@ export default class Canvas extends Component {
       <Control>
         <SwitchInput
           label="Use Background Image"
+          initialValue={this.state.useBackgroundImage}
           onChange={this.customDispatch('useBackgroundImage')}
         />
       </Control>
