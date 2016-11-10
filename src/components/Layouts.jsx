@@ -7,7 +7,7 @@ import manifest from '../lib/manifest';
 const Layouts = styled('section')`
   display: flex;
   flex-direction: column;
-  padding: 10px 10px 0;
+  padding: 20px;
 `;
 
 export default () =>

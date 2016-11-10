@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import styled from 'styled-components';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import muiThemeable from 'material-ui/styles/muiThemeable';
 import Dialog from 'material-ui/Dialog';
 import Snackbar from 'material-ui/Snackbar';
 import FlatButton from 'material-ui/FlatButton';
@@ -27,6 +28,18 @@ const Container = styled('section')`
   justify-content: space-between;
 `;
 
+const DefaultCustomContent = (
+  <div
+    style={{
+      padding: 20,
+      textAlign: 'center'
+    }}
+  >
+    Select some content to display options
+  </div>
+);
+
+
 class Designer extends Component {
   constructor(props) {
     super(props);
@@ -35,18 +48,27 @@ class Designer extends Component {
       snack: false,
       message: '',
       markup: null,
-      custom: null
+      customContent: DefaultCustomContent,
+      customBody: null
     };
   }
 
-  setCustom = (component) => {
+  setCustomContent = (component) => {
     if (component) {
       this.setState({
-        custom: component
+        customContent: component
       });
-    } else if (this.canvas) {
-      this.setCustom(this.canvas.getCustom());
+    } else {
+      this.setState({
+        customContent: DefaultCustomContent
+      });
     }
+  }
+
+  setCustomBody = (component) => {
+    this.setState({
+      customBody: component
+    });
   }
 
   toggleModal = () => this.setState({
@@ -152,12 +174,16 @@ class Designer extends Component {
           handleRedo={this.doRedo}
         />
         <Container>
-          <Toolbox custom={this.state.custom} />
+          <Toolbox
+            customContent={this.state.customContent}
+            customBody={this.state.customBody}
+          />
           <Canvas
             ref={(c) => {
               this.canvas = c;
             }}
-            setCustom={this.setCustom}
+            setCustomContent={this.setCustomContent}
+            setCustomBody={this.setCustomBody}
           />
         </Container>
         <Dialog
@@ -176,7 +202,11 @@ class Designer extends Component {
           autoHideDuration={3000}
           onRequestClose={this.toggleSnack}
           contentStyle={{
-            textAlign: 'center'
+            textAlign: 'center',
+            color: this.props.muiTheme.palette.textColor
+          }}
+          bodyStyle={{
+            background: this.props.muiTheme.palette.canvasColor
           }}
         />
       </Main>
@@ -184,4 +214,8 @@ class Designer extends Component {
   }
 }
 
-export default DragDropContext(HTML5Backend)(Designer);
+Designer.propTypes = {
+  muiTheme: PropTypes.object
+};
+
+export default muiThemeable()(DragDropContext(HTML5Backend)(Designer));

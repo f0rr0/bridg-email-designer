@@ -57,7 +57,7 @@ class Image extends Component {
   getCustom = (e) => {
     e.stopPropagation();
     this.props.setCustom(
-      <div style={{ padding: 10 }} key={this.uniqueid}>
+      <div style={{ padding: 20 }} key={this.uniqueid}>
         <Control>
           <DialogInput
             icon={<ImageIcon />}

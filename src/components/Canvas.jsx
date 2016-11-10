@@ -71,7 +71,7 @@ export default class Canvas extends Component {
   }
 
   componentDidMount() {
-    this.props.setCustom(this.getCustom());
+    this.props.setCustomBody(this.getCustom());
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -79,7 +79,7 @@ export default class Canvas extends Component {
   }
 
   componentDidUpdate() {
-    this.props.setCustom(this.getCustom());
+    this.props.setCustomBody(this.getCustom());
   }
 
   onDrop = ({ numCols }) => {
@@ -87,7 +87,7 @@ export default class Canvas extends Component {
   }
 
   getCustom = () =>
-    <div style={{ padding: 10 }} key={this.uniqueid}>
+    <div style={{ padding: 20 }} key={this.uniqueid}>
       <Control>
         <SwitchInput
           label="Use Background Image"
@@ -319,7 +319,7 @@ export default class Canvas extends Component {
         removeRow={this.removeRow}
         reorderRows={this.reorderRows}
         pushToUndoStack={this.pushToUndoStack}
-        setCustom={this.props.setCustom}
+        setCustom={this.props.setCustomContent}
       />
     ).toJS();
 
@@ -333,9 +333,7 @@ export default class Canvas extends Component {
       borderColor
     } = this.state;
     return (
-      <ParentContainer
-        onClick={() => this.props.setCustom(this.getCustom())}
-      >
+      <ParentContainer>
         <TargetContainer
           backgroundColor={backgroundColor}
           useBackgroundImage={useBackgroundImage}
@@ -354,5 +352,6 @@ export default class Canvas extends Component {
 }
 
 Canvas.propTypes = {
-  setCustom: PropTypes.func.isRequired
+  setCustomContent: PropTypes.func.isRequired,
+  setCustomBody: PropTypes.func.isRequired
 };

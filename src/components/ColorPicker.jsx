@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { ChromePicker } from 'react-color';
+import ClickOutside from 'react-click-outside';
+import uniqueid from 'lodash.uniqueid';
 import IconButton from 'material-ui/IconButton';
 import Fill from 'material-ui/svg-icons/editor/format-color-fill';
 import { emphasize, fade } from 'material-ui/utils/colorManipulator';
@@ -14,6 +16,7 @@ class ColorPicker extends Component {
       value: props.initialValue,
       show: false
     };
+    this.uniqueid = uniqueid();
   }
 
   dispatch = type => (val) => {
@@ -22,9 +25,11 @@ class ColorPicker extends Component {
         show: !this.state.show
       });
     } else if (type === 'hide') {
-      this.setState({
-        show: false
-      });
+      if (!document.getElementById(this.uniqueid).contains(val.target)) {
+        this.setState({
+          show: false
+        });
+      }
     } else if (type === 'setVal') {
       this.setState({
         value: serializeRGBA(val.rgb)
@@ -54,32 +59,37 @@ class ColorPicker extends Component {
         >
           {this.props.label}
         </span>
-        <div>
+        <div id={this.uniqueid}>
           <IconButton
             style={{
               backgroundColor: this.state.value,
               borderRadius: '3px',
             }}
             onTouchTap={this.dispatch('toggle')}
+            className={this.uniqueid}
           >
             <Icon color={fade(emphasize(this.state.value, 1), 1)} />
           </IconButton>
           {
             this.state.show ?
-              <div
-                style={{
-                  position: 'absolute',
-                  marginLeft: '-178px',
-                  zIndex: '2'
-                }}
+              <ClickOutside
+                onClickOutside={this.dispatch('hide')}
               >
-                <ChromePicker
-                  color={this.state.value}
-                  onChangeComplete={this.dispatch('setVal')}
-                />
-              </div>
+                <div
+                  style={{
+                    position: 'absolute',
+                    marginLeft: '-178px',
+                    zIndex: '2'
+                  }}
+                >
+                  <ChromePicker
+                    color={this.state.value}
+                    onChangeComplete={this.dispatch('setVal')}
+                  />
+                </div>
+              </ClickOutside>
             :
-              null
+            null
           }
         </div>
       </div>

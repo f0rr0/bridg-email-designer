@@ -151,6 +151,7 @@ class Html extends Component {
       editing: false,
       highlight: false
     });
+    this.props.setCustom(null);
   }
 
   handleClick = () => {
@@ -159,6 +160,16 @@ class Html extends Component {
         editing: true,
         highlight: false
       });
+      this.props.setCustom(
+        <div
+          style={{
+            padding: 20,
+            textAlign: 'center'
+          }}
+        >
+          Use &lsquo;style&rsquo; attribute in your markup to customize this component.
+        </div>
+      );
     }
   }
 
@@ -201,18 +212,18 @@ class Html extends Component {
               />
             </ClickOutside>
           :
-            <div
-              style={{
-                background: 'rgba(0, 0, 0, 0)',
-                height: '100%',
-                width: '100%',
-                lineHeight: 1.3,
-                outline: inCanvas && highlight ? '2px solid blue' : 'none'
-              }}
-              onClick={this.handleClick}
-              onMouseEnter={this.toggleHighlight}
-              onMouseLeave={this.toggleHighlight}
-              dangerouslySetInnerHTML={{ __html: markup }} // eslint-disable-line
+          <div
+            style={{
+              background: 'rgba(0, 0, 0, 0)',
+              height: '100%',
+              width: '100%',
+              lineHeight: 1.3,
+              outline: inCanvas && highlight ? '2px solid blue' : 'none'
+            }}
+            onClick={this.handleClick}
+            onMouseEnter={this.toggleHighlight}
+            onMouseLeave={this.toggleHighlight}
+            dangerouslySetInnerHTML={{ __html: markup }} // eslint-disable-line
             />
         }
       </div>,
@@ -226,6 +237,7 @@ Html.propTypes = {
   state: PropTypes.object,
   inCanvas: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
+  setCustom: PropTypes.func,
   pushToUndoStack: PropTypes.func,
   connectDragSource: PropTypes.func.isRequired,
   connectDragPreview: PropTypes.func.isRequired

@@ -5,7 +5,7 @@ import getComponent, { contentTypes } from '../lib/get-component';
 const Content = styled('section')`
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 20px;
 `;
 
 const Container = styled('div')`

@@ -89,7 +89,7 @@ class Image extends Component {
   getCustom = (e) => {
     e.stopPropagation();
     this.props.setCustom(
-      <div style={{ padding: 10 }} key={this.uniqueid}>
+      <div style={{ padding: 20 }} key={this.uniqueid}>
         <Control>
           <DialogInput
             icon={<ImageIcon />}
@@ -164,7 +164,8 @@ class Image extends Component {
     });
   }
 
-  handleMouseDown = (event) => {
+  stopEvent = (event) => {
+    event.stopPropagation();
     event.preventDefault();
   }
 
@@ -188,6 +189,7 @@ class Image extends Component {
       });
     }
   }
+
   toggleHighlight = () => {
     this.setState({
       highlight: !this.state.highlight
@@ -255,7 +257,7 @@ class Image extends Component {
                       onResize={this.handleResize}
                       onResizeStart={this.handleResizeStart}
                       draggableOpts={{
-                        onMouseDown: this.handleMouseDown
+                        onMouseDown: this.stopEvent
                       }}
                     >
                       <ImageContainer

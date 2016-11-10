@@ -38,7 +38,6 @@ export default class Toolbox extends Component {
       <Container>
         <Paper
           style={{
-            height: 'auto',
             width: '100%',
             background: 'rgba(0, 0, 0, 0.35)'
           }}
@@ -49,14 +48,12 @@ export default class Toolbox extends Component {
           >
             <Tab icon={<DashboardIcon />} label="Layouts" value={0} />
             <Tab icon={<ListIcon />} label="Content" value={1} />
-            <Tab icon={<TuneIcon />} label="Customization" value={2} />
+            <Tab icon={<TuneIcon />} label="Tune" value={2} />
+            <Tab icon={<TuneIcon />} label="Body" value={3} />
           </Tabs>
           <SwipeableViews
             index={this.state.slideIndex}
             onChangeIndex={this.handleChange}
-            style={{
-              height: '100%'
-            }}
           >
             <div>
               <Layouts />
@@ -65,7 +62,10 @@ export default class Toolbox extends Component {
               <Content />
             </div>
             <div className="customization">
-              {this.props.custom}
+              {this.props.customContent}
+            </div>
+            <div>
+              {this.props.customBody}
             </div>
           </SwipeableViews>
         </Paper>
@@ -75,5 +75,6 @@ export default class Toolbox extends Component {
 }
 
 Toolbox.propTypes = {
-  custom: PropTypes.object
+  customContent: PropTypes.object,
+  customBody: PropTypes.object
 };

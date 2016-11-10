@@ -118,7 +118,7 @@ class Text extends Component {
 
   getCustom = () => {
     this.props.setCustom(
-      <div style={{ padding: 10 }} key={this.uniqueid}>
+      <div style={{ padding: 20 }} key={this.uniqueid}>
         <Control>
           <ColorPicker
             label="Background Color"
