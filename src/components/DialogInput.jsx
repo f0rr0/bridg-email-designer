@@ -67,6 +67,7 @@ class DialogInput extends Component {
         </span>
         <div>
           <IconButton
+            disabled={this.props.disabled}
             style={{
               backgroundColor: palette.canvasColor,
               borderRadius: '3px',
@@ -100,6 +101,7 @@ export default muiThemeable()(DialogInput);
 
 DialogInput.propTypes = {
   muiTheme: PropTypes.object,
+  disabled: PropTypes.bool,
   icon: PropTypes.object.isRequired,
   initialValue: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
@@ -108,5 +110,6 @@ DialogInput.propTypes = {
 };
 
 DialogInput.defaultProps = {
+  disabled: false,
   onChange: () => {}
 };

@@ -5,6 +5,7 @@ import BorderColorIcon from 'material-ui/svg-icons/editor/border-color';
 import ImageIcon from 'material-ui/svg-icons/image/image';
 import Paper from 'material-ui/Paper';
 import uniqueid from 'lodash.uniqueid';
+import SwitchInput from './SwitchInput';
 import DialogInput from './DialogInput';
 import DropDown from './DropDown';
 import PlusMinus from './PlusMinus';
@@ -25,7 +26,7 @@ const ParentContainer = styled(Paper)`
 
 const TargetContainer = styled('section')`
   color: #000000;
-  background-image: ${({ backgroundImage }) => css`url(${backgroundImage})`}
+  background-image: ${({ backgroundImage, useBackgroundImage }) => useBackgroundImage ? css`url(${backgroundImage})` : 'none'}
   background-size: cover;
   background-color: ${({ backgroundColor }) => backgroundColor}
   border: ${({ borderSize, borderStyle, borderColor }) => `${borderSize}px ${borderStyle} ${borderColor}`}
@@ -56,6 +57,7 @@ export default class Canvas extends Component {
     super(props);
     this.state = {
       canvas: canvasState.create(),
+      useBackgroundImage: false,
       backgroundImage: '',
       backgroundColor: 'rgba(255, 255, 255, 1)',
       borderColor: 'rgba(0, 0, 0, 1)',
@@ -87,8 +89,15 @@ export default class Canvas extends Component {
   getCustom = () =>
     <div style={{ padding: 10 }} key={this.uniqueid}>
       <Control>
+        <SwitchInput
+          label="Use Background Image"
+          onChange={this.customDispatch('useBackgroundImage')}
+        />
+      </Control>
+      <Control>
         <DialogInput
           icon={<ImageIcon />}
+          disabled={!this.state.useBackgroundImage}
           label="Background Image"
           floatingLabelText="Enter link to image"
           initialValue={this.state.backgroundImage === '' ? 'https://unsplash.it/640/1000/?random' : this.state.backgroundImage}
@@ -146,6 +155,12 @@ export default class Canvas extends Component {
 
   customDispatch = type => (val) => {
     switch (type) {
+      case 'useBackgroundImage':
+        this.pushToUndoStack();
+        this.setState({
+          useBackgroundImage: val
+        });
+        break;
       case 'backgroundImage':
         this.pushToUndoStack();
         this.setState({
@@ -310,6 +325,7 @@ export default class Canvas extends Component {
   render() {
     const {
       backgroundColor,
+      useBackgroundImage,
       backgroundImage,
       borderSize,
       borderStyle,
@@ -321,6 +337,7 @@ export default class Canvas extends Component {
       >
         <TargetContainer
           backgroundColor={backgroundColor}
+          useBackgroundImage={useBackgroundImage}
           backgroundImage={backgroundImage}
           borderSize={borderSize}
           borderStyle={borderStyle}
