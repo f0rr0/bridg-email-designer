@@ -67,11 +67,12 @@ const exportMarkup = (canvas, state) => {
   const {
     backgroundColor,
     backgroundImage,
+    useBackgroundImage,
     borderSize,
     borderStyle,
     borderColor
   } = state;
-  const markup = `<table class="container" style="color: #000000; border: ${borderSize}px ${borderStyle} ${borderColor}; background-color: ${backgroundColor}; background-image: url(${backgroundImage}); background-size: cover;"><tr><td>${parseCanvas(canvas)}</td></tr></table>`;
+  const markup = `<table class="container" style="color: #000000; border: ${borderSize}px ${borderStyle} ${borderColor}; background-color: ${backgroundColor}; background-image: ${useBackgroundImage ? `url(${backgroundImage})` : 'none'}; background-size: cover;"><tr><td>${parseCanvas(canvas)}</td></tr></table>`;
   return juice(withTemplate(markup, css));
 };
 
