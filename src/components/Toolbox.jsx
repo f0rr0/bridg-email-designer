@@ -54,6 +54,7 @@ export default class Toolbox extends Component {
           <SwipeableViews
             index={this.state.slideIndex}
             onChangeIndex={this.handleChange}
+            className="customization"
           >
             <div>
               <Layouts />
@@ -61,7 +62,7 @@ export default class Toolbox extends Component {
             <div>
               <Content />
             </div>
-            <div className="customization">
+            <div>
               {this.props.customContent}
             </div>
             <div>

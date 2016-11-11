@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-// import styled from 'styled-components';
+import styled from 'styled-components';
 import { DragSource, DropTarget } from 'react-dnd';
 import equal from 'deep-equal';
 import manifest from '../lib/manifest';
 import { source, collect as collectSource } from '../lib/generic-drag-source';
 import { target, collect as collectTarget } from '../lib/generic-drop-target';
 import Column from './Column';
-// import close from '../assets/close.png';
+import close from '../assets/close.png';
 
 const rowSource = Object.assign({}, source, {
   beginDrag(props, monitor, component) {
@@ -24,10 +24,22 @@ const rowTarget = Object.assign({}, target, {
   hover(props, monitor) {
     const { inCanvas: targetInCanvas, id: overId, reorderRows } = props;
     if (targetInCanvas) {
-      const { id: draggedId, inCanvas: sourceInCanvas } = monitor.getItem();
+      const {
+        id: draggedId,
+        inCanvas: sourceInCanvas
+      } = monitor.getItem();
+      const { y } = monitor.getClientOffset();
       if (draggedId !== overId) {
         if (sourceInCanvas) {
-          reorderRows(draggedId, overId);
+          const {
+            top: overTop,
+            height: overHeight
+          } = document.getElementById(overId).getBoundingClientRect();
+          if (y <= (overTop + (overHeight / 2))) {
+            reorderRows(draggedId, 'before', overId);
+          } else if (y > (overTop + (overHeight / 2)) && y <= overTop + overHeight) {
+            reorderRows(draggedId, 'after', overId);
+          }
         } else {
           // reorderRows(null, overId, false); TODO: Toolbox to canvas reorder.
         }
@@ -36,18 +48,18 @@ const rowTarget = Object.assign({}, target, {
   }
 });
 
-// const CloseButton = styled('div')`
-//   height: 20px;
-//   margin: ${({ showClose }) => showClose ? '-1px 3px 0 -1px' : '0px'}
-//   flex: ${({ showClose }) => showClose ? '0 0 17px' : '0 0 0'}
-//   background-image: ${`url(${close})`};
-//   background-repeat: no-repeat;
-//   background-size: contain;
-//   cursor: pointer;
-//   opacity: ${({ showClose }) => showClose ? 0.8 : 0}
-//   transition: all 0.5s ease-in-out;
-//   transition-delay: 0.2s;
-// `;
+const CloseButton = styled('div')`
+  height: 20px;
+  margin: ${({ showClose }) => showClose ? '1px 3px 0 0' : '0px'}
+  flex: ${({ showClose }) => showClose ? '0 0 17px' : '0 0 0'}
+  background-image: ${`url(${close})`};
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+  opacity: ${({ showClose }) => showClose ? 0.8 : 0}
+  transition: all 0.5s ease-in-out;
+  transition-delay: 0.2s;
+`;
 
 class Row extends Component {
   constructor(props) {
@@ -84,7 +96,7 @@ class Row extends Component {
       getPropsForColumn,
       addContent,
       updateRef,
-      // removeRow,
+      removeRow,
       pushToUndoStack,
       setCustom,
       connectDragSource,
@@ -92,25 +104,23 @@ class Row extends Component {
       connectDropTarget
     } = this.props;
 
-    // const { showClose } = this.state;
+    const { showClose } = this.state;
 
     return (
       connectDropTarget(connectDragPreview(connectDragSource(
         <div
-          id={type}
+          id={id}
           style={{
             // overflowY: 'auto',
             cursor: disableDrag ? 'default' : 'move',
             opacity: isDragging ? inCanvas ? 0.4 : 0.4 : 1, // eslint-disable-line
-            transition: 'opacity 0.2s ease-in-out'
+            transition: 'opacity 0.2s ease-in-out',
+            outline: showClose && inCanvas ? '2px solid green' : 'none'
           }}
-          // onMouseEnter={this.toggleClose(true)}
-          // onMouseOver={this.toggleClose(true)}
-          // onMouseLeave={this.toggleClose(false)}
+          onMouseEnter={this.toggleClose(true)}
+          onMouseOver={this.toggleClose(true)}
+          onMouseLeave={this.toggleClose(false)}
         >
-          {/* {
-            inCanvas ? <CloseButton showClose={showClose} onClick={removeRow(id)} /> : null
-          } */}
           {
             inCanvas ?
               <div
@@ -122,6 +132,7 @@ class Row extends Component {
                   width: '548px',
                 }}
               >
+                <CloseButton showClose={showClose} onClick={removeRow(id)} />
                 {
                   [...Array(numCols).keys()].map(key =>
                     <Column

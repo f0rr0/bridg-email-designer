@@ -51,6 +51,7 @@ export default class Column extends Component {
       return contents.map((content, index) => {
         const ComponentForType = content.get('component');
         const type = content.get('type');
+        // const id = content.get('id');
         let state = null;
         if (content.has('state')) {
           state = content.get('state');
@@ -59,6 +60,7 @@ export default class Column extends Component {
           <ComponentForType
             type={type}
             key={index}
+            // id={id}
             state={state}
             pushToUndoStack={pushToUndoStack}
             setCustom={setCustom}

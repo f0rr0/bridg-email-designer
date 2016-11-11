@@ -49,10 +49,6 @@ const ImageContainer = styled('div')`
   margin: 0 auto;
   transition: background 0.2s ease-in-out;
   cursor: pointer;
-
-  &:hover {
-    opacity: 0.5;
-  }
 `;
 
 const Control = styled('div')`

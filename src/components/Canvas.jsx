@@ -101,7 +101,7 @@ export default class Canvas extends Component {
           disabled={!this.state.useBackgroundImage}
           label="Background Image"
           floatingLabelText="Enter link to image"
-          initialValue={this.state.backgroundImage === '' ? 'https://unsplash.it/640/1000/?random' : this.state.backgroundImage}
+          initialValue={this.state.backgroundImage === '' ? 'https://unsplash.it/840/1000/?random' : this.state.backgroundImage}
           onChange={this.customDispatch('backgroundImage')}
         />
       </Control>
@@ -263,17 +263,10 @@ export default class Canvas extends Component {
     });
   }
 
-  reorderRows = (from, to, inCanvas = true) => {
-    let { canvas } = this.state;
-    const toIndex = canvasState.findRow(canvas, to);
-    if (inCanvas) {
-      const fromIndex = canvasState.findRow(canvas, from);
-      const row = canvas.get(fromIndex);
-      canvas = canvas.splice(fromIndex, 1).splice(toIndex, 0, row);
-      this.setState({
-        canvas
-      });
-    }
+  reorderRows = (from, position, to, inCanvas = true) => {
+    this.setState(({ canvas }) => ({
+      canvas: canvasState.reorderRows(canvas, from, position, to, inCanvas)
+    }));
   }
 
   addContent = (rowId, colIndex, content) => {

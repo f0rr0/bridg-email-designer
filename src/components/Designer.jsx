@@ -189,7 +189,6 @@ class Designer extends Component {
         <Dialog
           title="Preview"
           actions={actions}
-          modal={false}
           open={this.state.modal}
           onRequestClose={this.toggleModal}
           autoScrollBodyContent

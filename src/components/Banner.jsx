@@ -20,10 +20,6 @@ const ImageContainer = styled('img')`
   padding: ${({ padding }) => `${padding}px`}
   background-color: ${({ background }) => background}
   transition: all 0.2s ease-in-out;
-
-  &:hover {
-    opacity: 0.5;
-  }
 `;
 
 const Control = styled('div')`
