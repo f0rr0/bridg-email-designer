@@ -298,6 +298,7 @@ class Text extends Component {
         }
       }
     };
+    console.log(stateToHTML(this.state.editorState.getCurrentContent(), options), this.state.editorState.getCurrentContent(), options);
     return `<div style="color: ${textColor}; background-color: ${background}; padding: ${padding}px; border: ${borderSize}px ${borderStyle} ${borderColor}; width: 100%; height: 100%;">${stateToHTML(this.state.editorState.getCurrentContent(), options)}</div>`;
   }
 
@@ -341,6 +342,8 @@ class Text extends Component {
                 background,
                 padding,
                 color: textColor,
+                position: highlight ? 'relative' : 'static',
+                zIndex: highlight ? 1499 : 0,
                 outline: highlight ? '2px solid blue' : 'none',
                 border: `${borderSize}px ${borderStyle} ${borderColor}`,
               }}
@@ -367,7 +370,9 @@ class Text extends Component {
           <div
             style={{
               width: '100%',
-              outline: highlight ? '2px solid blue' : 'none'
+              position: highlight ? 'relative' : 'static',
+              zIndex: highlight ? 1499 : 0,
+              outline: highlight ? '2px solid blue' : 'none',
             }}
             onMouseEnter={this.toggleHighlight}
             onMouseLeave={this.toggleHighlight}

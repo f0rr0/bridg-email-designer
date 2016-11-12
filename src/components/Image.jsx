@@ -306,6 +306,8 @@ class Image extends Component {
           height: '100%',
           width: '100%',
           padding: inCanvas ? padding : '10px',
+          position: inCanvas && highlight ? 'relative' : 'static',
+          zIndex: inCanvas && highlight ? 1499 : 0,
           outline: highlight ? '2px solid blue' : 'none',
           lineHeight: 1.3,
           cursor: 'move',

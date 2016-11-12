@@ -4,7 +4,7 @@ import { DragSource, DropTarget } from 'react-dnd';
 import equal from 'deep-equal';
 import manifest from '../lib/manifest';
 import { source, collect as collectSource } from '../lib/generic-drag-source';
-import { target, collect as collectTarget } from '../lib/generic-drop-target';
+import { target } from '../lib/generic-drop-target';
 import Column from './Column';
 import close from '../assets/close.png';
 
@@ -30,47 +30,60 @@ const rowTarget = Object.assign({}, target, {
       } = monitor.getItem();
       const { y } = monitor.getClientOffset();
       if (draggedId !== overId) {
-        if (sourceInCanvas) {
-          const {
-            top: overTop,
-            height: overHeight
-          } = document.getElementById(overId).getBoundingClientRect();
-          if (y <= (overTop + (overHeight / 2))) {
+        const {
+          top: overTop,
+          height: overHeight
+        } = document.getElementById(`ROW-${overId}`).getBoundingClientRect();
+        if (y <= (overTop + (overHeight / 2))) {
+          if (sourceInCanvas) {
             reorderRows(draggedId, 'before', overId);
-          } else if (y > (overTop + (overHeight / 2)) && y <= overTop + overHeight) {
+          }
+          // component.decoratedComponentInstance.showDropHelper('top');
+        } else if (y > (overTop + (overHeight / 2)) && y <= overTop + overHeight) {
+          if (sourceInCanvas) {
             reorderRows(draggedId, 'after', overId);
           }
-        } else {
-          // reorderRows(null, overId, false); TODO: Toolbox to canvas reorder.
+          // component.decoratedComponentInstance.showDropHelper('bottom');
         }
       }
     }
   }
 });
 
+const collectTarget = (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver()
+});
+
 const CloseButton = styled('div')`
   height: 20px;
-  margin: ${({ showClose }) => showClose ? '1px 3px 0 0' : '0px'}
-  flex: ${({ showClose }) => showClose ? '0 0 17px' : '0 0 0'}
+  width: 20px;
+  margin: 3px auto auto 3px;
+  position: absolute;
   background-image: ${`url(${close})`};
   background-repeat: no-repeat;
   background-size: contain;
   cursor: pointer;
-  opacity: ${({ showClose }) => showClose ? 0.8 : 0}
-  transition: all 0.5s ease-in-out;
-  transition-delay: 0.2s;
+  display: ${({ showClose }) => showClose ? 'inline-block' : 'none'}
 `;
 
 class Row extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showClose: false
+      showClose: false,
+      dropHelper: null
     };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return !equal(this.props, nextProps) || !equal(this.state, nextState);
+  }
+
+  showDropHelper = (position) => {
+    this.setState({
+      dropHelper: position
+    });
   }
 
   toggleClose = (val, cb) => () => {
@@ -83,8 +96,6 @@ class Row extends Component {
     });
   }
 
-  handleClick = this.toggleClose(false, this.props.removeRow);
-
   render() {
     const {
       id,
@@ -93,6 +104,7 @@ class Row extends Component {
       inCanvas,
       disableDrag,
       isDragging,
+      isOver,
       getPropsForColumn,
       addContent,
       updateRef,
@@ -104,18 +116,21 @@ class Row extends Component {
       connectDropTarget
     } = this.props;
 
-    const { showClose } = this.state;
+    const { showClose, dropHelper } = this.state;
 
     return (
       connectDropTarget(connectDragPreview(connectDragSource(
         <div
-          id={id}
+          id={`${type}-${id}`}
           style={{
-            // overflowY: 'auto',
             cursor: disableDrag ? 'default' : 'move',
             opacity: isDragging ? inCanvas ? 0.4 : 0.4 : 1, // eslint-disable-line
             transition: 'opacity 0.2s ease-in-out',
-            outline: showClose && inCanvas ? '2px solid green' : 'none'
+            position: showClose && inCanvas ? 'relative' : 'static',
+            zIndex: showClose && inCanvas ? 1499 : 1,
+            outline: showClose && inCanvas ? '2px solid green' : 'none',
+            borderTop: dropHelper && isOver && dropHelper === 'top' ? '4px dashed red' : 'none',
+            borderBottom: dropHelper && isOver && dropHelper === 'bottom' ? '4px dashed red' : 'none'
           }}
           onMouseEnter={this.toggleClose(true)}
           onMouseOver={this.toggleClose(true)}
@@ -123,29 +138,31 @@ class Row extends Component {
         >
           {
             inCanvas ?
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'stretch',
-                  alignContent: 'stretch',
-                  margin: '0 auto',
-                  width: '548px',
-                }}
-              >
+              <div>
                 <CloseButton showClose={showClose} onClick={removeRow(id)} />
-                {
-                  [...Array(numCols).keys()].map(key =>
-                    <Column
-                      {...getPropsForColumn(key)}
-                      inCanvas
-                      addContent={addContent}
-                      updateRef={updateRef}
-                      pushToUndoStack={pushToUndoStack}
-                      setCustom={setCustom}
-                      key={key}
-                    />
-                  )
-                }
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'stretch',
+                    alignContent: 'stretch',
+                    margin: '0 auto',
+                    width: '548px',
+                  }}
+                >
+                  {
+                    [...Array(numCols).keys()].map(key =>
+                      <Column
+                        {...getPropsForColumn(key)}
+                        inCanvas
+                        addContent={addContent}
+                        updateRef={updateRef}
+                        pushToUndoStack={pushToUndoStack}
+                        setCustom={setCustom}
+                        key={key}
+                      />
+                    )
+                  }
+                </div>
               </div>
             :
               <div
@@ -189,6 +206,7 @@ Row.propTypes = {
   setCustom: PropTypes.func,
   disableDrag: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
+  isOver: PropTypes.bool.isRequired,
   connectDragSource: PropTypes.func.isRequired,
   connectDragPreview: PropTypes.func.isRequired,
   connectDropTarget: PropTypes.func.isRequired

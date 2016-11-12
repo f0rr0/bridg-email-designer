@@ -6,6 +6,7 @@ import SwipeableViews from 'react-swipeable-views';
 import DashboardIcon from 'material-ui/svg-icons/action/dashboard';
 import ListIcon from 'material-ui/svg-icons/action/list';
 import TuneIcon from 'material-ui/svg-icons/image/tune';
+import BodyIcon from 'material-ui/svg-icons/content/content-paste';
 import Layouts from './Layouts';
 import Content from './Content';
 
@@ -49,7 +50,7 @@ export default class Toolbox extends Component {
             <Tab icon={<DashboardIcon />} label="Layouts" value={0} />
             <Tab icon={<ListIcon />} label="Content" value={1} />
             <Tab icon={<TuneIcon />} label="Tune" value={2} />
-            <Tab icon={<TuneIcon />} label="Body" value={3} />
+            <Tab icon={<BodyIcon />} label="Body" value={3} />
           </Tabs>
           <SwipeableViews
             index={this.state.slideIndex}

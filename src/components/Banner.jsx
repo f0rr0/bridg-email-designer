@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import styled from 'styled-components';
 import { DragSource } from 'react-dnd';
+import ClickOutside from 'react-click-outside';
 import ProgressiveImage from 'react-progressive-image';
 import equal from 'deep-equal';
 import uniqueid from 'lodash.uniqueid';
@@ -39,6 +40,8 @@ class Image extends Component {
       height: 80,
       background: 'rgba(255, 255, 255, 1)'
     };
+    this.state.highlight = false;
+    this.state.editing = false;
     this.uniqueid = uniqueid();
   }
 
@@ -50,8 +53,7 @@ class Image extends Component {
     this.props.setCustom(null);
   }
 
-  getCustom = (e) => {
-    e.stopPropagation();
+  getCustom = () => {
     this.props.setCustom(
       <div style={{ padding: 20 }} key={this.uniqueid}>
         <Control>
@@ -134,6 +136,29 @@ class Image extends Component {
     }
   }
 
+  handleClickOutside = (e) => {
+    if (![...document.querySelectorAll('.customization')].some(node => node.contains(e.target))) {
+      this.props.setCustom(null);
+      this.setState({
+        editing: false,
+        highlight: false
+      });
+    }
+  }
+
+  handleClick = () => {
+    this.getCustom();
+    this.setState({
+      editing: true
+    });
+  }
+
+  toggleHighlight = () => {
+    this.setState({
+      highlight: !this.state.highlight
+    });
+  }
+
   export = () => {
     const {
       src,
@@ -162,45 +187,82 @@ class Image extends Component {
       src,
       padding,
       height,
-      background
+      background,
+      highlight,
+      editing
     } = this.state;
+
+    const content = (() => {
+      if (inCanvas) {
+        if (editing) {
+          return (
+            <ClickOutside
+              onClickOutside={this.handleClickOutside}
+              style={{
+                width: '100%'
+              }}
+            >
+              <ProgressiveImage
+                src={src}
+                placeholder={placeholder}
+              >
+                {
+                  img =>
+                    <ImageContainer
+                      src={img}
+                      padding={padding}
+                      height={height}
+                      background={background}
+                    />
+                }
+              </ProgressiveImage>
+            </ClickOutside>
+          );
+        }
+        return (
+          <ProgressiveImage
+            src={src}
+            placeholder={placeholder}
+          >
+            {
+              img =>
+                <ImageContainer
+                  src={img}
+                  padding={padding}
+                  height={height}
+                  background={background}
+                  onMouseEnter={this.toggleHighlight}
+                  onMouseLeave={this.toggleHighlight}
+                  onClick={this.handleClick}
+                />
+            }
+          </ProgressiveImage>
+        );
+      }
+      return (
+        <div style={{ padding: '10px', lineHeight: 1.3 }}>
+          Banner Image
+        </div>
+      );
+    })();
+
     return connectDragPreview(connectDragSource(
       <div
         id={type}
         style={{
           background: inCanvas ? 'rgba(0, 0, 0, 0)' : '#FFFFFF',
           opacity: isDragging ? 0.6 : 1,
-          height: '100%',
           width: '100%',
           color: '#000000',
           cursor: inCanvas ? 'pointer' : 'move',
-          transition: 'all 0.2s ease-in-out',
           display: 'flex',
-          flex: '1 0 auto'
+          flex: '1 0 auto',
+          position: highlight || editing ? 'relative' : 'static',
+          zIndex: highlight || editing ? 1499 : 0,
+          outline: editing || highlight ? '2px solid blue' : 'none'
         }}
       >
-        {
-          inCanvas ?
-            <ProgressiveImage
-              src={src}
-              placeholder={placeholder}
-            >
-              {
-                img =>
-                  <ImageContainer
-                    src={img}
-                    padding={padding}
-                    height={height}
-                    background={background}
-                    onClick={this.getCustom}
-                  />
-              }
-            </ProgressiveImage>
-          :
-            <div style={{ padding: '10px', lineHeight: 1.3 }}>
-              Banner Image
-            </div>
-        }
+        {content}
       </div>,
       { dropEffect: 'copy' }
     ), { captureDraggingState: true });

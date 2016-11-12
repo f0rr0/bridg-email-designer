@@ -34,33 +34,42 @@ const removeRow = (canvas, rowId) => {
   return canvas;
 };
 
-const addRow = (canvas, numCols) => {
+const addRow = (canvas, numCols, index) => {
   const newRow = fromJS({
     id: uniqueid(),
     columns: Array(numCols).fill(List())
   });
+  if (index) {
+    return canvas.set(index, newRow);
+  }
   return canvas.push(newRow);
 };
 
-const reorderRows = (canvas, fromId, position, toId, inCanvas) => {
+const reorderRows = (canvas, fromId, toId) => {
   const fromIndex = findRow(canvas, fromId);
   const toIndex = findRow(canvas, toId);
   const row = canvas.get(fromIndex);
+  return canvas.splice(fromIndex, 1).splice(toIndex, 0, row);
+};
+
+const shouldReorderRows = (canvas, fromId, position, toId, inCanvas) => {
+  const fromIndex = findRow(canvas, fromId);
+  const toIndex = findRow(canvas, toId);
   if (inCanvas) {
     if (position === 'before') {
       if (fromIndex === 0) {
-        return canvas;
+        return false;
       } else if (fromIndex > toIndex) {
-        return canvas.splice(fromIndex, 1).splice(toIndex, 0, row);
+        return true;
       }
-      return canvas;
+      return false;
     } else if (fromIndex === canvas.size - 1) {
-      return canvas;
+      return false;
     } else if (fromIndex < toIndex) {
-      return canvas.splice(fromIndex, 1).splice(toIndex, 0, row);
+      return true;
     }
   }
-  return canvas;
+  return false;
 };
 
 const addContent = (canvas, rowId, colIndex, content) => {
@@ -141,6 +150,7 @@ export {
   findRow,
   removeRow,
   addRow,
+  shouldReorderRows,
   reorderRows,
   addContent,
   // removeContent,

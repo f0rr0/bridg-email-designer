@@ -264,9 +264,14 @@ export default class Canvas extends Component {
   }
 
   reorderRows = (from, position, to, inCanvas = true) => {
-    this.setState(({ canvas }) => ({
-      canvas: canvasState.reorderRows(canvas, from, position, to, inCanvas)
-    }));
+    if (canvasState.shouldReorderRows(this.state.canvas, from, position, to, inCanvas)) {
+      /* this.pushToUndoStack(); */
+      this.setState(({ canvas }) => ({
+        canvas: canvasState.reorderRows(canvas, from, to)
+      }), () => {
+        this.refsTree = canvasState.reorderRows(this.refsTree, from, to);
+      });
+    }
   }
 
   addContent = (rowId, colIndex, content) => {
@@ -309,6 +314,7 @@ export default class Canvas extends Component {
         inCanvas
         addContent={this.addContent}
         updateRef={this.updateRef}
+        addRow={this.addRow}
         removeRow={this.removeRow}
         reorderRows={this.reorderRows}
         pushToUndoStack={this.pushToUndoStack}

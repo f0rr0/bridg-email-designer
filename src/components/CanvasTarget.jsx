@@ -19,6 +19,7 @@ class CanvasTarget extends Component {
           flexGrow: '1',
           height: '100%',
           width: '100%',
+          paddingBottom: '10em',
           overflowY: 'scroll',
         }}
       >

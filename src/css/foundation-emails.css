@@ -105,7 +105,7 @@ th.columns,
 th.column {
   margin: 0 auto;
   Margin: 0 auto;
-  padding-left: 16px;
+  /*padding-left: 16px;*/
   /*padding-bottom: 16px; */
 }
   td.columns .column,
@@ -143,8 +143,9 @@ th.column table:not(.button) {
 td.large-1,
 th.large-1 {
   width: 32.33333px;
-  padding-left: 8px;
-  padding-right: 8px; }
+  /*padding-left: 8px;
+  padding-right: 8px; */
+}
 
 td.large-1.first,
 th.large-1.first {
@@ -179,8 +180,9 @@ th.large-1 center {
 td.large-2,
 th.large-2 {
   width: 80.66667px;
-  padding-left: 8px;
-  padding-right: 8px; }
+  /*padding-left: 8px;
+  padding-right: 8px; */
+}
 
 td.large-2.first,
 th.large-2.first {
@@ -215,8 +217,9 @@ th.large-2 center {
 td.large-3,
 th.large-3 {
   width: 129px;
-  padding-left: 8px;
-  padding-right: 8px; }
+  /*padding-left: 8px;
+  padding-right: 8px; */
+}
 
 td.large-3.first,
 th.large-3.first {
@@ -251,8 +254,9 @@ th.large-3 center {
 td.large-4,
 th.large-4 {
   width: 177.33333px;
-  padding-left: 8px;
-  padding-right: 8px; }
+  /*padding-left: 8px;
+  padding-right: 8px; */
+}
 
 td.large-4.first,
 th.large-4.first {
@@ -287,8 +291,9 @@ th.large-4 center {
 td.large-5,
 th.large-5 {
   width: 225.66667px;
-  padding-left: 8px;
-  padding-right: 8px; }
+  /*padding-left: 8px;
+  padding-right: 8px; */
+}
 
 td.large-5.first,
 th.large-5.first {
@@ -323,8 +328,9 @@ th.large-5 center {
 td.large-6,
 th.large-6 {
   width: 274px;
-  padding-left: 8px;
-  padding-right: 8px; }
+  /*padding-left: 8px;
+  padding-right: 8px; */
+}
 
 td.large-6.first,
 th.large-6.first {
@@ -359,8 +365,9 @@ th.large-6 center {
 td.large-7,
 th.large-7 {
   width: 322.33333px;
-  padding-left: 8px;
-  padding-right: 8px; }
+  /*padding-left: 8px;
+  padding-right: 8px; */
+}
 
 td.large-7.first,
 th.large-7.first {
@@ -395,8 +402,9 @@ th.large-7 center {
 td.large-8,
 th.large-8 {
   width: 370.66667px;
-  padding-left: 8px;
-  padding-right: 8px; }
+  /*padding-left: 8px;
+  padding-right: 8px; */
+}
 
 td.large-8.first,
 th.large-8.first {
@@ -431,8 +439,9 @@ th.large-8 center {
 td.large-9,
 th.large-9 {
   width: 419px;
-  padding-left: 8px;
-  padding-right: 8px; }
+  /*padding-left: 8px;
+  padding-right: 8px; */
+}
 
 td.large-9.first,
 th.large-9.first {
@@ -467,8 +476,9 @@ th.large-9 center {
 td.large-10,
 th.large-10 {
   width: 467.33333px;
-  padding-left: 8px;
-  padding-right: 8px; }
+  /*padding-left: 8px;
+  padding-right: 8px; */
+}
 
 td.large-10.first,
 th.large-10.first {
@@ -503,8 +513,9 @@ th.large-10 center {
 td.large-11,
 th.large-11 {
   width: 515.66667px;
-  padding-left: 8px;
-  padding-right: 8px; }
+  /*padding-left: 8px;
+  padding-right: 8px; */
+}
 
 td.large-11.first,
 th.large-11.first {
@@ -539,8 +550,9 @@ th.large-11 center {
 td.large-12,
 th.large-12 {
   width: 564px;
-  padding-left: 8px;
-  padding-right: 8px; }
+  /*padding-left: 8px;
+  padding-right: 8px; */
+}
 
 td.large-12.first,
 th.large-12.first {
@@ -1201,8 +1213,9 @@ body.outlook p {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    padding-left: 16px !important;
-    padding-right: 16px !important; }
+    /*padding-left: 16px !important;
+    padding-right: 16px !important; */
+  }
     table.body .columns .column,
     table.body .columns .columns,
     table.body .column .column,

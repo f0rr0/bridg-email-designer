@@ -194,8 +194,10 @@ class Html extends Component {
           height: '100%',
           width: '100%',
           cursor: inCanvas ? 'text' : 'move',
-          transition: 'all 0.2s ease-in-out',
           display: 'flex',
+          position: inCanvas && highlight ? 'relative' : 'static',
+          zIndex: inCanvas && highlight ? 1499 : 0,
+          outline: inCanvas && highlight ? '2px solid blue' : 'none'
         }}
       >
         {
@@ -212,18 +214,17 @@ class Html extends Component {
               />
             </ClickOutside>
           :
-          <div
-            style={{
-              background: 'rgba(0, 0, 0, 0)',
-              height: '100%',
-              width: '100%',
-              lineHeight: 1.3,
-              outline: inCanvas && highlight ? '2px solid blue' : 'none'
-            }}
-            onClick={this.handleClick}
-            onMouseEnter={this.toggleHighlight}
-            onMouseLeave={this.toggleHighlight}
-            dangerouslySetInnerHTML={{ __html: markup }} // eslint-disable-line
+            <div
+              style={{
+                background: 'rgba(0, 0, 0, 0)',
+                height: '100%',
+                width: '100%',
+                lineHeight: 1.3
+              }}
+              onClick={this.handleClick}
+              onMouseEnter={this.toggleHighlight}
+              onMouseLeave={this.toggleHighlight}
+              dangerouslySetInnerHTML={{ __html: markup }} // eslint-disable-line
             />
         }
       </div>,
