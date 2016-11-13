@@ -7,7 +7,7 @@ import CopyPlugin from 'copy-webpack-plugin';
 
 const devConfig = {
   context: resolve(__dirname, './src'),
-  devtool: 'eval',
+  devtool: 'source-map',
   entry: [
     'webpack-dev-server/client?http://localhost:8080',
     'webpack/hot/dev-server',

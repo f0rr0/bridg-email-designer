@@ -298,7 +298,7 @@ class Text extends Component {
         }
       }
     };
-    console.log(stateToHTML(this.state.editorState.getCurrentContent(), options), this.state.editorState.getCurrentContent(), options);
+
     return `<div style="color: ${textColor}; background-color: ${background}; padding: ${padding}px; border: ${borderSize}px ${borderStyle} ${borderColor}; width: 100%; height: 100%;">${stateToHTML(this.state.editorState.getCurrentContent(), options)}</div>`;
   }
 
