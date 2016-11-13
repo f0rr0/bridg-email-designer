@@ -6,7 +6,7 @@ const parseColumn = (column) => {
   column.forEach((content) => {
     markup += content.get('component').export();
   });
-  return markup;
+  return `<table><tr><th>${markup}</th><th class="expander"></th></tr></table>`;
 };
 
 const parseRow = (row) => {
@@ -35,12 +35,12 @@ const parseRow = (row) => {
 const parseCanvas = (canvas) => {
   let markup = '';
   canvas.forEach((row) => {
-    markup += `<table class="row"><tr>${parseRow(row)}</tr></table>`;
+    markup += `<table class="row collapse"><tbody><tr>${parseRow(row)}</tr></tbody></table>`;
   });
   return markup;
 };
 
-const withTemplate = (markup, styles) =>
+const withTemplate = (markup, styles, wrapperStyles) =>
   `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -51,12 +51,10 @@ const withTemplate = (markup, styles) =>
   </style>
 </head>
 <body>
-  <table class="body" data-made-with-foundation>
+  <table class="body" ${wrapperStyles}>
     <tr>
-      <td class="float-center" align="center" valign="top">
-        <center>
-          ${markup}
-        </center>
+      <td align="center" valign="top">
+        ${markup}
       </td>
     </tr>
   </table>
@@ -72,8 +70,9 @@ const exportMarkup = (canvas, state) => {
     borderStyle,
     borderColor
   } = state;
-  const markup = `<table class="container" style="color: #000000; border: ${borderSize}px ${borderStyle} ${borderColor}; background-color: ${backgroundColor}; background-image: ${useBackgroundImage ? `url(${backgroundImage})` : 'none'}; background-size: cover;"><tr><td>${parseCanvas(canvas)}</td></tr></table>`;
-  return juice(withTemplate(markup, css));
+  const wrapperStyles = `style="color: #000000; border: ${borderSize}px ${borderStyle} ${borderColor}; background-color: ${backgroundColor}; background-image: ${useBackgroundImage ? `url(${backgroundImage})` : 'none'}; background-size: cover;"`;
+  const markup = `<table class="container"><tbody><tr><td>${parseCanvas(canvas)}</td></tr></tbody></table>`;
+  return juice(withTemplate(markup, css, wrapperStyles));
 };
 
 export default exportMarkup;

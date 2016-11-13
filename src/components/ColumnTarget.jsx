@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes, Children } from 'react';
 import equal from 'deep-equal';
 import { DropTarget } from 'react-dnd';
 import { target } from '../lib/generic-drop-target';
@@ -30,7 +30,7 @@ class ColumnTarget extends Component {
       <div
         style={{
           width: '100%',
-          height: '100%',
+          height: Children.count(children) > 0 ? 'auto' : '5em',
           display: 'flex',
           flexGrow: 1,
           flexDirection: 'column',

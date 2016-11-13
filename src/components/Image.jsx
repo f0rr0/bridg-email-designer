@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import styled, { css, injectGlobal } from 'styled-components';
+import styled, { injectGlobal } from 'styled-components';
 import { DragSource } from 'react-dnd';
 import ProgressiveImage from 'react-progressive-image';
 import { ResizableBox } from 'react-resizable';
@@ -38,18 +38,6 @@ injectGlobal`
   }
 `;
 /*eslint-enable */
-
-const ImageContainer = styled('div')`
-  background: ${({ bg }) => css`url(${bg})`}
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  width: ${({ width }) => `${width}px`}
-  height: ${({ height }) => `${height}px`}
-  margin: 0 auto;
-  transition: background 0.2s ease-in-out;
-  cursor: pointer;
-`;
 
 const Control = styled('div')`
   margin-bottom: 10px;
@@ -201,9 +189,9 @@ class Image extends Component {
       height
     } = this.state;
     if (href === '') {
-      return `<center style="padding: ${padding}px; background-color: ${background}"><img src=${src} align="center" class="float-center" style="width: auto; height: ${height}px" /></center>`;
+      return `<center style="box-sizing: border-box; padding: ${padding}px; background-color: ${background}"><img src=${src} align="center" class="float-center" style="width: auto; height: ${height}px" /></center>`;
     }
-    return `<center style="padding: ${padding}px; background-color: ${background}"><a class="float-center" align="center" href=${href} target="__blank" rel="noopener noreferrer"><img src=${src} style="display: inline-block !important; width: auto; height: ${height}px"/></a></center>`;
+    return `<center style="box-sizing: border-box; padding: ${padding}px; background-color: ${background}"><a class="float-center" align="center" href=${href} target="__blank" rel="noopener noreferrer"><img src=${src} style="display: inline-block !important; width: auto; height: ${height}px"/></a></center>`;
   }
 
   serialize = () => this.state;
@@ -248,18 +236,25 @@ class Image extends Component {
                     <ResizableBox
                       height={height}
                       width={width}
-                      minConstraints={[100, 100]}
-                      maxConstraints={[548 - (2 * padding), 1000]}
+                      minConstraints={[10, 10]}
+                      maxConstraints={[552 - (2 * padding), 1000]}
                       onResize={this.handleResize}
                       onResizeStart={this.handleResizeStart}
                       draggableOpts={{
                         onMouseDown: this.stopEvent
                       }}
                     >
-                      <ImageContainer
+                      <img
                         height={height}
                         width={width}
-                        bg={img}
+                        src={img}
+                        alt={img}
+                        style={{
+                          display: 'block',
+                          margin: '0 auto',
+                          transition: 'background 0.2s ease-in-out',
+                          cursor: 'pointer'
+                        }}
                       />
                     </ResizableBox>
                 }
@@ -274,13 +269,19 @@ class Image extends Component {
           >
             {
               img =>
-                <ImageContainer
-                  bg={img}
+                <img
+                  height={height}
+                  width={width}
+                  src={img}
+                  alt={img}
+                  style={{
+                    display: 'block',
+                    margin: '0 auto',
+                    cursor: 'pointer'
+                  }}
                   onMouseEnter={this.toggleHighlight}
                   onMouseLeave={this.toggleHighlight}
                   onClick={this.handleClick}
-                  height={height}
-                  width={width}
                 />
             }
           </ProgressiveImage>

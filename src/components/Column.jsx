@@ -19,8 +19,6 @@ const Container = styled('div')`
   align-items: stretch;
   align-content: stretch;
   width: ${({ col }) => css`${100 / col}%`}
-  min-height: 5em;
-  height: 100%;
   border: 1px dotted #303030;
 `;
 

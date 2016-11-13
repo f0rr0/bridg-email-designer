@@ -193,7 +193,7 @@ class Designer extends Component {
           onRequestClose={this.toggleModal}
           autoScrollBodyContent
         >
-          <div dangerouslySetInnerHTML={{ __html: html }} />
+          <iframe style={{ width: '100%' }} srcDoc={html} />
         </Dialog>
         <Snackbar
           open={this.state.snack}

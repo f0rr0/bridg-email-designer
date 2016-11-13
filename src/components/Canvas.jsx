@@ -20,7 +20,7 @@ const ParentContainer = styled(Paper)`
   order: 1;
   flex-grow: 1;
   flex-shrink: 1;
-  min-width: 548px;
+  min-width: 552px;
   max-width: 840px;
 `;
 

@@ -63,8 +63,8 @@ const CloseButton = styled('div')`
   background-image: ${`url(${close})`};
   background-repeat: no-repeat;
   background-size: contain;
-  cursor: pointer;
   display: ${({ showClose }) => showClose ? 'inline-block' : 'none'}
+  cursor: pointer;
 `;
 
 class Row extends Component {
@@ -146,7 +146,7 @@ class Row extends Component {
                     alignItems: 'stretch',
                     alignContent: 'stretch',
                     margin: '0 auto',
-                    width: '548px',
+                    width: '552px',
                   }}
                 >
                   {

@@ -299,7 +299,7 @@ class Text extends Component {
       }
     };
 
-    return `<div style="color: ${textColor}; background-color: ${background}; padding: ${padding}px; border: ${borderSize}px ${borderStyle} ${borderColor}; width: 100%; height: 100%;">${stateToHTML(this.state.editorState.getCurrentContent(), options)}</div>`;
+    return `<div style="box-sizing: border-box; color: ${textColor}; background-color: ${background}; padding: ${padding}px; border: ${borderSize}px ${borderStyle} ${borderColor}; width: 100%; height: 100%;">${stateToHTML(this.state.editorState.getCurrentContent(), options)}</div>`;
   }
 
   serialize = () => ({
@@ -344,7 +344,7 @@ class Text extends Component {
                 color: textColor,
                 position: highlight ? 'relative' : 'static',
                 zIndex: highlight ? 1499 : 0,
-                outline: highlight ? '2px solid blue' : 'none',
+                outline: '2px solid blue',
                 border: `${borderSize}px ${borderStyle} ${borderColor}`,
               }}
               onClickOutside={this.handleClickOutside}

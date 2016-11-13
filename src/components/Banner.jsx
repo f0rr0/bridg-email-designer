@@ -16,7 +16,6 @@ import placeholder from '../assets/image.svg';
 
 const ImageContainer = styled('img')`
   width: 100%;
-  height: ${({ height }) => `${height}px`};
   vertical-align: top;
   padding: ${({ padding }) => `${padding}px`}
   background-color: ${({ background }) => background}
@@ -37,7 +36,6 @@ class Image extends Component {
       src: placeholder,
       href: '',
       padding: 0,
-      height: 80,
       background: 'rgba(255, 255, 255, 1)'
     };
     this.state.highlight = false;
@@ -61,7 +59,7 @@ class Image extends Component {
             icon={<ImageIcon />}
             label="Image Source"
             floatingLabelText="Enter link to image"
-            initialValue={this.state.src === placeholder ? 'https://unsplash.it/548/80/?random' : this.state.src}
+            initialValue={this.state.src === placeholder ? 'https://unsplash.it/552/80/?random' : this.state.src}
             onChange={this.customDispatch('src')}
           />
         </Control>
@@ -88,14 +86,6 @@ class Image extends Component {
             onChange={this.customDispatch('padding')}
           />
         </Control>
-        <Control>
-          <PlusMinus
-            label="Height"
-            initialValue={this.state.height}
-            maxValue={1000}
-            onChange={this.customDispatch('height')}
-          />
-        </Control>
       </div>
     );
   }
@@ -106,12 +96,6 @@ class Image extends Component {
         this.props.pushToUndoStack();
         this.setState({
           padding: val
-        });
-        break;
-      case 'height':
-        this.props.pushToUndoStack();
-        this.setState({
-          height: val
         });
         break;
       case 'src':
@@ -164,13 +148,12 @@ class Image extends Component {
       src,
       href,
       padding,
-      height,
       background
     } = this.state;
     if (href === '') {
-      return `<img src="${src}" style="width: 100%; height:${height}px; padding: ${padding}px; background-color: ${background}" />`;
+      return `<div style="width: 100%;"><img src="${src}" style="box-sizing: border-box; width: 100%; padding: ${padding}px; background-color: ${background}" /></div>`;
     }
-    return `<a href=${href} target='__blank' rel='noopener noreferrer'><img src="${src}" style="width: 100%; height:${height}px; padding: ${padding}px; background-color: ${background}" /></a>`;
+    return `<div style="width: 100%;"><a href=${href} target='__blank' rel='noopener noreferrer'><img src="${src}" style="box-sizing: border-box; width: 100%; padding: ${padding}px; background-color: ${background}" /></a></div>`;
   }
 
   serialize = () => this.state;
@@ -186,7 +169,6 @@ class Image extends Component {
     const {
       src,
       padding,
-      height,
       background,
       highlight,
       editing
@@ -211,7 +193,6 @@ class Image extends Component {
                     <ImageContainer
                       src={img}
                       padding={padding}
-                      height={height}
                       background={background}
                     />
                 }
@@ -226,15 +207,16 @@ class Image extends Component {
           >
             {
               img =>
-                <ImageContainer
-                  src={img}
-                  padding={padding}
-                  height={height}
-                  background={background}
-                  onMouseEnter={this.toggleHighlight}
-                  onMouseLeave={this.toggleHighlight}
-                  onClick={this.handleClick}
-                />
+                <div style={{ width: '100%' }}>
+                  <ImageContainer
+                    src={img}
+                    padding={padding}
+                    background={background}
+                    onMouseEnter={this.toggleHighlight}
+                    onMouseLeave={this.toggleHighlight}
+                    onClick={this.handleClick}
+                  />
+                </div>
             }
           </ProgressiveImage>
         );
