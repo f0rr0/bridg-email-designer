@@ -20,6 +20,7 @@ const ParentContainer = styled(Paper)`
   order: 1;
   flex-grow: 1;
   flex-shrink: 1;
+  display: flex;
   min-width: 584px;
   max-width: 840px;
 `;
@@ -30,8 +31,7 @@ const TargetContainer = styled('section')`
   background-size: cover;
   background-color: ${({ backgroundColor }) => backgroundColor}
   border: ${({ borderSize, borderStyle, borderColor }) => `${borderSize}px ${borderStyle} ${borderColor}`}
-  width: 100%;
-  height: 100%;
+  flex: 1 1 100%;
   display: flex;
   font-family: Helvetica, Arial, sans-serif;
   font-weight: normal;

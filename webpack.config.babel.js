@@ -2,6 +2,7 @@
 import { resolve } from 'path';
 import { HotModuleReplacementPlugin, DefinePlugin, optimize } from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
 import DashboardPlugin from 'webpack-dashboard/plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 
@@ -95,6 +96,9 @@ const prodConfig = Object.assign({}, devConfig, {
         minifyCSS: true,
         minifyURLs: true
       }
+    }),
+    new ScriptExtHtmlWebpackPlugin({
+      defaultAttribute: 'async'
     }),
     new optimize.UglifyJsPlugin({
       compress: {
