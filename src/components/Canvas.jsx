@@ -308,6 +308,7 @@ export default class Canvas extends Component {
   loadFromPreset = (preset) => {
     this.pushToUndoStack();
     this.refsTree = canvasState.create(preset.canvas);
+    this.uniqueid = uniqueid();
     this.setState({
       ...preset,
       canvas: this.refsTree
