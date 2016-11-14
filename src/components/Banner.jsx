@@ -156,7 +156,20 @@ class Image extends Component {
     return `<div style="width: 100%;"><a href=${href} target='__blank' rel='noopener noreferrer'><img src="${src}" style="box-sizing: border-box; width: 100%; padding: ${padding}px; background-color: ${background}" /></a></div>`;
   }
 
-  serialize = () => this.state;
+  serialize = () => {
+    const {
+      src,
+      href,
+      padding,
+      background
+    } = this.state;
+    return {
+      src,
+      href,
+      padding,
+      background
+    };
+  }
 
   render() {
     const {

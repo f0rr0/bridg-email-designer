@@ -194,7 +194,24 @@ class Image extends Component {
     return `<center style="box-sizing: border-box; padding: ${padding}px; background-color: ${background}"><a class="float-center" align="center" href=${href} target="__blank" rel="noopener noreferrer"><img src=${src} style="display: inline-block !important; width: auto; height: ${height}px"/></a></center>`;
   }
 
-  serialize = () => this.state;
+  serialize = () => {
+    const {
+      src,
+      href,
+      padding,
+      background,
+      height,
+      width
+    } = this.state;
+    return {
+      src,
+      href,
+      padding,
+      background,
+      height,
+      width
+    };
+  };
 
   render() {
     const {

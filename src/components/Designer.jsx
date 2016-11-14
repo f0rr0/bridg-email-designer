@@ -3,9 +3,7 @@ import styled from 'styled-components';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import muiThemeable from 'material-ui/styles/muiThemeable';
-import Dialog from 'material-ui/Dialog';
 import Snackbar from 'material-ui/Snackbar';
-import FlatButton from 'material-ui/FlatButton';
 import Header from './Header.jsx';
 import Toolbox from './Toolbox.jsx';
 import Canvas from './Canvas.jsx';
@@ -71,10 +69,6 @@ class Designer extends Component {
     });
   }
 
-  toggleModal = () => this.setState({
-    modal: !this.state.modal,
-    markup: this.exportHtml()
-  });
 
   toggleSnack = () => this.setState({
     snack: !this.state.snack
@@ -93,7 +87,7 @@ class Designer extends Component {
     textArea.style.outline = 'none';
     textArea.style.boxShadow = 'none';
     textArea.style.background = 'transparent';
-    textArea.value = this.state.markup;
+    textArea.value = this.exportHtml();
     document.body.appendChild(textArea);
     textArea.select();
     try {
@@ -120,6 +114,12 @@ class Designer extends Component {
   doUndo = () => this.canvas.doUndo();
 
   doRedo = () => this.canvas.doRedo();
+
+  showPreview = () => {
+    const newdocument = window.open().document;
+    newdocument.write(this.exportHtml());
+    newdocument.close();
+  }
 
   saveState = () => {
     try {
@@ -152,23 +152,12 @@ class Designer extends Component {
   }
 
   render() {
-    const actions = [
-      <FlatButton
-        label="Close"
-        onTouchTap={this.toggleModal}
-      />,
-      <FlatButton
-        label="Copy to Clipboard"
-        secondary
-        onTouchTap={this.copyToClipboard}
-      />,
-    ];
-    const html = this.state.markup;
     return (
       <Main>
         <Header
+          handlePreview={this.showPreview}
           handleSave={this.saveState}
-          handleExport={this.toggleModal}
+          handleExport={this.showPreview}
           handleRestore={this.loadState}
           handleUndo={this.doUndo}
           handleRedo={this.doRedo}
@@ -186,15 +175,6 @@ class Designer extends Component {
             setCustomBody={this.setCustomBody}
           />
         </Container>
-        <Dialog
-          title="Preview"
-          actions={actions}
-          open={this.state.modal}
-          onRequestClose={this.toggleModal}
-          autoScrollBodyContent
-        >
-          <iframe style={{ width: '100%' }} srcDoc={html} />
-        </Dialog>
         <Snackbar
           open={this.state.snack}
           message={this.state.message}

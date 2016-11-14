@@ -146,7 +146,8 @@ class Row extends Component {
                     alignItems: 'stretch',
                     alignContent: 'stretch',
                     margin: '0 auto',
-                    width: '552px',
+                    padding: '0 16px',
+                    width: '584px',
                   }}
                 >
                   {

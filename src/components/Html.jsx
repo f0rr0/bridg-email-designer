@@ -181,7 +181,9 @@ class Html extends Component {
 
   export = () => this.state.markup;
 
-  serialize = () => this.state;
+  serialize = () => ({
+    markup: this.state.markup
+  });
 
   render() {
     const { type, inCanvas, isDragging, connectDragSource, connectDragPreview } = this.props;
