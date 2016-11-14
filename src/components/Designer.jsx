@@ -157,7 +157,7 @@ class Designer extends Component {
         <Header
           handlePreview={this.showPreview}
           handleSave={this.saveState}
-          handleExport={this.showPreview}
+          handleExport={this.copyToClipboard}
           handleRestore={this.loadState}
           handleUndo={this.doUndo}
           handleRedo={this.doRedo}

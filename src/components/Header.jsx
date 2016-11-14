@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import MenuItem from 'material-ui/MenuItem';
@@ -6,6 +6,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
 import Settings from 'material-ui/svg-icons/action/settings';
+import Visibility from 'material-ui/svg-icons/action/visibility';
 import Code from 'material-ui/svg-icons/action/code';
 import Save from 'material-ui/svg-icons/content/save';
 import Undo from 'material-ui/svg-icons/content/undo';
@@ -49,78 +50,83 @@ const Title = styled('div')`
   text-align: left;
 `;
 
-class HeaderComponent extends Component {
-  render() {
-    const {
-      handleSave,
-      handleRestore,
-      handleExport,
-      handleUndo,
-      handleRedo,
-      muiTheme
-    } = this.props;
+const HeaderComponent = (props) => {
+  const {
+    handlePreview,
+    handleSave,
+    handleRestore,
+    handleExport,
+    handleUndo,
+    handleRedo,
+    muiTheme
+  } = props;
 
-    return (
-      <Header muiTheme={muiTheme}>
-        <a href="http://bridg.com" target="__blank"><Logo /></a>
-        <Divider />
-        <Title muiTheme={muiTheme}>Email Designer</Title>
-        <FloatingActionButton
-          style={{
-            marginRight: '10px'
-          }}
-          mini
-          secondary
-          onTouchTap={handleUndo}
-        >
-          <Undo />
-        </FloatingActionButton>
-        <FloatingActionButton
-          style={{
-            marginRight: '30px'
-          }}
-          mini
-          secondary
-          onTouchTap={handleRedo}
-        >
-          <Redo />
-        </FloatingActionButton>
-        <IconMenu
-          iconButtonElement={
-            <IconButton>
-              <Settings />
-            </IconButton>
-          }
-          iconStyle={{
-            color: muiTheme.palette.accent1Color
-          }}
-          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-          targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-        >
-          <MenuItem
-            primaryText="Save"
-            leftIcon={<Save />}
-            onClick={handleSave}
-          />
-          <MenuItem
-            primaryText="Restore"
-            leftIcon={<Restore />}
-            onClick={handleRestore}
-          />
-          <MenuItem
-            primaryText="Export"
-            leftIcon={<Code />}
-            onClick={handleExport}
-          />
-        </IconMenu>
-      </Header>
-    );
-  }
-}
+  return (
+    <Header muiTheme={muiTheme}>
+      <a href="http://bridg.com" target="__blank"><Logo /></a>
+      <Divider />
+      <Title muiTheme={muiTheme}>Email Designer</Title>
+      <FloatingActionButton
+        style={{
+          marginRight: '10px'
+        }}
+        mini
+        secondary
+        onTouchTap={handleUndo}
+      >
+        <Undo />
+      </FloatingActionButton>
+      <FloatingActionButton
+        style={{
+          marginRight: '30px'
+        }}
+        mini
+        secondary
+        onTouchTap={handleRedo}
+      >
+        <Redo />
+      </FloatingActionButton>
+      <IconMenu
+        iconButtonElement={
+          <IconButton>
+            <Settings />
+          </IconButton>
+        }
+        iconStyle={{
+          color: muiTheme.palette.accent1Color
+        }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+      >
+        <MenuItem
+          primaryText="Preview"
+          leftIcon={<Visibility />}
+          onClick={handlePreview}
+        />
+        <MenuItem
+          primaryText="Export"
+          leftIcon={<Code />}
+          onClick={handleExport}
+        />
+        <MenuItem
+          primaryText="Save"
+          leftIcon={<Save />}
+          onClick={handleSave}
+        />
+        <MenuItem
+          primaryText="Restore"
+          leftIcon={<Restore />}
+          onClick={handleRestore}
+        />
+      </IconMenu>
+    </Header>
+  );
+};
 
 export default muiThemeable()(HeaderComponent);
 
 HeaderComponent.propTypes = {
+  handlePreview: PropTypes.func.isRequired,
   handleSave: PropTypes.func.isRequired,
   handleRestore: PropTypes.func.isRequired,
   handleExport: PropTypes.func.isRequired,
