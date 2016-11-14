@@ -151,6 +151,21 @@ class Designer extends Component {
     }
   }
 
+  loadPreset = canvas => () => {
+    try {
+      this.canvas.loadFromPreset(canvas);
+      this.setState({
+        snack: true,
+        message: 'Preset loaded successfully!'
+      });
+    } catch (e) {
+      this.setState({
+        snack: true,
+        message: `Oops! ${e}`
+      });
+    }
+  }
+
   render() {
     return (
       <Main>
@@ -159,6 +174,7 @@ class Designer extends Component {
           handleSave={this.saveState}
           handleExport={this.copyToClipboard}
           handleRestore={this.loadState}
+          handlePreset={this.loadPreset}
           handleUndo={this.doUndo}
           handleRedo={this.doRedo}
         />

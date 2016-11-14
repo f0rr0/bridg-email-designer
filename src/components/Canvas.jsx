@@ -290,17 +290,26 @@ export default class Canvas extends Component {
       ...this.state,
       canvas: serialize(this.refsTree)
     });
-    localStorage.setItem('canvas', state); // eslint-disable-line
+    localStorage.setItem('canvas', state);
   }
 
   loadFromLocalStorage = () => {
-    const state = JSON.parse(localStorage.getItem('canvas')); // eslint-disable-line
+    const state = JSON.parse(localStorage.getItem('canvas'));
     this.refsTree = canvasState.create(state.canvas);
     this.redoStack = this.redoStack.clear();
     this.undoStack = this.undoStack.clear();
     this.uniqueid = uniqueid();
     this.setState({
       ...state,
+      canvas: this.refsTree
+    });
+  }
+
+  loadFromPreset = (preset) => {
+    this.pushToUndoStack();
+    this.refsTree = canvasState.create(preset.canvas);
+    this.setState({
+      ...preset,
       canvas: this.refsTree
     });
   }

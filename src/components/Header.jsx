@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import MenuItem from 'material-ui/MenuItem';
+import Divider from 'material-ui/Divider';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
@@ -12,7 +13,10 @@ import Save from 'material-ui/svg-icons/content/save';
 import Undo from 'material-ui/svg-icons/content/undo';
 import Redo from 'material-ui/svg-icons/content/redo';
 import Restore from 'material-ui/svg-icons/action/restore';
+import ArrowLeft from 'material-ui/svg-icons/navigation/chevron-left';
+import startCase from 'lodash.startcase';
 import logo from '../assets/Bridg-TM-White.png';
+import presets from '../lib/presets';
 
 const Header = styled('header')`
   background: ${({ muiTheme }) => muiTheme.palette.canvasColor};
@@ -35,7 +39,7 @@ const Logo = styled('div')`
   flex-grow: 0;
 `;
 
-const Divider = styled('span')`
+const VerticalDivider = styled('span')`
   height: 50px;
   width: 1px;
   margin: 0 0.889em;
@@ -58,13 +62,24 @@ const HeaderComponent = (props) => {
     handleExport,
     handleUndo,
     handleRedo,
+    handlePreset,
     muiTheme
   } = props;
+
+  const presetItems = [];
+  new Map(Object.entries(presets)).forEach((preset, name) => {
+    presetItems.push(
+      <MenuItem
+        primaryText={startCase(name)}
+        onClick={handlePreset(preset)}
+      />
+    );
+  });
 
   return (
     <Header muiTheme={muiTheme}>
       <a href="http://bridg.com" target="__blank"><Logo /></a>
-      <Divider />
+      <VerticalDivider />
       <Title muiTheme={muiTheme}>Email Designer</Title>
       <FloatingActionButton
         style={{
@@ -108,6 +123,7 @@ const HeaderComponent = (props) => {
           leftIcon={<Code />}
           onClick={handleExport}
         />
+        <Divider />
         <MenuItem
           primaryText="Save"
           leftIcon={<Save />}
@@ -117,6 +133,12 @@ const HeaderComponent = (props) => {
           primaryText="Restore"
           leftIcon={<Restore />}
           onClick={handleRestore}
+        />
+        <Divider />
+        <MenuItem
+          primaryText="Presets"
+          leftIcon={<ArrowLeft />}
+          menuItems={presetItems}
         />
       </IconMenu>
     </Header>
@@ -132,5 +154,6 @@ HeaderComponent.propTypes = {
   handleExport: PropTypes.func.isRequired,
   handleUndo: PropTypes.func.isRequired,
   handleRedo: PropTypes.func.isRequired,
+  handlePreset: PropTypes.func.isRequired,
   muiTheme: PropTypes.object
 };
