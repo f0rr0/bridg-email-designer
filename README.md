@@ -3,11 +3,11 @@
 ### Installation
 
 ```
-git clone https://github.com/Bridg/bridg-email-designer
-cd bridg-email-designer
-npm install # yarn install (if using yarn)
-npm start # dev mode
-npm run build # production build
+npm install -g yarn
+git clone https://github.com/Bridg/bridg-email-designer && cd bridg-email-designer
+yarn install
+yarn start # dev mode
+yarn run build # production build
 ```
 
 ### File Structure
@@ -29,30 +29,42 @@ Designer.jsx
               +--Column.jsx
                   +--ColumnTarget.jsx
 ```
-### Drag and Drop
-All 'draggable' and 'droppable' components are decorated with `DragSource` and `DropTarget` components respectively. Some common methods for these live in `./lib/generic-drag-source.js` and `./generic-drop-target.js`.
-
-### New Content Types
-The designer uses a webpack context to import all content components automatically. To create a new content component, for instance `Social.jsx`, create the file under `./src/components` and add `SOCIAL` to `./lib/types.js`
-
-### Exporting Markup
-Each content component defines an `export` function that returns the markup as it should end up in the email based on it's current state. The parser lives in `./lib/parser.js`. We use `foundation-emails.css` to get 100% email friendly markup. The styles are inlined with `juice`.
-
-### Canvas State
-`Canvas.jsx` is the most 'stateful' component here. The state lives in an Immutable List of Immutable Maps. The maps have a unique id which helps in deleting and reordering the rows. See `./src/components/Canvas.jsx` and `./lib/parser.js`.
-
 ### Styling
 There are no CSS files besides the ZURB framework for emails which is inlined with the exported markup. The designer uses inline styling in JSX and `styled-components` exclusively. Also for the presentational components `material-ui` has been used.
 
-### Credits
-The following open source libraries were used:
-* react-dnd
-* codemirror
-* draftjs
-* react-resizable
-* Immutable.js
-* styled-components
-* juice
+### Drag and Drop
+All 'draggable' and 'droppable' components are decorated with `DragSource` and `DropTarget` components respectively. Some common methods for these live in `lib/generic-drag-source.js` and `lib/generic-drop-target.js`.
+
+### New Content Types
+The designer uses a webpack context to import all content components automatically. To create a new content component, for instance `Social.jsx`, create the file under `src/components` and add `SOCIAL` to `lib/types.js`
+
+### Canvas State
+`Canvas.jsx` is the most 'stateful' component here. The state lives in an Immutable List of Immutable Maps. The maps have a unique id which helps in deleting and reordering the rows. See `src/components/Canvas.jsx` and `lib/parser.js`.
+
+### Exporting Markup
+Each content component defines an `export` function that returns the markup as it should end up in the email based on it's current state. The parser lives in `lib/parser.js`. We use `foundation-emails.css` to get 100% email friendly markup. The styles are inlined with `juice`.
+
+### Saving to `localStorage`
+Every content component must always define a method called `serialize` which returns the bare minimum state which the component needs to reconstruct itself. This state is provided to the component as `state` on `props` and can be used in the constructor to populate relevant fields. See `lib/serialize.js` and `lib/deserialize.js` to see how this happens underneath.
+
+### Undo/Redo
+Each content type component is given a `pushToUndoStack` function on `props`. Calling this function saves the entire state of the designer in an immutable stack. Use this function sparingly and only when you need to. You don't want to pollute the stack with undo stack with unwanted states.
+
+### Customization via Tune tab
+If your content component needs to be customized with controls in the Tune tab, just define a class method `getCustom` with returns a JSX element with all your controls. Some controls which can be dropped in right away are:
+* SwitchInput
+* PlusMinus
+* DialogInput
+* ColorPicker
+
+### Highlighted/Editing state
+To provide relevant feedback when the component is being hovered or edited, we use relevant React events: `onMouseEnter`, `onMouseLeave` and `onMouseDown` in conjunction with a HOC: `react-click-outside`. Use this with care as any such HOC will attach listeners to the `window` and might interfere with events elsewhere in the designer. The HOC should only be rendered when the component is being edited.
+
+### Merge Tags
+The merge tags available to the `Text` component live in `lib/mentions.js`. Edit that file to add new tags or modify the syntax as you please. However, make sure the syntax is consistent across all the tags.
+
+### Presets/Themes
+The designer includes some predefined presets that are ready to use. These live in `lib/presets.js`. Every preset contains a JSON representation of the entire designer state that is required to reconstruct it. Currently, to add more presets, design them in the designer as you'd like and save the design. Then, copy to contents of `canvas` in `localStorage` (can be accessed via [Chrome Developer Tools](https://developers.google.com/web/tools/chrome-devtools/manage-data/local-storage)) to the `presets` file. The key of the preset is converted to sentence case and used as the name for that preset.
 
 ### Deploy to gh-pages
 ```
