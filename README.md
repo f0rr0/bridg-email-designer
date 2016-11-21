@@ -42,7 +42,7 @@ The designer uses a webpack context to import all content components automatical
 `Canvas.jsx` is the most 'stateful' component here. The state lives in an Immutable List of Immutable Maps. The maps have a unique id which helps in deleting and reordering the rows. See `src/components/Canvas.jsx` and `lib/parser.js`.
 
 ### Exporting Markup
-Each content component defines an `export` function that returns the markup as it should end up in the email based on it's current state. The parser lives in `lib/parser.js`. We use `foundation-emails.css` to get 100% email friendly markup. The styles are inlined with `juice`.
+Each content component defines an `export` function that returns the markup as it should end up in the email based on it's current state. The parser lives in `lib/parser.js`. We use a modified version of [Foundation for Emails](http://foundation.zurb.com/emails.html) to get 100% email friendly markup. The styles are inlined with `juice`.
 
 ### Saving to `localStorage`
 Every content component must always define a method called `serialize` which returns the bare minimum state which the component needs to reconstruct itself. This state is provided to the component as `state` on `props` and can be used in the constructor to populate relevant fields. See `lib/serialize.js` and `lib/deserialize.js` to see how this happens underneath.
