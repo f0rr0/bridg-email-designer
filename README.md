@@ -48,23 +48,23 @@ Each content component defines an `export` function that returns the markup as i
 Every content component must always define a method called `serialize` which returns the bare minimum state which the component needs to reconstruct itself. This state is provided to the component as `state` on `props` and can be used in the constructor to populate relevant fields. See `lib/serialize.js` and `lib/deserialize.js` to see how this happens underneath.
 
 ### Undo/Redo
-Each content type component is given a `pushToUndoStack` function on `props`. Calling this function saves the entire state of the designer in an immutable stack. Use this function sparingly and only when you need to. You don't want to pollute the stack with undo stack with unwanted states.
+Each content type component is given a `pushToUndoStack` function on `props`. Calling this function saves the entire state of the designer in an immutable stack. Use this function sparingly and only when you need to. You don't want to pollute the undo stack with unwanted states.
 
 ### Customization via Tune tab
-If your content component needs to be customized with controls in the Tune tab, just define a class method `getCustom` with returns a JSX element with all your controls. Some controls which can be dropped in right away are:
+If your content component needs to be customized with controls in the Tune tab, you can call the `setCustom` function on `props` with a JSX element with all your controls as the only argument. Some controls which can be dropped in right away are:
 * SwitchInput
 * PlusMinus
 * DialogInput
 * ColorPicker
 
 ### Highlighted/Editing state
-To provide relevant feedback when the component is being hovered or edited, we use relevant React events: `onMouseEnter`, `onMouseLeave` and `onMouseDown` in conjunction with a HOC: `react-click-outside`. Use this with care as any such HOC will attach listeners to the `window` and might interfere with events elsewhere in the designer. The HOC should only be rendered when the component is being edited.
+To provide relevant feedback when the component is being hovered or edited, we use React events: `onMouseEnter`, `onMouseLeave` and `onMouseDown` in conjunction with a HOC: `react-click-outside`. Use this with care as any such HOC will attach listeners to the `window` and might interfere with events elsewhere in the designer. The HOC should only be rendered when the component is being edited.
 
 ### Merge Tags
 The merge tags available to the `Text` component live in `lib/mentions.js`. Edit that file to add new tags or modify the syntax as you please. However, make sure the syntax is consistent across all the tags.
 
 ### Presets/Themes
-The designer includes some predefined presets that are ready to use. These live in `lib/presets.js`. Every preset contains a JSON representation of the entire designer state that is required to reconstruct it. Currently, to add more presets, design them in the designer as you'd like and save the design. Then, copy to contents of `canvas` in `localStorage` (can be accessed via [Chrome Developer Tools](https://developers.google.com/web/tools/chrome-devtools/manage-data/local-storage)) to the `presets` file. The key of the preset is converted to sentence case and used as the name for that preset.
+The designer includes some predefined presets that are ready to use. These live in `lib/presets.js`. Every preset contains a JSON representation of the entire designer state that is required to reconstruct it. Currently, to add more presets, design them in the designer as you'd like and save the design. Then, copy the contents of `canvas` in `localStorage` (can be accessed via [Chrome Developer Tools](https://developers.google.com/web/tools/chrome-devtools/manage-data/local-storage)) to the `presets` file. The key of the preset is converted to sentence case and used as the name for that preset.
 
 ### Deploy to gh-pages
 ```
