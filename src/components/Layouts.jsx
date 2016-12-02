@@ -10,8 +10,20 @@ const Layouts = styled('section')`
   padding: 20px;
 `;
 
+const Note = styled.h4`
+  color: #b5b5b5;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 0.8em;
+  margin-bottom: 20px;
+  width: 100%;
+  letter-spacing: 0.4px;
+`;
+
 export default () =>
   <Layouts>
+    <Note>Structures are your basic building blocks</Note>
     {
       [...Array(4).keys()].map(
         (key) => {

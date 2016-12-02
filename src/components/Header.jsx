@@ -4,6 +4,7 @@ import muiThemeable from 'material-ui/styles/muiThemeable';
 import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
 import Settings from 'material-ui/svg-icons/action/settings';
@@ -19,7 +20,7 @@ import logo from '../assets/Bridg-TM-White.png';
 import presets from '../lib/presets';
 
 const Header = styled('header')`
-  background: ${({ muiTheme }) => muiTheme.palette.canvasColor};
+  background: ${({muiTheme}) => muiTheme.appBar.color};
   display: flex;
   padding: 0.5em 0.889em;
   align-items: center;
@@ -48,7 +49,7 @@ const VerticalDivider = styled('span')`
 `;
 
 const Title = styled('div')`
-  color: ${({ muiTheme }) => muiTheme.palette.textColor};
+  color: #fff;
   font-size: 18px;
   flex-grow: 1;
   text-align: left;
@@ -81,26 +82,34 @@ const HeaderComponent = (props) => {
       <a href="http://bridg.com" target="__blank"><Logo /></a>
       <VerticalDivider />
       <Title muiTheme={muiTheme}>Email Designer</Title>
-      <FloatingActionButton
+      <IconButton
         style={{
-          marginRight: '10px'
         }}
-        mini
-        secondary
+        iconStyle={{
+          color: '#FFF',
+          marginRight: '-10px'
+        }}
+        tooltip="Undo"
+        tooltipStyles={{
+          background: 'RGBA(0,0,0,0.2)',
+          color: '#FFF',
+        }}
         onTouchTap={handleUndo}
       >
         <Undo />
-      </FloatingActionButton>
-      <FloatingActionButton
+      </IconButton>
+      <IconButton
         style={{
-          marginRight: '30px'
+          marginRight: '20px',
         }}
-        mini
-        secondary
+        iconStyle={{
+          color: '#FFF'
+        }}
+        tooltip="Redo"
         onTouchTap={handleRedo}
       >
         <Redo />
-      </FloatingActionButton>
+      </IconButton>
       <IconMenu
         iconButtonElement={
           <IconButton>
@@ -108,7 +117,7 @@ const HeaderComponent = (props) => {
           </IconButton>
         }
         iconStyle={{
-          color: muiTheme.palette.accent1Color
+          color: muiTheme.palette.accent2Color
         }}
         anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
         targetOrigin={{ horizontal: 'right', vertical: 'top' }}

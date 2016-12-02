@@ -6,14 +6,14 @@ import SwipeableViews from 'react-swipeable-views';
 import DashboardIcon from 'material-ui/svg-icons/action/dashboard';
 import ListIcon from 'material-ui/svg-icons/action/list';
 import TuneIcon from 'material-ui/svg-icons/image/tune';
-import BodyIcon from 'material-ui/svg-icons/content/content-paste';
+import BodyIcon from 'material-ui/svg-icons/av/web-asset';
 import Layouts from './Layouts';
 import Content from './Content';
 
 const Container = styled('section')`
   padding-left: 15px;
-  width: 394px;
-  max-width: 394px;
+  width: 100%;
+  max-width: 500px;
   min-width: 394px;
   order: 2;
   display: flex;
@@ -40,22 +40,32 @@ export default class Toolbox extends Component {
         <Paper
           style={{
             width: '100%',
-            background: 'rgba(0, 0, 0, 0.35)'
+            background: '#f4f4f4',
+            height: '100%',
+            borderRadius: 0
           }}
         >
           <Tabs
             onChange={this.handleChange}
             value={this.state.slideIndex}
+            tabTemplateStyle={{
+              background: '#eee'
+            }}
+            inkBarStyle={{
+              background: '#555'
+            }}
           >
-            <Tab icon={<DashboardIcon />} label="Layouts" value={0} />
-            <Tab icon={<ListIcon />} label="Content" value={1} />
-            <Tab icon={<TuneIcon />} label="Tune" value={2} />
-            <Tab icon={<BodyIcon />} label="Body" value={3} />
+            <Tab icon={<DashboardIcon />} label="Structure" value={0} disableTouchRipple />
+            <Tab icon={<ListIcon />} label="Content" value={1} disableTouchRipple />
+            <Tab icon={<TuneIcon />} label="Properties" value={2} disableTouchRipple />
+            <Tab icon={<BodyIcon />} label="Body" value={3} disableTouchRipple />
           </Tabs>
           <SwipeableViews
             index={this.state.slideIndex}
             onChangeIndex={this.handleChange}
             className="customization"
+            style={{
+            }}
           >
             <div>
               <Layouts />

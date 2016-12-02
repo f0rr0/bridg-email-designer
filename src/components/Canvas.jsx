@@ -22,7 +22,8 @@ const ParentContainer = styled(Paper)`
   flex-shrink: 1;
   display: flex;
   min-width: 584px;
-  max-width: 840px;
+  max-width: 100%;
+  margin: 15px 0 0 15px;
 `;
 
 const TargetContainer = styled('section')`

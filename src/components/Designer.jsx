@@ -13,28 +13,33 @@ const Main = styled('main')`
   width: 100%;
   overflow-y: scroll;
   font-size: 16px;
-  background: linear-gradient(to top, #12FFF7, #B3FFAB);
+  background: #c5c5c5;
   font-family: 'Lato', sans-serif;
   display: flex;
   flex-direction: column;
 `;
 
 const Container = styled('section')`
-  padding: 15px;
   display: flex;
   flex: 1 1 auto;
   justify-content: space-between;
 `;
 
+const Note = styled.h4`
+  color: #b5b5b5;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 0.8em;
+  margin-top: 20px;
+  width: 100%;
+  letter-spacing: 0.4px;
+`;
+
 const DefaultCustomContent = (
-  <div
-    style={{
-      padding: 20,
-      textAlign: 'center'
-    }}
-  >
+  <Note>
     Select some content to display options
-  </div>
+  </Note>
 );
 
 
@@ -201,7 +206,7 @@ class Designer extends Component {
             color: this.props.muiTheme.palette.textColor
           }}
           bodyStyle={{
-            background: this.props.muiTheme.palette.canvasColor
+            background: this.props.muiTheme.palette.accent2Color
           }}
         />
       </Main>

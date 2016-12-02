@@ -6,7 +6,8 @@ const ContainerInToolbox = styled('div')`
   display: inline-block;
   width: ${({ col }) => css`${100 / col}%`}
   height: 100%;
-  border-right: 5px solid #303030;
+  border-right: 3px solid #303030;
+  background: #FFF;
 
   &:last-child {
     border-right: none;
@@ -19,7 +20,7 @@ const Container = styled('div')`
   align-items: stretch;
   align-content: stretch;
   width: ${({ col }) => css`${100 / col}%`}
-  border: 1px dotted #303030;
+  border: 1px dashed #303030;
 `;
 
 export default class Column extends Component {

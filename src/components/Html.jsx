@@ -102,15 +102,9 @@ const options = {
 };
 
 const defaultMarkup =
-`<p
-  style="
-    padding: 10px;
-    background: #FFF;
-    color: #000;
-  "
->
+`<h1>
   HTML Markup
-</p>`;
+</h1>`;
 
 class Html extends Component {
   constructor(props) {
@@ -199,35 +193,65 @@ class Html extends Component {
           display: 'flex',
           position: inCanvas && highlight ? 'relative' : 'static',
           zIndex: inCanvas && highlight ? 1499 : 0,
-          outline: inCanvas && highlight ? '2px solid blue' : 'none'
+          outline: inCanvas && highlight ? '2px solid #4CB9EA' : 'none'
         }}
       >
         {
-          (inCanvas && editing) ?
-            <ClickOutside
-              style={{ height: '100%', width: '100%' }}
-              onClickOutside={this.handleBlur}
-            >
-              <Codemirror
-                value={markup}
-                onChange={this.handleChange}
-                options={options}
-                ref={(c) => { this.editor = c; }}
-              />
-            </ClickOutside>
-          :
-            <div
-              style={{
-                background: 'rgba(0, 0, 0, 0)',
-                height: '100%',
-                width: '100%',
-                lineHeight: 1.3
-              }}
-              onClick={this.handleClick}
-              onMouseEnter={this.toggleHighlight}
-              onMouseLeave={this.toggleHighlight}
-              dangerouslySetInnerHTML={{ __html: markup }} // eslint-disable-line
-            />
+          (() => {
+            if (inCanvas) {
+              if (editing) {
+                return (
+                  <ClickOutside
+                    style={{ height: '100%', width: '100%' }}
+                    onClickOutside={this.handleBlur}
+                  >
+                    <Codemirror
+                      value={markup}
+                      onChange={this.handleChange}
+                      options={options}
+                      ref={(c) => { this.editor = c; }}
+                    />
+                  </ClickOutside>
+                );
+              }
+
+              return (
+                <div
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                    color: '#000000',
+                    background: '#FFFFFF',
+                  }}
+                  onClick={this.handleClick}
+                  onMouseEnter={this.toggleHighlight}
+                  onMouseLeave={this.toggleHighlight}
+                  dangerouslySetInnerHTML={{ __html: markup }} // eslint-disable-line
+                />
+              );
+            }
+
+            return (
+              <div
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  color: '#000000',
+                  background: '#FFFFFF',
+                  border: '1px solid #eee',
+                  padding: 10,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+                onClick={this.handleClick}
+                onMouseEnter={this.toggleHighlight}
+                onMouseLeave={this.toggleHighlight}
+              >
+                <strong>&lt;</strong>HTML Markup<strong>&gt;</strong>
+              </div>
+            );
+          })()
         }
       </div>,
       { dropEffect: 'copy' }

@@ -6,7 +6,7 @@ import manifest from '../lib/manifest';
 import { source, collect as collectSource } from '../lib/generic-drag-source';
 import { target } from '../lib/generic-drop-target';
 import Column from './Column';
-import close from '../assets/close.png';
+import trash from '../assets/trash.svg';
 
 const rowSource = Object.assign({}, source, {
   beginDrag(props, monitor, component) {
@@ -55,16 +55,40 @@ const collectTarget = (connect, monitor) => ({
   isOver: monitor.isOver()
 });
 
+const RowActionContainer = styled.div`
+  background: #fff;
+  padding:5px;
+  position:absolute;
+  top:0;
+  left:0;
+  display: ${({ show }) => show ? 'inline-block' : 'none'}
+`;
+
 const CloseButton = styled('div')`
   height: 20px;
   width: 20px;
-  margin: 3px auto auto 3px;
-  position: absolute;
-  background-image: ${`url(${close})`};
+  position:relative;
+  background-image: ${`url(${trash})`};
   background-repeat: no-repeat;
   background-size: contain;
-  display: ${({ showClose }) => showClose ? 'inline-block' : 'none'}
   cursor: pointer;
+`;
+
+const RowInToolbox = styled.div`  
+  display: block;
+  margin-bottom: 10px;
+  height: 5em;
+  border-radius: 2px;
+  border: 3px solid #303030;
+  transition: 0.1s all cubic-bezier(0,.79,.44,.71);
+  
+  &:hover {
+    box-shadow: 0 6px 10px rgba(0,0,0,.35);
+  }
+  
+  &:active {
+    transform: scale(1.05);
+  }
 `;
 
 class Row extends Component {
@@ -128,7 +152,8 @@ class Row extends Component {
             transition: 'opacity 0.2s ease-in-out',
             position: showClose && inCanvas ? 'relative' : 'static',
             zIndex: showClose && inCanvas ? 1499 : 1,
-            outline: showClose && inCanvas ? '2px solid green' : 'none',
+            outline: showClose && inCanvas ? '2px solid #4CB9EA' : 'none',
+            background: showClose && inCanvas ? 'rgba(120,171,193,0.2)' : 'transparent',
             borderTop: dropHelper && isOver && dropHelper === 'top' ? '4px dashed red' : 'none',
             borderBottom: dropHelper && isOver && dropHelper === 'bottom' ? '4px dashed red' : 'none'
           }}
@@ -139,7 +164,9 @@ class Row extends Component {
           {
             inCanvas ?
               <div>
-                <CloseButton showClose={showClose} onClick={removeRow(id)} />
+                <RowActionContainer show={showClose}>
+                  <CloseButton onClick={removeRow(id)} />
+                </RowActionContainer>
                 <div
                   style={{
                     display: 'flex',
@@ -166,15 +193,7 @@ class Row extends Component {
                 </div>
               </div>
             :
-              <div
-                style={{
-                  display: 'block',
-                  marginBottom: '10px',
-                  height: '5em',
-                  borderRadius: '4px',
-                  border: '5px solid #303030',
-                }}
-              >
+              <RowInToolbox>
                 {
                   [...Array(numCols).keys()].map(key =>
                     <Column
@@ -185,7 +204,7 @@ class Row extends Component {
                     />
                   )
                 }
-              </div>
+              </RowInToolbox>
           }
         </div>,
         { dropEffect: 'copy' }

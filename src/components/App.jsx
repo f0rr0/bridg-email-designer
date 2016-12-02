@@ -1,7 +1,7 @@
 import React from 'react';
 import { injectGlobal } from 'styled-components';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Designer from './Designer';
@@ -77,12 +77,15 @@ injectGlobal`
 
 export default () =>
   <MuiThemeProvider
-    muiTheme={getMuiTheme(darkBaseTheme, {
+    muiTheme={getMuiTheme(lightBaseTheme, {
       fontFamily: 'Lato',
+      appBar: {
+        color: '#353f49'
+      },
       tabs: {
-        backgroundColor: darkBaseTheme.palette.canvasColor,
-        textColor: darkBaseTheme.palette.secondaryTextColor,
-        selectedTextColor: darkBaseTheme.palette.textColor
+        backgroundColor: lightBaseTheme.palette.canvasColor,
+        textColor: lightBaseTheme.palette.secondaryTextColor,
+        selectedTextColor: '#333'
       }
     })}
   >

@@ -344,7 +344,7 @@ class Text extends Component {
                 color: textColor,
                 position: highlight ? 'relative' : 'static',
                 zIndex: highlight ? 1499 : 0,
-                outline: '2px solid blue',
+                outline: '2px solid #4CB9EA',
                 border: `${borderSize}px ${borderStyle} ${borderColor}`,
               }}
               onClickOutside={this.handleClickOutside}
@@ -372,7 +372,7 @@ class Text extends Component {
               width: '100%',
               position: highlight ? 'relative' : 'static',
               zIndex: highlight ? 1499 : 0,
-              outline: highlight ? '2px solid blue' : 'none',
+              outline: highlight ? '2px solid #4CB9EA' : 'none',
             }}
             onMouseEnter={this.toggleHighlight}
             onMouseLeave={this.toggleHighlight}
@@ -387,7 +387,11 @@ class Text extends Component {
             width: '100%',
             color: '#000000',
             background: '#FFFFFF',
-            padding: 10
+            border: '1px solid #eee',
+            padding: 10,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
           }}
         >
           Formatted Text

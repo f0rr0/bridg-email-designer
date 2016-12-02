@@ -234,8 +234,21 @@ class Image extends Component {
           </ProgressiveImage>
         );
       }
+
       return (
-        <div style={{ padding: '10px', lineHeight: 1.3 }}>
+        <div
+          style={{
+            height: '100%',
+            width: '100%',
+            color: '#000000',
+            background: '#FFFFFF',
+            border: '1px solid #eee',
+            padding: 10,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
           Banner Image
         </div>
       );
@@ -248,13 +261,14 @@ class Image extends Component {
           background: inCanvas ? 'rgba(0, 0, 0, 0)' : '#FFFFFF',
           opacity: isDragging ? 0.6 : 1,
           width: '100%',
+          height: inCanvas ? '100%' : 100,
           color: '#000000',
           cursor: inCanvas ? 'pointer' : 'move',
           display: 'flex',
           flex: '1 0 auto',
           position: highlight || editing ? 'relative' : 'static',
           zIndex: highlight || editing ? 1499 : 0,
-          outline: editing || highlight ? '2px solid blue' : 'none'
+          outline: editing || highlight ? '2px solid #4CB9EA' : 'none'
         }}
       >
         {content}

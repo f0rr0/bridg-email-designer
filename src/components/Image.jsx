@@ -307,7 +307,15 @@ class Image extends Component {
       return (
         <div
           style={{
+            height: '100%',
+            width: '100%',
             color: '#000000',
+            background: '#FFFFFF',
+            border: '1px solid #eee',
+            padding: 10,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
           }}
         >
           Resizable Image
@@ -323,10 +331,10 @@ class Image extends Component {
           opacity: isDragging ? 0.6 : 1,
           height: '100%',
           width: '100%',
-          padding: inCanvas ? padding : '10px',
+          padding: inCanvas ? padding : '0',
           position: inCanvas && highlight ? 'relative' : 'static',
           zIndex: inCanvas && highlight ? 1499 : 0,
-          outline: highlight ? '2px solid blue' : 'none',
+          outline: highlight ? '2px solid #4CB9EA' : 'none',
           lineHeight: 1.3,
           cursor: 'move',
           display: 'flex',
