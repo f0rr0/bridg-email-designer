@@ -1,5 +1,7 @@
 # bridg-email-designer
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/f0rr0/bridg-email-designer.svg?token=c2bbba7ea5338cba75d84944c543983ad36969db5c45343fb2ffc4e4967ff7c4&ts=1533434825439)](https://greenkeeper.io/)
+
 ### Installation
 
 ```
